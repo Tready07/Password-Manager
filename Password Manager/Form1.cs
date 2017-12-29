@@ -16,5 +16,12 @@ namespace Password_Manager
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("The Submit button was clicked!");
+            String username = this.usernameTextBox.Text;
+            String password = this.passwordTextBox.Text;
+        }
     }
 }
