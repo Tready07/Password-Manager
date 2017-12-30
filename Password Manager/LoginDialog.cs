@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Password_Manager
 {
-    public partial class Form1 : Form
+    public partial class LoginDialog : Form
     {
-        public Form1()
+        public LoginDialog()
         {
             InitializeComponent();
         }
