@@ -10,7 +10,9 @@ namespace Password_Manager_Server
     {
         static void Main(string[] args)
         {
-
+            bool isInitialized = databaseInitializer.intializeDatabase();
+            Console.ReadKey();
+            
         }
     }
 }
