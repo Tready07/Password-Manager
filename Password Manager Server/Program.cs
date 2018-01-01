@@ -12,7 +12,6 @@ namespace Password_Manager_Server
         {
             bool isInitialized = databaseInitializer.intializeDatabase();
             Console.ReadKey();
-            
         }
     }
 }
