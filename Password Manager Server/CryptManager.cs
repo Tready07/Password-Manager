@@ -22,7 +22,7 @@ namespace Password_Manager_Server
             tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);
             tripleDES.Mode = CipherMode.ECB;
             tripleDES.Padding = PaddingMode.PKCS7;
-            ICryptoTransform encryptor = tripleDES.CreateEncryptor();
+            ICryptoTransform encryptor = tripleDES.CreateEncryptor();           
             byte[] resultArray = encryptor.TransformFinalBlock(inputArray, 0, inputArray.Length);
             tripleDES.Clear();
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);

@@ -54,7 +54,7 @@ namespace Password_Manager_Server
             bool tablesInitialzed = true;
             SQLiteConnection dbConn = new SQLiteConnection();
             dbConn = getConnection(dbConn);
-            String createUsersTable = "CREATE TABLE users (name VARCHAR(20) NOT NULL UNIQUE, password TEXT NOT NULL, isAdmin BOOL, salt TEXT, secretkey TEXT)";
+            String createUsersTable = "CREATE TABLE users (name VARCHAR(20) NOT NULL UNIQUE, password TEXT NOT NULL, isAdmin BOOL, salt TEXT)";
             String createApplicationsTable = "CREATE TABLE applications (name VARCHAR(20) NOT NULL, application CHAR(20), application_type CHAR(20) NOT NULL, username CHAR(40), password TEXT, UNIQUE(name, application, username), FOREIGN KEY(name) REFERENCES users(name))";
             try
             {
