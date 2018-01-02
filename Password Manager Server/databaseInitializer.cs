@@ -70,6 +70,7 @@ namespace Password_Manager_Server
                 Console.Write(e.Message);
                 System.Environment.Exit(1);
             }
+            dbConn.Close();
             return tablesInitialzed;
 
         }
@@ -80,7 +81,7 @@ namespace Password_Manager_Server
          *      getConnection makes a sqlite connection to pwdatabase.sqlite file
          *      and opens the connection then returns the sqliteconnection object it was passed
          */
-        private static SQLiteConnection getConnection(SQLiteConnection connection)
+        public static SQLiteConnection getConnection(SQLiteConnection connection)
         {
             try
             {
