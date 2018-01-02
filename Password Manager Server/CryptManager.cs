@@ -49,6 +49,18 @@ namespace Password_Manager_Server
             return UTF8Encoding.UTF8.GetString(resultArray);
         }
 
+        /**
+         * @brief
+         *      Generates a secret key used for symmetric encryption and decryption
+         */
+        public byte[] generateKey()
+        {
+            TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
+            tripleDES.GenerateKey();
+            return tripleDES.Key;
+        }
+
+
 #if false
             --- This is example code of how the cryptManager class works it is used to encrypt and decrypt text
             CryptManager cryptManager = new CryptManager();
