@@ -36,8 +36,9 @@
             this.applicationTreeView = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.editButton = new System.Windows.Forms.Button();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.editButton = new System.Windows.Forms.Button();
+            this.accountToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -89,7 +90,8 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
-            this.toolStripButton2});
+            this.toolStripButton2,
+            this.accountToolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(863, 25);
@@ -104,6 +106,14 @@
             this.toolStripButton1.Size = new System.Drawing.Size(76, 22);
             this.toolStripButton1.Text = "New App";
             // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(107, 22);
+            this.toolStripButton2.Text = "New Username";
+            // 
             // editButton
             // 
             this.editButton.Location = new System.Drawing.Point(634, 59);
@@ -113,13 +123,14 @@
             this.editButton.Text = "Edit";
             this.editButton.UseVisualStyleBackColor = true;
             // 
-            // toolStripButton2
+            // accountToolStripButton
             // 
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(107, 22);
-            this.toolStripButton2.Text = "New Username";
+            this.accountToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("accountToolStripButton.Image")));
+            this.accountToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.accountToolStripButton.Name = "accountToolStripButton";
+            this.accountToolStripButton.Size = new System.Drawing.Size(117, 22);
+            this.accountToolStripButton.Text = "Account Settings";
+            this.accountToolStripButton.ToolTipText = "Account Settings";
             // 
             // PasswordManagerForm
             // 
@@ -153,5 +164,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton accountToolStripButton;
     }
 }
