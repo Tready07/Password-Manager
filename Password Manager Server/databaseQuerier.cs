@@ -27,7 +27,7 @@ namespace Password_Manager_Server
             foreach(var name in applicationNames)
             {
                 String appType = getAppType(name, user);
-                string[] usernames = getUserNames(name, user);
+                Shared.Username[] usernames = getUserNames(name, user);
                 Shared.Application app = new Shared.Application(name, usernames, appType);
                 applications.Add(app);
             }
@@ -58,9 +58,9 @@ namespace Password_Manager_Server
          * @brief
          *      Gets the list of usernames the 'user' has for the given application
          */
-        private string [] getUserNames(String appName, String user)
+        private Shared.Username [] getUserNames(String appName, String user)
         {
-            List<string> usernames = new List<string>();
+            List<Shared.Username> usernames = new List<Shared.Username>();
             String sqlString = "SELECT username FROM applications WHERE application = @application AND name = @name";
             SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
             command.Parameters.AddWithValue("@name", user);
@@ -68,7 +68,8 @@ namespace Password_Manager_Server
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                usernames.Add(reader["username"].ToString());
+                Shared.Username username = new Shared.Username(reader["username"].ToString());
+                usernames.Add(username);
             }
             return usernames.ToArray();
         }
@@ -93,6 +94,20 @@ namespace Password_Manager_Server
             return appType;
         }
 
+        public string[] getAppTypes(String user)
+        {
+            List<String> appTypes = new List<string>;
+            String sqlString = "SELECT DISTINCT application_type FROM applications WHERE name = @name";
+            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+            command.Parameters.AddWithValue("@name", user);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while(reader.Read())
+            {
+                var appType = reader["application_type"].ToString();
+                appTypes.Add(appType);
+            }
+            return appTypes.ToArray();
+        }
         /**
          * @brief
          *      gets the password for the given 'username'

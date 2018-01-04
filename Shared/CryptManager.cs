@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace Password_Manager_Server
+namespace Shared
 {
-    class CryptManager
+    public class CryptManager
     {
         /**
          * @brief
@@ -15,7 +15,7 @@ namespace Password_Manager_Server
          *      then it encrypts using TripleDes Electronic Cookbook (ecb).
          *      It returns a (encrypted) string.
          */
-        public string encrypt(string input, string key)
+        public static string encrypt(string input, string key)
         {
             byte[] inputArray = UTF8Encoding.UTF8.GetBytes(input);
             TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
@@ -36,7 +36,7 @@ namespace Password_Manager_Server
          *      it then returns a (plaintext) string.
          */
 
-        public string decrypt(string input, string key)
+        public static string decrypt(string input, string key)
         {
             byte[] inputArray = Convert.FromBase64String(input);
             TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
@@ -53,7 +53,7 @@ namespace Password_Manager_Server
          * @brief
          *      Generates a secret key used for symmetric encryption and decryption
          */
-        public byte[] generateKey()
+        public static byte[] generateKey()
         {
             TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
             tripleDES.GenerateKey();

@@ -9,7 +9,7 @@ namespace Shared
     [Serializable]
     public class Application
     {
-        public Application(String name, String[] usernames, String type)
+        public Application(String name, Username[] usernames, String type)
         {
             
             Usernames = usernames;
@@ -20,11 +20,16 @@ namespace Shared
             
             Name = name;
         }
+
+        public Application()
+        {
+
+        }
         /**
           * @brief
           *      List of usernames for the given application
           */
-        public String[] Usernames { get; set; }
+        public Username [] Usernames { get; set; }
 
         /**
           * @brief

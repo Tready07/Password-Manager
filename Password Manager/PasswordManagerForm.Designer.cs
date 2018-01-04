@@ -37,8 +37,8 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.editButton = new System.Windows.Forms.Button();
             this.accountToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.editButton = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -105,6 +105,7 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(76, 22);
             this.toolStripButton1.Text = "New App";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripButton2
             // 
@@ -114,15 +115,6 @@
             this.toolStripButton2.Size = new System.Drawing.Size(107, 22);
             this.toolStripButton2.Text = "New Username";
             // 
-            // editButton
-            // 
-            this.editButton.Location = new System.Drawing.Point(634, 59);
-            this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(75, 23);
-            this.editButton.TabIndex = 7;
-            this.editButton.Text = "Edit";
-            this.editButton.UseVisualStyleBackColor = true;
-            // 
             // accountToolStripButton
             // 
             this.accountToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("accountToolStripButton.Image")));
@@ -131,6 +123,16 @@
             this.accountToolStripButton.Size = new System.Drawing.Size(117, 22);
             this.accountToolStripButton.Text = "Account Settings";
             this.accountToolStripButton.ToolTipText = "Account Settings";
+            // 
+            // editButton
+            // 
+            this.editButton.Location = new System.Drawing.Point(634, 59);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(75, 23);
+            this.editButton.TabIndex = 7;
+            this.editButton.Text = "Edit";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
             // PasswordManagerForm
             // 

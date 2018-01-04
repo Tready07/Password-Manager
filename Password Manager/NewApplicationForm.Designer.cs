@@ -91,6 +91,7 @@
             // 
             // appTypeComboBox
             // 
+            this.appTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.appTypeComboBox.FormattingEnabled = true;
             this.appTypeComboBox.Items.AddRange(new object[] {
             "Social Media",
@@ -103,6 +104,7 @@
             this.appTypeComboBox.Name = "appTypeComboBox";
             this.appTypeComboBox.Size = new System.Drawing.Size(117, 21);
             this.appTypeComboBox.TabIndex = 2;
+            this.appTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.appTypeComboBox_SelectedIndexChanged);
             // 
             // appTypeLabel
             // 
@@ -121,6 +123,7 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "Submit";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.submitButton);
             // 
             // cancelButton
             // 
