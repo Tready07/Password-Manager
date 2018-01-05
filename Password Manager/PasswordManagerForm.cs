@@ -16,26 +16,38 @@ namespace Password_Manager
         public PasswordManagerForm()
         {
             InitializeComponent();
-            var secretKeyIsPresent = checkForSecretKey();
-            DialogResult result = MessageBox.Show("Please select if you already have a secretkey file you would like to use or if you want it to be generated for you" + 
-                 " and stored locally", "Secret Key",MessageBoxButtons.YesNo);
-            if(result == DialogResult.Yes)
-            {
-                var secretkey = Shared.CryptManager.generateKey();
-                File.WriteAllBytes("keyFile",secretkey);
+            var secretKeyIsPresent = File.Exists("keyFile");
+            if (!secretKeyIsPresent)
+            {   //TODO: Handle case where the file is encrypted.        
+                DialogResult result = MessageBox.Show("Please select YES if you already have a secretkey file you would like to use or" +
+                 " select no if you want it to be generated for you and stored locally", "Secret Key", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    OpenFileDialog fileDialog = new OpenFileDialog();
+                    fileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                    fileDialog.FilterIndex = 2;
+                    fileDialog.RestoreDirectory = true;
+                    if (fileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            string filename = fileDialog.FileName;
+                            m_secretkey = File.ReadAllBytes(filename);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    var secretkey = Shared.CryptManager.generateKey();
+                    File.WriteAllBytes("keyFile", secretkey);
+                    m_secretkey = secretkey;
+                }
             }
-            else
-            {
-                //TODO: generate windows explorer have them point us to secret key read in file as secretkey
-            }
-
-
-        }
-
-        bool checkForSecretKey()
-        {
-            //TODO: Check for secret key
-            return false;
+            
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -86,13 +98,26 @@ namespace Password_Manager
             if(this.passwordTextBox.ReadOnly)
             {
                 this.passwordTextBox.ReadOnly = false;
-                this.editButton.Text = "Edit";
+                this.editButton.Text = "Submit";
             }
             else
             {
                 this.passwordTextBox.ReadOnly = true;
                 this.editButton.Text = "Edit";
             }
+        }
+    byte[] m_secretkey;
+
+        private void showpwCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(this.passwordTextBox.UseSystemPasswordChar)
+            {
+                this.passwordTextBox.UseSystemPasswordChar = false;
+            }
+            else
+            {
+                this.passwordTextBox.UseSystemPasswordChar = true;
+            }           
         }
     }
 }

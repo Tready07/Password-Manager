@@ -78,6 +78,7 @@
             this.showpwCheckBox.TabIndex = 4;
             this.showpwCheckBox.Text = "Show Password";
             this.showpwCheckBox.UseVisualStyleBackColor = true;
+            this.showpwCheckBox.CheckedChanged += new System.EventHandler(this.showpwCheckBox_CheckedChanged);
             // 
             // applicationTreeView
             // 

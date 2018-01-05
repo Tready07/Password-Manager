@@ -94,9 +94,14 @@ namespace Password_Manager_Server
             return appType;
         }
 
+        /**
+         * @brief
+         *      Returns a string array of distinct application types for
+         *      that given user
+         */      
         public string[] getAppTypes(String user)
         {
-            List<String> appTypes = new List<string>;
+            List<String> appTypes = new List<string>();
             String sqlString = "SELECT DISTINCT application_type FROM applications WHERE name = @name";
             SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
             command.Parameters.AddWithValue("@name", user);
@@ -108,6 +113,7 @@ namespace Password_Manager_Server
             }
             return appTypes.ToArray();
         }
+
         /**
          * @brief
          *      gets the password for the given 'username'
