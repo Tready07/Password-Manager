@@ -14,7 +14,7 @@ namespace Networking
      */
     public class MessageBase
     {
-        public MessageHeader header;
+        [NonSerialized] public MessageHeader header;
     }
 
     

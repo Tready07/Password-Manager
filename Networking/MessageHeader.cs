@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +37,14 @@ namespace Networking
          * delivered.
          */
         public int messageSize { get; set; } = 0; //Do I need this if class is serializable?
+
+        public byte [] toByteArray()
+        {
+            var formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream();
+            formatter.Serialize(stream, this);
+            return stream.ToArray();
+        }
         
     }
 }

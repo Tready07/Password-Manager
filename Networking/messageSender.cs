@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Networking
 {
-    class MessageSender
+    public class MessageSender
     {
         public MessageSender(MessageBase message,Socket socket)
         {
@@ -20,6 +20,7 @@ namespace Networking
                 try
                 {
                     formatter.Serialize(stream, message);
+                    socket.Send(message.header.toByteArray());
                     socket.Send(stream.ToArray());
                 }
                 catch(Exception e)
