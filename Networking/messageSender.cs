@@ -11,7 +11,13 @@ namespace Networking
 {
     public class MessageSender
     {
-        public MessageSender(MessageBase message,Socket socket)
+        public MessageSender(Socket skt)
+        {
+            socket = skt;
+               
+        }
+
+        public void send(MessageBase message)
         {
             var formatter = new BinaryFormatter();
             MemoryStream stream = new MemoryStream();
@@ -23,13 +29,14 @@ namespace Networking
                     socket.Send(message.header.toByteArray());
                     socket.Send(stream.ToArray());
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.Write("Error sending message " + message.header.messageID);
                     Console.WriteLine(e.Message);
                 }
             }
-                
         }
+
+        public Socket socket { get; set; }
     }
 }

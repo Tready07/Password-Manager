@@ -53,7 +53,7 @@ namespace Password_Manager_Server
         {
             bool tablesInitialzed = true;
             SQLiteConnection dbConn = new SQLiteConnection();
-            dbConn = getConnection(dbConn);
+            dbConn = makeConnection(dbConn);
             String createUsersTable = "CREATE TABLE users (name VARCHAR(20) NOT NULL UNIQUE, password TEXT NOT NULL, isAdmin BOOL, salt TEXT)";
             String createApplicationsTable = "CREATE TABLE applications (name VARCHAR(20) NOT NULL, application CHAR(20), application_type CHAR(20) NOT NULL, username CHAR(40), password TEXT, UNIQUE(name, application, username), FOREIGN KEY(name) REFERENCES users(name))";
             try
@@ -81,7 +81,7 @@ namespace Password_Manager_Server
          *      getConnection makes a sqlite connection to pwdatabase.sqlite file
          *      and opens the connection then returns the sqliteconnection object it was passed
          */
-        public static SQLiteConnection getConnection(SQLiteConnection connection)
+        public static SQLiteConnection makeConnection(SQLiteConnection connection)
         {
             try
             {

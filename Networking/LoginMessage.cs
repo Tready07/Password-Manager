@@ -21,6 +21,6 @@ namespace Networking
          *      the client can log in cause he has the correct info
          *      server should implement this with matching hashs
          */
-        Shared.Username username;
+        public Shared.Username username;
     }
 }

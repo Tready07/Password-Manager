@@ -27,7 +27,8 @@ namespace Password_Manager
             LoginMessage msg = new LoginMessage(user);
             SocketManager sktMngr = SocketManager.Instance;
             sktMngr.connect(this.serverAddressTextBox.Text, (int)serverPort.Value);
-            MessageSender msgSender = new MessageSender(msg,sktMngr.socket);
+            MessageSender msgSender = new MessageSender(sktMngr.socket);
+            msgSender.send(msg);
         }
 
     }

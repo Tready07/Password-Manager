@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationsRequest.cs" />
+    <Compile Include="ApplicationsResponse.cs" />
     <Compile Include="LoginMessage.cs" />
     <Compile Include="MessageBase.cs" />
     <Compile Include="MessageHeader.cs" />

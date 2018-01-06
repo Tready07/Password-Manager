@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Networking
 {
-    class ApplicationsRequest : MessageBase
+    [Serializable]
+    public class ApplicationsRequest : MessageBase
     {   
         /**
          * @brief
