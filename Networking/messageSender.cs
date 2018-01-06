@@ -11,25 +11,26 @@ namespace Networking
 {
     public class MessageSender
     {
-        public MessageSender(MessageBase message,Socket socket)
+        public MessageSender(MessageBase message, Socket socket)
         {
-            var formatter = new BinaryFormatter();
-            MemoryStream stream = new MemoryStream();
-            using (socket)
+            try
             {
-                try
+                using (var stream = new MemoryStream())
                 {
+                    var headerBuffer = message.header.toByteArray();
+                    stream.Write(headerBuffer, 0, headerBuffer.Length);
+
+                    var formatter = new BinaryFormatter();
                     formatter.Serialize(stream, message);
-                    socket.Send(message.header.toByteArray());
+
                     socket.Send(stream.ToArray());
                 }
-                catch(Exception e)
-                {
-                    Console.Write("Error sending message " + message.header.messageID);
-                    Console.WriteLine(e.Message);
-                }
             }
-                
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unable to send message {message.header.messageID.ToString()}");
+                Console.WriteLine($"The following error occurred: {ex.Message}");
+            }
         }
     }
 }
