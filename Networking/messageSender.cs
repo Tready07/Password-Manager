@@ -13,20 +13,30 @@ namespace Networking
     {
         public MessageSender(Socket skt)
         {
-            socket = skt;
-               
+            socket = skt;             
+        }
+
+        public MessageSender()
+        {
+
         }
 
         public void send(MessageBase message)
         {
             var formatter = new BinaryFormatter();
-            MemoryStream stream = new MemoryStream();
+            var lengthformatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream();            
             using (socket)
             {
                 try
                 {
-                    formatter.Serialize(stream, message);
-                    socket.Send(message.header.toByteArray());
+                    MemoryStream payLoadStream = new MemoryStream();
+                    lengthformatter.Serialize(payLoadStream, message);
+                    message.header.messageSize = payLoadStream.Length;
+                    var headerSize = BitConverter.GetBytes(message.header.toByteArray().Length);
+                    stream.Write(headerSize, 0, headerSize.Length);
+                    stream.Write(message.header.toByteArray(), 0, message.header.toByteArray().Length);
+                    stream.Write(payLoadStream.ToArray(), 0,(int)payLoadStream.Length);
                     socket.Send(stream.ToArray());
                 }
                 catch (Exception e)
