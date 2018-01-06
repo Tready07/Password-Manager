@@ -40,11 +40,12 @@ namespace Networking
 
         public byte [] toByteArray()
         {
-            var formatter = new BinaryFormatter();
-            MemoryStream stream = new MemoryStream();
-            formatter.Serialize(stream, this);
-            return stream.ToArray();
+            using (var stream = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                return stream.ToArray();
+            }
         }
-        
     }
 }
