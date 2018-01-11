@@ -135,7 +135,73 @@ namespace Password_Manager_Server
                 password = reader["password"].ToString();
             }
             return password;
-
         }
+        
+
+        /**
+         * @brief
+         *      sets the password for a specific username under the specific user
+         *      NOTE: the password should be encrypted
+         */      
+        public void setPassword(String appName, String username, String user, String password)
+        {
+            String sqlString = "UPDATE applications SET password = @password WHERE application = @appName AND username = @username AND name = @user";
+            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+            command.Parameters.AddWithValue("@name", user);
+            command.Parameters.AddWithValue("@appName", appName);
+            command.Parameters.AddWithValue("@username", username);
+            command.Parameters.AddWithValue("@password", password);
+            command.ExecuteNonQuery();
+        }
+
+        /**
+         * @brief
+         *      sets the password for a specific username under the specific user
+         *      NOTE: the password should be encrypted
+         */
+        public void setPassword(Shared.Application app, String user)
+        {
+            String sqlString = "UPDATE applications SET password = @password WHERE application = @appName AND username = @username AND name = @user";
+            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+            command.Parameters.AddWithValue("@name", user);
+            command.Parameters.AddWithValue("@appName", app.Name);
+            command.Parameters.AddWithValue("@username", app.Usernames[0].name);
+            command.Parameters.AddWithValue("@password", app.Usernames[0].password);
+            command.ExecuteNonQuery();
+        }
+
+        /**
+         * @brief
+         *      adds a new username to the database fields in all of the parameters
+         *      in the applications table
+         */      
+        public void addUsername(Shared.Application app, String user)
+        {
+            String sqlString = "INSERT INTO applications (name, application, application_type, username, password) " +
+                "VALUES (@name, @appName, @appType, @username, @password)";
+            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+            command.Parameters.AddWithValue("@name", user);
+            command.Parameters.AddWithValue("@appName", app.Name);
+            command.Parameters.AddWithValue("@appType", app.Type);
+            command.Parameters.AddWithValue("@username", app.Usernames[0].name);
+            command.Parameters.AddWithValue("@password", app.Usernames[0].password);
+            command.ExecuteNonQuery();
+        }
+
+        /**
+         * @brief
+         *      removes a username and his info from the database.
+         *      
+         */
+        public void removeUsername(Shared.Application app, String user)
+        {
+            String sqlString = "DELETE FROM applications WHERE name = @name AND application = @appname AND username = @username";
+            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+            command.Parameters.AddWithValue("@name", user);
+            command.Parameters.AddWithValue("@appName", app.Name);
+            command.Parameters.AddWithValue("@username", app.Usernames[0].name);
+            command.ExecuteNonQuery();
+        }
+
     }
 }
