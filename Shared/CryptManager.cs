@@ -60,6 +60,33 @@ namespace Shared
             return tripleDES.Key;
         }
 
+        /**
+         * @brief
+         *      Generates a random string
+         */
+        public static String generateSalt(int byteCount)
+        {
+            var rngCsp = new RNGCryptoServiceProvider();
+            Byte[] random = new Byte[byteCount];
+            rngCsp.GetBytes(random);
+            string value = BitConverter.ToString(random);
+            return value;
+        }      
+
+        /**
+         * @brief
+         *      Generates the hash of the input and
+         *      returns the string
+         */      
+        public String hash(String msgToHash)
+        {
+            SHA256 Hasher = SHA256Managed.Create();
+            byte[] hashValue;
+            byte[] msg = Convert.FromBase64CharArray(msgToHash.ToArray(),0,msgToHash.ToArray().Length);
+            hashValue = Hasher.ComputeHash(msg);
+            string value = BitConverter.ToString(hashValue);
+            return value;
+        }
 
 #if false
             --- This is example code of how the cryptManager class works it is used to encrypt and decrypt text
