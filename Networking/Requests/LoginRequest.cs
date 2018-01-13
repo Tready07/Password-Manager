@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,10 +11,12 @@ namespace Networking.Request
     [Serializable]
     public class LoginRequest : MessageBase
     {
-        public LoginRequest(Shared.Username user)
+        public const int MessageID = 1;
+
+        public LoginRequest(Shared.Username user) :
+            base(MessageID, MessageType.Request)
         {
             username = user;
-            header = new MessageHeader(1);
         }
         /**
          * @brief
@@ -22,5 +26,16 @@ namespace Networking.Request
          *      server should implement this with matching hashs
          */
         public Shared.Username username;
+
+        public override byte[] ToByteArray()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var serializer = new BinaryFormatter();
+                serializer.Serialize(stream, this);
+
+                return stream.ToArray();
+            }
+        }
     }
 }

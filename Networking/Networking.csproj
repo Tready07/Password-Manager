@@ -40,11 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageType.cs" />
     <Compile Include="Requests\ApplicationsRequest.cs" />
     <Compile Include="Responses\ApplicationsResponse.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="MessageBase.cs" />
-    <Compile Include="MessageHeader.cs" />
     <Compile Include="MessageSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\MessageHeader.cs" />
