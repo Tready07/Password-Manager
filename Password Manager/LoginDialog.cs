@@ -19,7 +19,7 @@ namespace Password_Manager
             InitializeComponent();
         }
 
-        private void loginSubmitButton(object sender, EventArgs e)
+        private async void loginSubmitButton(object sender, EventArgs e)
         {
             Console.WriteLine("The Submit button was clicked!");
             String username = this.usernameTextBox.Text;
@@ -28,8 +28,7 @@ namespace Password_Manager
             LoginRequest msg = new LoginRequest(user);
             SocketManager sktMngr = SocketManager.Instance;
             sktMngr.connect(this.serverAddressTextBox.Text, (int)serverPort.Value);
-            MessageSender msgSender = new MessageSender(sktMngr.socket);
-            msgSender.send(msg);
+            await sktMngr.SendMessage(msg);
         }
 
     }
