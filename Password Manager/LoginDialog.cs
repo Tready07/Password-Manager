@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Networking;
+using Networking.Request;
 
 namespace Password_Manager
 {
@@ -24,7 +25,7 @@ namespace Password_Manager
             String username = this.usernameTextBox.Text;
             String password = this.passwordTextBox.Text;
             Shared.Username user = new Shared.Username(username, password);
-            LoginMessage msg = new LoginMessage(user);
+            LoginRequest msg = new LoginRequest(user);
             SocketManager sktMngr = SocketManager.Instance;
             sktMngr.connect(this.serverAddressTextBox.Text, (int)serverPort.Value);
             MessageSender msgSender = new MessageSender(sktMngr.socket);

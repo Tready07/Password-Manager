@@ -9,6 +9,8 @@ using System.IO;
 using System.Threading;
 using System.Data.SQLite;
 using System.Net;
+using Networking.Request;
+using Networking.Response;
 
 namespace Password_Manager_Server
 {
@@ -82,7 +84,7 @@ namespace Password_Manager_Server
             var memoryStream = new MemoryStream(result);
             if(messageID == (int)MessageType.Login)
             {
-                Networking.LoginMessage msg = new BinaryFormatter().Deserialize(memoryStream) as Networking.LoginMessage;
+                LoginRequest msg = new BinaryFormatter().Deserialize(memoryStream) as LoginRequest;
                 msg.header = msgHeader;
                 session.user = msg.username.name;
                 bool correctUser = true;
@@ -100,10 +102,10 @@ namespace Password_Manager_Server
             }
             else if(messageID == (int)MessageType.ApplicationsRequest)
             {
-                Networking.ApplicationsRequest msg = new BinaryFormatter().Deserialize(memoryStream) as Networking.ApplicationsRequest;
+                ApplicationsRequest msg = new BinaryFormatter().Deserialize(memoryStream) as ApplicationsRequest;
                 msg.header = msgHeader;
                 var applications = querier.getApplications(session.user);
-                var response = new Networking.ApplicationsResponse(applications);
+                var response = new ApplicationsResponse(applications);
                 sender.send(response);
             }
             

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Networking
+namespace Networking.Request
 {
     [Serializable]
     public class ApplicationsRequest : MessageBase

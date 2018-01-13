@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Networking
+namespace Networking.Request
 {   
     [Serializable]
-    public class LoginMessage : MessageBase
+    public class LoginRequest : MessageBase
     {
-        public LoginMessage(Shared.Username user)
+        public LoginRequest(Shared.Username user)
         {
             username = user;
             header = new MessageHeader(1);
