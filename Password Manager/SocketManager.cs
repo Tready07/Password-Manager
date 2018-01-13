@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using Networking;
+
 namespace Password_Manager
 {
     public class SocketManager
@@ -27,5 +29,15 @@ namespace Password_Manager
             socket.Connect(host, port);
         }
         protected SocketManager() { }
+
+        /// <summary>
+        /// Sends a message to the server.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        /// <returns>The asynchronous operation that represents the message being sent.</returns>
+        public async Task SendMessage(MessageBase message)
+        {
+            this.socket.Send(await MessageUtils.SerializeMessage(message));
+        }
     }
 }
