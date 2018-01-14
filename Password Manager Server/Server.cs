@@ -1,151 +1,87 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using System.Threading;
-using System.Data.SQLite;
+using System.Diagnostics;
 using System.Net;
-using Networking.Request;
-using Networking.Response;
+using System.Net.Sockets;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Password_Manager_Server
 {
-    class Server
+    /// <summary>
+    /// Responsible for accepting and handling client connections.
+    /// </summary>
+    public class Server
     {
-        enum MessageType {Login=1, ApplicationsRequest }
+        private readonly TcpListener tcpListener;
+        private readonly List<ClientSession> clientList;
+        private readonly Thread messageThread;
 
-        public void  start(SQLiteConnection conn)
+        private readonly Object clientListLock = new object();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Server" /> class.
+        /// </summary>
+        public Server()
         {
-            listener = new TcpListener(IPAddress.Parse("127.0.0.1"),12086);
-            clients = new List<ClientSession>();
-            querier = new DatabaseQuerier(conn);
-            sender = new Networking.MessageSender();
-            listener.Start();
-            Thread thread = new Thread(handleClients);
-            thread.Start();
+            this.clientList = new List<ClientSession>();
+            this.tcpListener = new TcpListener(IPAddress.Loopback, 12086);
+            this.messageThread = new Thread(new ParameterizedThreadStart(Server.HandleClientMessages));
+        }
+
+        /// <summary>
+        /// Start accepting clients.
+        /// </summary>
+        public async Task Start()
+        {
+            this.tcpListener.Start();
+            this.messageThread.Start(this);
+
             while (true)
             {
-                ClientSession client = new ClientSession(listener.AcceptTcpClient(),"");
-                lock(clientLock)
+                var tcpClient = await this.tcpListener.AcceptTcpClientAsync();
+
+                var ipAddress = (IPEndPoint)tcpClient.Client.RemoteEndPoint;
+                Debug.WriteLine($"New client joined: {ipAddress.Address.ToString()}");
+
+                lock (this.clientListLock)
                 {
-                    Console.WriteLine("A Client is trying to connect from {0}", 
-                        ((IPEndPoint)(client.client.Client.RemoteEndPoint)).Address.ToString());
-                    clients.Add(client);
-                }            
+                    this.clientList.Add(new ClientSession(tcpClient));
+                }
             }
         }
 
-        private void handleClients()
+        private static void HandleClientMessages(object serverObj)
         {
+            Server server = serverObj as Server;
+
+            List<Task<int>> pendingReadingTasks = new List<Task<int>>();
+            byte[] buffer = new byte[4096];
             while (true)
             {
-                lock(clientLock)
+                // Go through each client and check to see if there are any data to be read in
+                lock (server.clientListLock)
                 {
-
-                    foreach (var connection in clients)
+                    foreach (var client in server.clientList)
                     {
-                        handleMessage(connection);
+                        var networkStream = client.Client.GetStream();
+                        if (networkStream.DataAvailable)
+                        {
+                            pendingReadingTasks.Add(networkStream.ReadAsync(buffer, 0, buffer.Length));
+                        }
                     }
+                }
 
+                // Start processing the pending reading tasks
+                while (pendingReadingTasks.Count > 0)
+                {
+                    var task = Task.WhenAny(pendingReadingTasks).GetAwaiter().GetResult();
+                    pendingReadingTasks.Remove(task);
+
+                    // "Process" the message
+                    Debug.WriteLine($"We received bytes: {task.Result.ToString()}");
                 }
             }
         }
-
-        private void handleMessage(ClientSession session) 
-        {            
-            //TODO: handle error the getstream method throws.
-            // stream.length will not work for networkstream have to change that RIP
-            var stream = session.client.GetStream();
-            if (!stream.DataAvailable)
-            {
-                return;
-            }
-            var msgHeader = getHeader(stream);
-            var messageID = msgHeader.messageID;
-            sender.socket = session.client.Client;
-            byte[] result = new byte[msgHeader.messageSize];
-            if (msgHeader.messageSize > 0)
-            {
-                using (stream)
-                {
-                    int bytesRead = 0;
-                    do
-                    {
-                        bytesRead += stream.Read(result, 0, result.Length);
-                    }
-                    while (bytesRead != msgHeader.messageSize);
-                }
-            }
-            Console.Write("WE have read in the entire message! for {0}", messageID);
-            var memoryStream = new MemoryStream(result);
-            if(messageID == (int)MessageType.Login)
-            {
-                LoginRequest msg = new BinaryFormatter().Deserialize(memoryStream) as LoginRequest;
-                msg.header = msgHeader;
-                session.user = msg.username.name;
-                bool correctUser = true;
-                if(!correctUser)
-                {
-                        Console.Write("Removing Client {0}", 
-                            IPAddress.Parse(((IPEndPoint)session.client.Client.RemoteEndPoint).Address.ToString()));
-                        clients.Remove(session);
-                        stream.Close();
-                    return;
-                }
-                Console.Write(msg.username.name + msg.username.password);
-                //TODO: use db querier to ensure username and password checkout then make response
-                // then remove client from list of clients
-            }
-            else if(messageID == (int)MessageType.ApplicationsRequest)
-            {
-                ApplicationsRequest msg = new BinaryFormatter().Deserialize(memoryStream) as ApplicationsRequest;
-                msg.header = msgHeader;
-                var applications = querier.getApplications(session.user);
-                var response = new ApplicationsResponse(applications);
-                sender.send(response);
-            }
-            
-        }
-
-        /**
-         * @brief
-         *      deserializes the network stream to a msg header so the
-         *      function handle messages knows what message is coming
-         */      
-        private Networking.MessageHeader getHeader(NetworkStream stream)
-        {
-            byte[] b_headerSize = new byte[5];
-            stream.Read(b_headerSize, 0, b_headerSize.Length);
-            var headerSize = BitConverter.ToInt32(b_headerSize,0);
-            byte[] b_header = new byte[headerSize];
-            int byteCount = 0;
-            while (byteCount < headerSize) //TODO: INSERT TIMEOUT
-            {     
-                do
-                {
-                    byteCount +=stream.Read(b_header, 0, headerSize-byteCount);
-                    if(byteCount == headerSize)
-                    {
-                        break;
-                    }
-                }
-                while (stream.DataAvailable);
-            }
-            MemoryStream memStream = new MemoryStream(b_header); 
-            var formatter = new BinaryFormatter();
-            //ERROR in deserializing
-            Networking.MessageHeader header = (Networking.MessageHeader)(formatter.Deserialize(memStream));
-            return header;
-        }
-
-        TcpListener listener;
-        List<ClientSession> clients;
-        private Object clientLock = new Object();
-        DatabaseQuerier querier;
-        Networking.MessageSender sender;
     }
 }
