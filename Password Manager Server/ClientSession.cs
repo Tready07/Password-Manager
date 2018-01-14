@@ -1,21 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace Password_Manager_Server
 {
+    /// <summary>
+    /// Encapsulates information about a client.
+    /// </summary>
     public class ClientSession
     {
-        public ClientSession(TcpClient tcpclient,String name)
+        private readonly TcpClient tcpClient;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClientSession" /> class.
+        /// </summary>
+        /// <param name="tcpClient">The <see cref="TcpClient" /> that contains the client connection.</param>
+        public ClientSession(TcpClient tcpClient)
         {
-            user = name;
-            client = tcpclient;
+            this.tcpClient = tcpClient;
         }
 
-        public String user { get; set; }
-        public TcpClient client;
+        /// <summary>
+        /// Gets the <see cref="TcpClient" /> for this client connection.
+        /// </summary>
+        public TcpClient Client => this.tcpClient;
     }
 }
