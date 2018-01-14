@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -15,7 +16,7 @@ namespace Password_Manager_Server
     {
         private readonly TcpListener tcpListener;
         private readonly List<ClientSession> clientList;
-        private readonly Thread messageThread;
+        private readonly CancellationTokenSource cancellationToken;
 
         private readonly Object clientListLock = new object();
 
@@ -26,62 +27,108 @@ namespace Password_Manager_Server
         {
             this.clientList = new List<ClientSession>();
             this.tcpListener = new TcpListener(IPAddress.Loopback, 12086);
-            this.messageThread = new Thread(new ParameterizedThreadStart(Server.HandleClientMessages));
+            this.cancellationToken = new CancellationTokenSource();
         }
 
         /// <summary>
         /// Start accepting clients.
         /// </summary>
-        public async Task Start()
+        public void Start()
         {
             this.tcpListener.Start();
-            this.messageThread.Start(this);
 
-            while (true)
+            var acceptClientTask = Task.Factory.StartNew(async () =>
             {
-                var tcpClient = await this.tcpListener.AcceptTcpClientAsync();
-
-                var ipAddress = (IPEndPoint)tcpClient.Client.RemoteEndPoint;
-                Debug.WriteLine($"New client joined: {ipAddress.Address.ToString()}");
-
-                lock (this.clientListLock)
+                while (!this.cancellationToken.Token.IsCancellationRequested)
                 {
-                    this.clientList.Add(new ClientSession(tcpClient));
-                }
-            }
-        }
+                    var tcpClient = await this.tcpListener.AcceptTcpClientAsync();
 
-        private static void HandleClientMessages(object serverObj)
-        {
-            Server server = serverObj as Server;
+                    // Print some information about the client that joined
+                    var ipAddress = (IPEndPoint)tcpClient.Client.RemoteEndPoint;
+                    Debug.WriteLine($"New client joined: {ipAddress.Address.ToString()}", "Server");
 
-            List<Task<int>> pendingReadingTasks = new List<Task<int>>();
-            byte[] buffer = new byte[4096];
-            while (true)
-            {
-                // Go through each client and check to see if there are any data to be read in
-                lock (server.clientListLock)
-                {
-                    foreach (var client in server.clientList)
+                    lock (this.clientListLock)
                     {
-                        var networkStream = client.Client.GetStream();
-                        if (networkStream.DataAvailable)
+                        this.clientList.Add(new ClientSession(tcpClient));
+                    }
+                }
+            }, this.cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+            var handleClientMessages = Task.Factory.StartNew(() =>
+            {
+                const int Timeout = 100;
+
+                List<Task<int>> pendingReadingTasks = new List<Task<int>>();
+                byte[] buffer = new byte[4096];
+
+                while (!this.cancellationToken.Token.IsCancellationRequested)
+                {
+                    if (this.clientList.Count == 0)
+                    {
+                        // Put the thread to sleep for a few milliseconds if we don't have any clients
+                        // to process.
+                        Thread.Sleep(Timeout);
+                        continue;
+                    }
+
+                    // Go through each client and check to see if there are any data to be read in
+                    // by calling Socket.Select.
+                    System.Collections.IList clientToRead = null;
+                    lock (this.clientListLock)
+                    {
+                        clientToRead = this.clientList.Select(cs => cs.Client.Client).ToList();
+                    }
+                    
+                    // Socket.Select will modify the clientToRead list so that it contains only
+                    // the clients that are ready to read. Note that we set the timeout to 100ms so
+                    // that it'll wait 100ms on each socket to see if it's available for reading
+                    // before moving on to the next one (don't do it indefinitely, in case a new
+                    // client joins).
+                    Socket.Select(clientToRead, null, null, Timeout);
+                    foreach (Socket client in clientToRead)
+                    {
+                        var networkStream = new NetworkStream(client);
+
+                        // Is there any data available to be read? If not, then that means the
+                        // socket has been disconnected.
+                        if (client.Available > 0)
                         {
                             pendingReadingTasks.Add(networkStream.ReadAsync(buffer, 0, buffer.Length));
                         }
+                        else
+                        {
+                            var ipAddress = (IPEndPoint)client.RemoteEndPoint;
+                            Debug.WriteLine($"Client disconnected: {ipAddress.Address}", "Server");
+
+                            lock (this.clientListLock)
+                            {
+                                this.clientList.Remove(this.clientList.Single(cs => cs.Client.Client == client));
+                            }
+                        }
+                    }
+                    
+
+                    // Start processing the pending reading tasks
+                    while (pendingReadingTasks.Count > 0)
+                    {
+                        var task = Task.WhenAny(pendingReadingTasks).GetAwaiter().GetResult();
+                        pendingReadingTasks.Remove(task);
+
+                        // "Process" the message
+                        Debug.WriteLine($"We received bytes: {task.Result.ToString()}", "Server");
                     }
                 }
+            }, this.cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
-                // Start processing the pending reading tasks
-                while (pendingReadingTasks.Count > 0)
-                {
-                    var task = Task.WhenAny(pendingReadingTasks).GetAwaiter().GetResult();
-                    pendingReadingTasks.Remove(task);
+            Task.WaitAll(acceptClientTask, handleClientMessages);
+        }
 
-                    // "Process" the message
-                    Debug.WriteLine($"We received bytes: {task.Result.ToString()}");
-                }
-            }
+        /// <summary>
+        /// Stops the server.
+        /// </summary>
+        public void Stop()
+        {
+            this.cancellationToken.Cancel();
         }
     }
 }
