@@ -39,7 +39,7 @@ namespace Password_Manager_Server
 
             var acceptClientTask = Task.Factory.StartNew(async () =>
             {
-                while (!this.cancellationToken.Token.IsCancellationRequested)
+                while (!this.cancellationToken.IsCancellationRequested)
                 {
                     var tcpClient = await this.tcpListener.AcceptTcpClientAsync();
 
@@ -52,6 +52,8 @@ namespace Password_Manager_Server
                         this.clientList.Add(new ClientSession(tcpClient));
                     }
                 }
+
+                Debug.WriteLine("Server is no longer accepting clients.");
             }, this.cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
             var handleClientMessages = Task.Factory.StartNew(() =>
@@ -61,7 +63,7 @@ namespace Password_Manager_Server
                 List<Task<int>> pendingReadingTasks = new List<Task<int>>();
                 byte[] buffer = new byte[4096];
 
-                while (!this.cancellationToken.Token.IsCancellationRequested)
+                while (!this.cancellationToken.IsCancellationRequested)
                 {
                     if (this.clientList.Count == 0)
                     {
@@ -118,9 +120,14 @@ namespace Password_Manager_Server
                         Debug.WriteLine($"We received bytes: {task.Result.ToString()}", "Server");
                     }
                 }
+
+                Debug.WriteLine("Server is no longer handling clients.");
             }, this.cancellationToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
-            Task.WaitAll(acceptClientTask, handleClientMessages);
+            var tasksToWait = new Task[] { acceptClientTask, handleClientMessages };
+            Task.WaitAll(tasksToWait);
+
+            Debug.WriteLine("The server has been stopped.");
         }
 
         /// <summary>

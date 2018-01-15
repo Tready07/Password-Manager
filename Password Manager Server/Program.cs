@@ -11,6 +11,8 @@ namespace Password_Manager_Server
 
         public static async Task Main()
         {
+            Console.CancelKeyPress += OnCancelKeyPressed;
+
             // Print a fancy header
             var originalFgColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -37,8 +39,11 @@ namespace Password_Manager_Server
 
         private static void OnCancelKeyPressed(object sender, ConsoleCancelEventArgs e)
         {
-            Console.WriteLine("Stopping the server...");
+            Debug.WriteLine("Stopping the server...");
             server.Stop();
+
+            // Don't immediately exit until all the Task that we've spawned are done.
+            e.Cancel = true;
         }
     }
 }
