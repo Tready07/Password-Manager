@@ -78,7 +78,7 @@ namespace Shared
          *      Generates the hash of the input and
          *      returns the string
          */      
-        public String hash(String msgToHash)
+        public static String hash(String msgToHash)
         {
             SHA256 Hasher = SHA256Managed.Create();
             byte[] hashValue;

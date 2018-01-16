@@ -203,5 +203,49 @@ namespace Password_Manager_Server
             command.ExecuteNonQuery();
         }
 
+        public String getSalt(String user)
+        {
+            String sqlString = "SELECT salt FROM users WHERE name = @name";
+            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+            command.Parameters.AddWithValue("@name", user);
+            SQLiteDataReader reader = command.ExecuteReader();
+            String salt = "";
+            while (reader.Read())
+            {
+                salt = reader["salt"].ToString();
+            }
+            return salt;
+        }
+
+        private String getLoginPassword(String user)
+        {
+
+            String sqlString = "SELECT password FROM users WHERE name = @name";
+            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+            command.Parameters.AddWithValue("@name", user);
+            SQLiteDataReader reader = command.ExecuteReader();
+            String password = "";
+            while (reader.Read())
+            {
+                password = reader["password"].ToString();
+            }
+            return password;
+        }
+
+        public bool checkLoginInfo(String user, String password)
+        {
+            bool isCorrect = false;
+            String salt = getSalt(user);
+            String encryptedAttemptedPW = Shared.CryptManager.hash(password + salt);
+            String encryptedStoredPW = getLoginPassword(user);
+
+            if(encryptedAttemptedPW == encryptedStoredPW)
+            {
+                isCorrect = true;
+            }
+
+            return isCorrect;
+        }
+
     }
 }

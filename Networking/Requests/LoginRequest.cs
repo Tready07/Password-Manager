@@ -11,7 +11,7 @@ namespace Networking.Request
     [Serializable]
     public class LoginRequest : MessageBase
     {
-        public const int MessageID = 1;
+        public const int MessageID = 0;
 
         public LoginRequest(Shared.Username user) :
             base(MessageID, MessageType.Request)

@@ -97,5 +97,22 @@ namespace Password_Manager_Server
             return connection;
                 
         }
+        public static SQLiteConnection makeConnection()
+        {
+            SQLiteConnection connection;
+            try
+            {
+                connection = new SQLiteConnection("Data Source=pwdatabase.sqlite;Version=3;");
+                connection.Open();
+                return connection;
+            }
+            catch (Exception e)
+            {
+                Console.Write(e.Message);
+                Console.WriteLine("Couldn't connect to database");
+                System.Environment.Exit(1);
+            }
+
+        }
     }
 }

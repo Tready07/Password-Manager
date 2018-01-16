@@ -11,7 +11,7 @@ namespace Networking.Response
     [Serializable]
    public class ApplicationsResponse : MessageBase
     {
-        public const int MessageID = 2;
+        public const int MessageID = 1;
 
         public ApplicationsResponse(Shared.Application[] apps) :
             base(MessageID, MessageType.Response)

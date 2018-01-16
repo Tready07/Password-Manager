@@ -9,7 +9,7 @@ namespace Networking.Request
     [Serializable]
     public class ApplicationsRequest : MessageBase
     {
-        public const int MessageID = 2;
+        public const int MessageID = 1;
 
         /**
          * @brief

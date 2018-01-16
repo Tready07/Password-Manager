@@ -118,6 +118,8 @@ namespace Password_Manager_Server
 
                         // "Process" the message
                         Debug.WriteLine($"We received bytes: {task.Result.ToString()}", "Server");
+                        MessageHandler handler = new MessageHandler();
+                        handler.handleMessage(buffer);
                     }
                 }
 
