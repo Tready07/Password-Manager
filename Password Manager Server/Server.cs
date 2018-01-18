@@ -60,9 +60,9 @@ namespace Password_Manager_Server
             {
                 const int Timeout = 100;
 
-                List<Task<int>> pendingReadingTasks = new List<Task<int>>();
+                List<ReadyClient> pendingReadingTasks = new List<ReadyClient>();
                 byte[] buffer = new byte[4096];
-
+                MessageHandler handler = new MessageHandler();
                 while (!this.cancellationToken.IsCancellationRequested)
                 {
                     if (this.clientList.Count == 0)
@@ -95,7 +95,7 @@ namespace Password_Manager_Server
                         // socket has been disconnected.
                         if (client.Available > 0)
                         {
-                            pendingReadingTasks.Add(networkStream.ReadAsync(buffer, 0, buffer.Length));
+                            pendingReadingTasks.Add(new ReadyClient(networkStream.ReadAsync(buffer, 0, buffer.Length),client);
                         }
                         else
                         {
@@ -108,19 +108,21 @@ namespace Password_Manager_Server
                             }
                         }
                     }
-                    
 
-                    // Start processing the pending reading tasks
+                    
+                    // Start processing the pending reading tasks   
+                    int i = pendingReadingTasks.Count - 1;
                     while (pendingReadingTasks.Count > 0)
                     {
-                        var task = Task.WhenAny(pendingReadingTasks).GetAwaiter().GetResult();
-                        pendingReadingTasks.Remove(task);
-
+                        var currentReadyClient = pendingReadingTasks[i].task.GetAwaiter().GetResult();
                         // "Process" the message
-                        Debug.WriteLine($"We received bytes: {task.Result.ToString()}", "Server");
-                        MessageHandler handler = new MessageHandler();
-                        handler.handleMessage(buffer);
+                        Debug.WriteLine($"We received bytes: { pendingReadingTasks[i].task.Result.ToString()}", "Server");
+                        handler.handleMessage(buffer,pendingReadingTasks[i].socket);
+                        pendingReadingTasks.Remove(pendingReadingTasks[i]);
+                        i--;
                     }
+
+
                 }
 
                 Debug.WriteLine("Server is no longer handling clients.");
