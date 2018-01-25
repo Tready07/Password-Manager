@@ -95,7 +95,7 @@ namespace Password_Manager_Server
                         // socket has been disconnected.
                         if (client.Available > 0)
                         {
-                            pendingReadingTasks.Add(new ReadyClient(networkStream.ReadAsync(buffer, 0, buffer.Length),client);
+                            pendingReadingTasks.Add(new ReadyClient(networkStream.ReadAsync(buffer, 0, buffer.Length),client));
                         }
                         else
                         {

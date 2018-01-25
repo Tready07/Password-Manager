@@ -81,8 +81,8 @@ namespace Shared
         public static String hash(String msgToHash)
         {
             SHA256 Hasher = SHA256Managed.Create();
-            byte[] hashValue;
-            byte[] msg = Convert.FromBase64CharArray(msgToHash.ToArray(),0,msgToHash.ToArray().Length);
+            byte[] hashValue;            
+            byte[] msg = Encoding.UTF8.GetBytes(msgToHash);
             hashValue = Hasher.ComputeHash(msg);
             string value = BitConverter.ToString(hashValue);
             return value;
