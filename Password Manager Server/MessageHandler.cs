@@ -32,13 +32,19 @@ namespace Password_Manager_Server
             // Implement Deserializer class
             MessageDeserializer ds = new MessageDeserializer(message);
             LoginRequest msg =(LoginRequest) ds.getMessage();
+            Console.WriteLine(msg.username.name);
+            Console.WriteLine(msg.username.password);
             var con = databaseInitializer.makeConnection();
             DatabaseQuerier db = new DatabaseQuerier(con);
-            db.checkLoginInfo(msg.username.name,msg.username.password);
-            ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(msg.username.name));
-            byte [] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
-            socket.Send(payLoad);
-            return true;
+            if(db.checkLoginInfo(msg.username.name,msg.username.password))
+            {
+                Console.Write("The info is True!");
+                ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(msg.username.name));
+                byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                socket.Send(payLoad);
+                return true;
+            }
+            return false;
         }
 
         

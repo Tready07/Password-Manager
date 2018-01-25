@@ -78,7 +78,7 @@ namespace Networking
             return ConvertEndianess(value);
         }
 
-        private static uint ConvertEndianess(uint value)
+        public static uint ConvertEndianess(uint value)
         {
             // Flip the endianess of an unsigned int (i.e., a 32-bit number) with some fancy
             // bit shifting magic.

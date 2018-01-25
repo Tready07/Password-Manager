@@ -59,7 +59,7 @@ namespace Password_Manager_Server
         /// <returns></returns>
         public int getMessageSize()
         {
-            return BitConverter.ToInt32(mBuffer, 9);
+            return (int)MessageUtils.ConvertEndianess(BitConverter.ToUInt32(mBuffer, 9));
         }
         public byte[] mBuffer;
     }
