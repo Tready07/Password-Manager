@@ -55,12 +55,17 @@ namespace Password_Manager_Server
             SQLiteConnection dbConn = new SQLiteConnection();
             dbConn = makeConnection(dbConn);
             String createUsersTable = "CREATE TABLE users (name VARCHAR(20) NOT NULL UNIQUE, password TEXT NOT NULL, isAdmin BOOL, salt TEXT)";
+            String salt = Shared.CryptManager.generateSalt(8);
+            String password = Shared.CryptManager.hash("Admin" + salt);
+            String addAdminUser = String.Format("INSERT INTO users VALUES('ADMIN', '{0}', true, '{1}')",password,salt);
             String createApplicationsTable = "CREATE TABLE applications (name VARCHAR(20) NOT NULL, application CHAR(20), application_type CHAR(20) NOT NULL, username CHAR(40), password TEXT, UNIQUE(name, application, username), FOREIGN KEY(name) REFERENCES users(name))";
             try
             {
                 SQLiteCommand command = new SQLiteCommand(createUsersTable, dbConn);
                 command.ExecuteNonQuery();
                 command = new SQLiteCommand(createApplicationsTable, dbConn);
+                command.ExecuteNonQuery();
+                command = new SQLiteCommand(addAdminUser, dbConn);
                 command.ExecuteNonQuery();
             }
             catch(Exception e)
