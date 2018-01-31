@@ -10,8 +10,6 @@ namespace Networking
     /// </summary>
     public static class MessageUtils
     {
-        private const string MagicNumber = "PASS";
-
         /// <summary>
         /// Serializes a message as a <see cref="byte" />[] so it can be written to a socket.
         /// </summary>
@@ -42,7 +40,7 @@ namespace Networking
         private static Task SerializeMessageHeader(MemoryStream stream, MessageBase message)
         {
             // First thing that gets written in the magic number
-            var magicNumberBytes = Encoding.ASCII.GetBytes(MagicNumber);
+            var magicNumberBytes = Encoding.ASCII.GetBytes(MessageHeader.MagicNumber);
             var magicNumberTask = stream.WriteAsync(magicNumberBytes, 0, magicNumberBytes.Length);
 
             // Next up is the message ID
