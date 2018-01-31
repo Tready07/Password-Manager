@@ -11,6 +11,51 @@ namespace Networking
     public static class MessageUtils
     {
         /// <summary>
+        /// Deserializes a message header from a stream.
+        /// </summary>
+        /// <param name="stream">The stream to read the message header from.</param>
+        /// <returns>The message header.</returns>
+        /// <exception cref="BadHeaderException">
+        /// <paramref name="stream" /> does not contain a valid message header.
+        /// </exception>
+        public static MessageHeader DeserializeMessageHeader(MemoryStream stream)
+        {
+            // Ensure that the magic number is available as the first thing that gets read in
+            byte[] buffer = new byte[MessageHeader.MagicNumber.Length];
+            stream.Read(buffer, 0, buffer.Length);
+            if (Encoding.ASCII.GetString(buffer) != MessageHeader.MagicNumber)
+            {
+                throw new BadHeaderException("The message header received is not valid.");
+            }
+
+            // Now read in the message ID (which should be an uint of 4 bytes)
+            buffer = new byte[4];
+            if (stream.Read(buffer, 0, 4) != 4)
+            {
+                throw new BadHeaderException("There is not enough data to read in the message ID.");
+            }
+            uint messageID = ToBigEndian(BitConverter.ToUInt32(buffer, 0));
+
+            // Now read in the message type (which should be a single byte)
+            buffer = new byte[1];
+            if (stream.Read(buffer, 0, 1) != 1)
+            {
+                throw new BadHeaderException("There is not enough data to read in the message type.");
+            }
+            MessageType messageType = (MessageType)buffer[0];
+
+            // Now read in the payload size
+            buffer = new byte[4];
+            if (stream.Read(buffer, 0, 4) != 4)
+            {
+                throw new BadHeaderException("There is not enough data to read in the payload size.");
+            }
+            uint payloadSize = ToBigEndian(BitConverter.ToUInt32(buffer, 0));
+
+            return new MessageHeader((int)messageID, messageType, (int)payloadSize);
+        }
+
+        /// <summary>
         /// Serializes a message as a <see cref="byte" />[] so it can be written to a socket.
         /// </summary>
         /// <param name="message">The message to serialize.</param>
