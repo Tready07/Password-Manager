@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using Networking;
 
 namespace Password_Manager_Server
 {
@@ -115,9 +117,38 @@ namespace Password_Manager_Server
                     while (pendingReadingTasks.Count > 0)
                     {
                         var currentReadyClient = pendingReadingTasks[i].task.GetAwaiter().GetResult();
+
                         // "Process" the message
-                        Debug.WriteLine($"We received bytes: { pendingReadingTasks[i].task.Result.ToString()}", "Server");
-                        handler.handleMessage(buffer,pendingReadingTasks[i].socket);
+                        int actualBytesRead = pendingReadingTasks[i].task.Result;
+                        Debug.WriteLine($"We received bytes: {actualBytesRead.ToString()}", "Server");
+
+                        try
+                        {
+                            using (var stream = new MemoryStream(buffer))
+                            {
+                                var messageHeader = MessageUtils.DeserializeMessageHeader(stream);
+
+                                // Make sure that we have enough data to actually process this message
+                                if (actualBytesRead - MessageHeader.HeaderSize < messageHeader.Size)
+                                {
+                                    // TODO: Actually handle this properly, i.e., skip it, keep
+                                    //       track of the message header we just read in, and then
+                                    //       read remaining data streamed until we have enough data
+                                    //       to properly process this message.
+                                    Debug.WriteLine("There is not enough data to read in the message payload.", "Server");
+                                    Debug.WriteLine("Skipping message...");
+                                }
+                                else
+                                {
+                                    handler.handleMessage(buffer, pendingReadingTasks[i].socket);
+                                }
+                            }
+                        }
+                        catch (BadHeaderException e)
+                        {
+                            Debug.WriteLine("Error while attempting to decode header:\n" + e, "Server");
+                        }
+
                         pendingReadingTasks.Remove(pendingReadingTasks[i]);
                         i--;
                     }

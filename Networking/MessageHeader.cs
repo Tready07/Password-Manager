@@ -17,6 +17,15 @@ namespace Networking
         public const string MagicNumber = "PASS";
 
         /// <summary>
+        /// The size of the message header.
+        /// </summary>
+        /// <remarks>
+        /// This is composed of the following: the magic number (4 bytes) + the message type (1 byte) +
+        /// the payload size (4 bytes).
+        /// </remarks>
+        public const int HeaderSize = 9;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MessageHeader" /> struct.
         /// </summary>
         /// <param name="messageID">The ID of the message being sent.</param>
