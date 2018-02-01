@@ -48,11 +48,7 @@ namespace Password_Manager
                     if (this.socket.Available == 0)
                     {
                         Trace.WriteLine("Server has disconnected from client.", "Client");
-                        this.socket.Shutdown(SocketShutdown.Both);
-                        this.socket.Disconnect(true);
-                        this.socket.Dispose();
-
-                        this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                        this.Disconnect();
                         break;
                     }
 
@@ -91,8 +87,24 @@ namespace Password_Manager
             });
         }
 
+        /// <summary>
+        /// Disconnect from the server.
+        /// </summary>
+        public void Disconnect()
+        {
+            this.socket.Shutdown(SocketShutdown.Both);
+            this.socket.Disconnect(true);
+            this.socket.Dispose();
+
+            // Note that the .NET Framework does not like it when you connect to a socket that's
+            // already been disconnected (unless it's a different endpoint), so initialize a new
+            // Socket.
+            this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
+
         protected SocketManager()
         {
+            this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.DontLinger, true);
         }
 
         /// <summary>
