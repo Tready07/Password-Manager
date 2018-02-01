@@ -28,6 +28,12 @@ namespace Password_Manager
         }
 
         public Socket socket { get; private set; } = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+        /// <summary>
+        /// Occurs when the client has been disconnected from the server.
+        /// </summary>
+        public event EventHandler Disconnected;
+
         public void connect(String host, int port)
         {   
             socket.Connect(host, port);
@@ -92,6 +98,8 @@ namespace Password_Manager
         /// </summary>
         public void Disconnect()
         {
+            this.Disconnected?.Invoke(this, EventArgs.Empty);
+
             this.socket.Shutdown(SocketShutdown.Both);
             this.socket.Disconnect(true);
             this.socket.Dispose();
