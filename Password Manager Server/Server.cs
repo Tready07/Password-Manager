@@ -146,7 +146,8 @@ namespace Password_Manager_Server
                                     if (!succeeded && messageHeader.ID == LoginRequest.MessageID)
                                     {
                                         // The login failed, so force a disconnect.
-                                        socket.Disconnect(false);
+                                        socket.Shutdown(SocketShutdown.Both);
+                                        socket.Disconnect(true);
                                         lock (this.clientListLock)
                                         {
                                             this.clientList.Remove(this.clientList.Single(cs => cs.Client.Client == socket));
