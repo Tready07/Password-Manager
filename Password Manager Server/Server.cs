@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Networking;
+using Networking.Request;
 
 namespace Password_Manager_Server
 {
@@ -140,7 +141,17 @@ namespace Password_Manager_Server
                                 }
                                 else
                                 {
-                                    handler.handleMessage(buffer, pendingReadingTasks[i].socket);
+                                    var socket = pendingReadingTasks[i].socket;
+                                    bool succeeded = handler.handleMessage(buffer, socket);
+                                    if (!succeeded && messageHeader.ID == LoginRequest.MessageID)
+                                    {
+                                        // The login failed, so force a disconnect.
+                                        socket.Disconnect(false);
+                                        lock (this.clientListLock)
+                                        {
+                                            this.clientList.Remove(this.clientList.Single(cs => cs.Client.Client == socket));
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -152,8 +163,6 @@ namespace Password_Manager_Server
                         pendingReadingTasks.Remove(pendingReadingTasks[i]);
                         i--;
                     }
-
-
                 }
 
                 Debug.WriteLine("Server is no longer handling clients.");
