@@ -142,7 +142,8 @@ namespace Password_Manager_Server
                                 else
                                 {
                                     var socket = pendingReadingTasks[i].socket;
-                                    bool succeeded = handler.handleMessage(buffer, socket);
+                                    bool succeeded = handler.handleMessage(buffer, 
+                                        this.clientList.Single(cs => cs.Client.Client == pendingReadingTasks[i].socket));
                                     if (!succeeded && messageHeader.ID == LoginRequest.MessageID)
                                     {
                                         // The login failed, so force a disconnect.

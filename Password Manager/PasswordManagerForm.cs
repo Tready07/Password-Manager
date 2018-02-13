@@ -119,5 +119,10 @@ namespace Password_Manager
                 this.passwordTextBox.UseSystemPasswordChar = true;
             }           
         }
+
+        private void applicationTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
     }
 }

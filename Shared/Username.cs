@@ -9,6 +9,11 @@ namespace Shared
     [Serializable]
     public class Username
     {
+
+        public Username()
+        {
+
+        }
         public Username(String username)
         {
             name = username;

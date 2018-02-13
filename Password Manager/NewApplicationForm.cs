@@ -50,7 +50,7 @@ namespace Password_Manager
             Shared.Username[] userName = new Shared.Username[] {username};
             app.Usernames = userName;
             app.Type = appTypeComboBox.SelectedItem.ToString();
-            
+            //TODO: send this over to the server.
         }
         byte[] secretKey { get; set; }
     }

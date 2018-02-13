@@ -83,6 +83,8 @@ namespace Password_Manager
                             }
 
                             Debug.WriteLine("Processing message...", "Client");
+                            MessageHandler handler = new MessageHandler();
+                            handler.handleMessage(stream);
                         }
                     }
                     catch (BadHeaderException ex)

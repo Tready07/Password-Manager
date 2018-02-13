@@ -12,24 +12,23 @@ namespace Password_Manager_Server
 {
     public class MessageHandler
     {
-        Func<byte [],Socket, bool>[] functions = {handleLogin};
+        Func<byte [],ClientSession, bool>[] functions = {handleLogin};
         public MessageHandler()
         {
 
         }
 
-        public bool handleMessage(byte [] message, Socket socket)
+        public bool handleMessage(byte [] message, ClientSession session)
         {
             bool isComplete = false;
             MessageDeserializer ds = new MessageDeserializer(message);
             int id = ds.getID();
-            isComplete = functions[id](message,socket);
+            isComplete = functions[id](message,session);
             return isComplete;
         }
 
-        private static bool handleLogin(byte [] message,Socket socket)
+        private static bool handleLogin(byte [] message,ClientSession session)
         {
-            // Implement Deserializer class
             MessageDeserializer ds = new MessageDeserializer(message);
             LoginRequest msg =(LoginRequest) ds.getMessage();
             Console.WriteLine(msg.username.name);
@@ -39,11 +38,18 @@ namespace Password_Manager_Server
             if(db.checkLoginInfo(msg.username.name,msg.username.password))
             {
                 Console.Write("The info is True!");
+                session.loginUsername.name = msg.username.name;
                 ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(msg.username.name));
                 byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
-                socket.Send(payLoad);
+                session.Client.Client.Send(payLoad);
                 return true;
             }
+            return false;
+        }
+
+        private static bool handleNewApp(byte [] message, ClientSession session)
+        {
+            //TODO: handleNewApp
             return false;
         }
 

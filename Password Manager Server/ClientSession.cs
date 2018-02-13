@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
+using Shared;
 
 namespace Password_Manager_Server
 {
@@ -18,7 +19,9 @@ namespace Password_Manager_Server
         public ClientSession(TcpClient tcpClient)
         {
             this.tcpClient = tcpClient;
+            loginUsername = new Username();
         }
+        public Username loginUsername { get; set; }
 
         /// <summary>
         /// Gets the <see cref="TcpClient" /> for this client connection.
