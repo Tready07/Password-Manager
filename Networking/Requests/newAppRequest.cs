@@ -6,18 +6,19 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Networking.Requests
+namespace Networking.Request
 {
-    class newAppRequest : MessageBase
+    [Serializable]
+    public class NewAppRequest : MessageBase
     {
         public const int MessageID = 2;
 
-        public newAppRequest(Shared.Application app) :
+        public NewAppRequest(Shared.Application app) :
             base(MessageID, MessageType.Request)
         {
             application = app;
         }
-        Shared.Application application;
+        public Shared.Application application;
 
         public override byte[] ToByteArray()
         {

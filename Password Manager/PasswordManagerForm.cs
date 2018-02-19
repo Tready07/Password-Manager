@@ -47,13 +47,18 @@ namespace Password_Manager
                     m_secretkey = secretkey;
                 }
             }
-            
+            else
+            {
+                m_secretkey = File.ReadAllBytes("keyFile");
+            }
+            //TODO: send ApplicationsRequests
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
+            //TODO: Fix names
             List<TreeNode> rootNodes = getRootNodes();
-            NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray());
+            NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(),m_secretkey);
             newAppForm.Show();
         }
 

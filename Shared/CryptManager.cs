@@ -15,11 +15,11 @@ namespace Shared
          *      then it encrypts using TripleDes Electronic Cookbook (ecb).
          *      It returns a (encrypted) string.
          */
-        public static string encrypt(string input, string key)
+        public static string encrypt(string input, byte [] key)
         {
             byte[] inputArray = UTF8Encoding.UTF8.GetBytes(input);
             TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
-            tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);
+            tripleDES.Key = key;
             tripleDES.Mode = CipherMode.ECB;
             tripleDES.Padding = PaddingMode.PKCS7;
             ICryptoTransform encryptor = tripleDES.CreateEncryptor();           

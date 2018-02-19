@@ -12,17 +12,17 @@ namespace Password_Manager_Server
 {
     public class MessageHandler
     {
-        Func<byte [],ClientSession, bool>[] functions = {handleLogin};
+        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp};
         public MessageHandler()
         {
 
         }
 
-        public bool handleMessage(byte [] message, ClientSession session)
+        public bool handleMessage(byte [] message, ClientSession session, MessageHeader header)
         {
             bool isComplete = false;
             MessageDeserializer ds = new MessageDeserializer(message);
-            int id = ds.getID();
+            int id = header.ID;
             isComplete = functions[id](message,session);
             return isComplete;
         }
@@ -47,10 +47,23 @@ namespace Password_Manager_Server
             return false;
         }
 
+        private static bool handleApplications(byte [] message,ClientSession session)
+        {
+            //TODO: send all of the users apps to him or her or it:D
+            return false;
+        }
+
         private static bool handleNewApp(byte [] message, ClientSession session)
         {
-            //TODO: handleNewApp
-            return false;
+            MessageDeserializer ds = new MessageDeserializer(message);
+            NewAppRequest request = (NewAppRequest)ds.getMessage();
+            Console.WriteLine(request.application.Usernames[0].name);
+            Console.WriteLine(request.application.Usernames[0].password);
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            db.addUsername(request.application, session.loginUsername.name);
+            //TODO: send back the application so the client can update the tree.
+            return true;
         }
 
         

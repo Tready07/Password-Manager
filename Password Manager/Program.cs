@@ -12,12 +12,13 @@ namespace Password_Manager
         /// The main entry point for the application.
         /// </summary>
         /// 
-        public static PasswordManagerForm passwordForm = new PasswordManagerForm();
+        public static PasswordManagerForm passwordForm;
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            passwordForm = new PasswordManagerForm();
             Application.Run(new LoginDialog());
             Application.Run(passwordForm);
         }

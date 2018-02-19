@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Networking.Request;
 
 namespace Password_Manager
 {
@@ -18,7 +19,7 @@ namespace Password_Manager
             this.appTypeComboBox.SelectedIndex = 0;
         }
 
-        public NewApplicationForm(String [] appTypes)
+        public NewApplicationForm(String [] appTypes, byte [] key)
         {
             InitializeComponent();
             this.appTypeComboBox.SelectedIndex = 0;
@@ -26,6 +27,7 @@ namespace Password_Manager
             {
                 this.appTypeComboBox.Items.Insert(0, appType);
             }
+            secretKey = key;
         }
         
         private void appTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -41,16 +43,19 @@ namespace Password_Manager
             }
         }
 
-        private void submitButton(object sender, EventArgs e)
+        private async void submitButton(object sender, EventArgs e)
         {
             Shared.Application app = new Shared.Application();
             String plainTextPw = pwTextBox.Text;
-            var encryptedPw = Shared.CryptManager.encrypt(plainTextPw,secretKey.ToString());
+            var encryptedPw = Shared.CryptManager.encrypt(plainTextPw,secretKey);
             Shared.Username username = new Shared.Username(usernameTextBox.Text,encryptedPw);
             Shared.Username[] userName = new Shared.Username[] {username};
             app.Usernames = userName;
             app.Type = appTypeComboBox.SelectedItem.ToString();
+            NewAppRequest request = new NewAppRequest(app);
             //TODO: send this over to the server.
+            SocketManager manager = SocketManager.Instance;
+            await manager.SendMessage(request);
         }
         byte[] secretKey { get; set; }
     }

@@ -40,5 +40,11 @@ namespace Password_Manager
             Program.passwordForm.populateTree(resp.applications);
             return true;
         }
+
+        private static bool handleNewApp(MemoryStream message)
+        {
+            //TODO: handleNewAPPresponse (update applications tree)
+            return false;
+        }
     }
 }

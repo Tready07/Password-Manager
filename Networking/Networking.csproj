@@ -45,7 +45,7 @@
     <Compile Include="MessageType.cs" />
     <Compile Include="MessageUtils.cs" />
     <Compile Include="Requests\ApplicationsRequest.cs" />
-    <Compile Include="Requests\newAppRequest.cs" />
+    <Compile Include="Requests\NewAppRequest.cs" />
     <Compile Include="Responses\ApplicationsResponse.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="MessageBase.cs" />
