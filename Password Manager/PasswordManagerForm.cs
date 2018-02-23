@@ -8,6 +8,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Password_Manager
 {
@@ -16,42 +17,6 @@ namespace Password_Manager
         public PasswordManagerForm()
         {
             InitializeComponent();
-            var secretKeyIsPresent = File.Exists("keyFile");
-            if (!secretKeyIsPresent)
-            {   //TODO: Handle case where the file is encrypted.        
-                DialogResult result = MessageBox.Show("Please select YES if you already have a secretkey file you would like to use or" +
-                 " select no if you want it to be generated for you and stored locally", "Secret Key", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    OpenFileDialog fileDialog = new OpenFileDialog();
-                    fileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                    fileDialog.FilterIndex = 2;
-                    fileDialog.RestoreDirectory = true;
-                    if (fileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        try
-                        {
-                            string filename = fileDialog.FileName;
-                            m_secretkey = File.ReadAllBytes(filename);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
-                        }
-                    }
-                }
-                else
-                {
-                    var secretkey = Shared.CryptManager.generateKey();
-                    File.WriteAllBytes("keyFile", secretkey);
-                    m_secretkey = secretkey;
-                }
-            }
-            else
-            {
-                m_secretkey = File.ReadAllBytes("keyFile");
-            }
-            //TODO: send ApplicationsRequests
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -128,6 +93,69 @@ namespace Password_Manager
         private void applicationTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
 
+        }
+
+        private void PasswordManagerForm_Load(object sender, EventArgs e)
+        {
+            var secretKeyIsPresent = File.Exists("keyFile");
+            if (!secretKeyIsPresent)
+            {
+                using (var dialog = new TaskDialog()
+                {
+                    Caption = "Browse for Secret Key",
+                    InstructionText = "Would you like to browse for your secret key, or generate a new one?",
+                    Text = "This key is needed in order to decrypt the passwords you've stored in Password Manager properly. " +
+                           "If you choose to browse for a key file, make sure that this is the same key file that you've " +
+                           "used earlier, or your passwords will look funny.",
+                    OwnerWindowHandle = this.Handle,
+                })
+                {
+                    var buttonGenerate = new TaskDialogButton("GenerateButton", "Generate new key")
+                    {
+                        Default = true,
+                    };
+                    buttonGenerate.Click += (object s, EventArgs ea) =>
+                    {
+                        var secretkey = Shared.CryptManager.generateKey();
+                        File.WriteAllBytes("keyFile", secretkey);
+                        m_secretkey = secretkey;
+
+                        dialog.Close();
+                    };
+
+                    var buttonBrowse = new TaskDialogButton("BrowseButton", "Browse for key");
+                    buttonBrowse.Click += (object s, EventArgs ea) =>
+                    {
+                        OpenFileDialog fileDialog = new OpenFileDialog();
+                        fileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                        fileDialog.FilterIndex = 2;
+                        fileDialog.RestoreDirectory = true;
+                        if (fileDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            try
+                            {
+                                string filename = fileDialog.FileName;
+                                m_secretkey = File.ReadAllBytes(filename);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                            }
+                        }
+
+                        dialog.Close();
+                    };
+
+                    dialog.Controls.Add(buttonGenerate);
+                    dialog.Controls.Add(buttonBrowse);
+                    dialog.Show();
+                }
+            }
+            else
+            {
+                m_secretkey = File.ReadAllBytes("keyFile");
+            }
+            //TODO: send ApplicationsRequests
         }
     }
 }
