@@ -37,7 +37,20 @@ namespace Password_Manager
         {
             BinaryFormatter formatter = new BinaryFormatter();
             ApplicationsResponse resp = (ApplicationsResponse)formatter.Deserialize(message);
-            Program.passwordForm.populateTree(resp.applications);
+
+            // NOTE: Because the MessageHandler will be running in a separate thread, it is important
+            //       to use Form.Invoke and put in GUI-related operations inside the lambda function
+            //       so that our calls will run/be invoked on the GUI thread.
+            //
+            //       Otherwise, WinForm will freak out, since we can't make calls to the GUI in
+            //       another thread (we can only do it in the thread that the form were created in,
+            //       i.e., the GUI thread).
+            Program.loginDialog.Invoke((MethodInvoker)(() =>
+            {
+                Program.loginDialog.Hide();
+                Program.passwordForm.Show();
+                Program.passwordForm.populateTree(resp.applications);
+            }));
             return true;
         }
 
