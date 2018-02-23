@@ -157,5 +157,10 @@ namespace Password_Manager
             }
             //TODO: send ApplicationsRequests
         }
+
+        private void PasswordManagerForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

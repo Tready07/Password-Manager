@@ -150,6 +150,7 @@
             this.Controls.Add(this.passwordTextBox);
             this.Name = "PasswordManagerForm";
             this.Text = "Password Manager";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PasswordManagerForm_FormClosed);
             this.Load += new System.EventHandler(this.PasswordManagerForm_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
