@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Networking;
 using Networking.Request;
-using Networking.Response;
+using Networking.Responses;
 using System.Net.Sockets;
 
 namespace Password_Manager_Server
@@ -62,10 +62,17 @@ namespace Password_Manager_Server
             var con = databaseInitializer.makeConnection();
             DatabaseQuerier db = new DatabaseQuerier(con);
             db.addUsername(request.application, session.loginUsername.name);
-            //TODO: send back the application so the client can update the tree.
+            NewAppResponse resp = new NewAppResponse(request.application);
+            byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+            session.Client.Client.Send(payLoad);
             return true;
         }
 
+        private static bool handlePassword(byte [] message, ClientSession session)
+        {
+            //TODO: send Password to client for given application. Don't forget to make the request :D
+            return false;
+        }
         
     }
 }

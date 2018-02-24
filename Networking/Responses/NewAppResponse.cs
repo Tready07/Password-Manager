@@ -9,17 +9,16 @@ using System.Threading.Tasks;
 namespace Networking.Responses
 {
     [Serializable]
-   public class ApplicationsResponse : MessageBase
+    public class NewAppResponse : MessageBase
     {
-        public const int MessageID = 0;
+        public const int MessageID = 1;
 
-        public ApplicationsResponse(Shared.Application[] apps) :
+        public NewAppResponse(Shared.Application app) :
             base(MessageID, MessageType.Response)
         {
-            applications = apps;
+            application = app;
         }
-
-        public Shared.Application[] applications { get; set; }
+        public Shared.Application application { get; set; }
 
         public override byte[] ToByteArray()
         {

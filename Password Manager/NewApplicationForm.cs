@@ -51,9 +51,9 @@ namespace Password_Manager
             Shared.Username username = new Shared.Username(usernameTextBox.Text,encryptedPw);
             Shared.Username[] userName = new Shared.Username[] {username};
             app.Usernames = userName;
-            app.Type = appTypeComboBox.SelectedItem.ToString();
+            app.Type = appTypeComboBox.Text;
+            app.Name = appNameTextBox.Text;
             NewAppRequest request = new NewAppRequest(app);
-            //TODO: send this over to the server.
             SocketManager manager = SocketManager.Instance;
             await manager.SendMessage(request);
         }

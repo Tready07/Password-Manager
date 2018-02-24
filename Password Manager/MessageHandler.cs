@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Networking.Response;
+using Networking.Responses;
 using Networking;
 using System.Windows.Forms;
 
@@ -13,7 +13,7 @@ namespace Password_Manager
 {
     class MessageHandler
     {
-        Func<MemoryStream, bool>[] functions = { handleApplications };
+        Func<MemoryStream, bool>[] functions = { handleApplications,handleNewApp };
         public MessageHandler()
         {
 
@@ -56,8 +56,15 @@ namespace Password_Manager
 
         private static bool handleNewApp(MemoryStream message)
         {
-            //TODO: handleNewAPPresponse (update applications tree)
-            return false;
+            BinaryFormatter formatter = new BinaryFormatter();
+            NewAppResponse resp = (NewAppResponse)formatter.Deserialize(message);
+
+
+            Program.passwordForm.Invoke((MethodInvoker)(() =>
+            {
+                Program.passwordForm.addAppToTree(resp.application);
+            }));          
+            return true;
         }
     }
 }

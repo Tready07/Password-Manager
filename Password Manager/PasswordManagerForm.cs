@@ -48,19 +48,38 @@ namespace Password_Manager
         
         public void populateTree(Shared.Application[] applications)
         {
-            var rootNodes = getRootNodes();
             foreach (var app in applications)
             {
-                foreach (var node in rootNodes)
+                addAppToTree(app);
+            }
+        }
+
+        public void addAppToTree(Shared.Application application)
+        {
+            var rootNodes = getRootNodes();
+            foreach(var appTypeNode in rootNodes)
+            {
+                if (application.Type == appTypeNode.Text)
                 {
-                    if (app.Type == node.Text)
+                    foreach(TreeNode appNode in appTypeNode.Nodes)
                     {
-                        var appNode = node.Nodes.Add(app.Name);
-                        appNode.Nodes.AddRange(app.Usernames.Select(username => new TreeNode(username.name)).ToArray());
-                        break;
+                        if (application.Name == appNode.Text)
+                        {
+                            appNode.Nodes.Add(application.Usernames[0].name);
+                            return;
+                        }
                     }
+                    TreeNode newAppNode = new TreeNode(application.Name);
+                    newAppNode.Nodes.Add(application.Usernames[0].name);
+                    appTypeNode.Nodes.Add(newAppNode);
+                    return;
                 }
             }
+            TreeNode newRootNode = new TreeNode(application.Type);
+            TreeNode applicationNode = newRootNode.Nodes.Add(application.Name);
+            applicationNode.Nodes.Add(application.Usernames[0].name);
+            this.applicationTreeView.Nodes.Add(newRootNode);
+            return;
         }
 
         private void editButton_Click(object sender, EventArgs e)
