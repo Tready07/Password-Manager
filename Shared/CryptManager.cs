@@ -36,11 +36,11 @@ namespace Shared
          *      it then returns a (plaintext) string.
          */
 
-        public static string decrypt(string input, string key)
+        public static string decrypt(string input, byte [] key)
         {
             byte[] inputArray = Convert.FromBase64String(input);
             TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();
-            tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);
+            tripleDES.Key = key;
             tripleDES.Mode = CipherMode.ECB;
             tripleDES.Padding = PaddingMode.PKCS7;
             ICryptoTransform decryptor = tripleDES.CreateDecryptor();

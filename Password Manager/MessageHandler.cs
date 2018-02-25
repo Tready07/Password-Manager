@@ -13,7 +13,7 @@ namespace Password_Manager
 {
     class MessageHandler
     {
-        Func<MemoryStream, bool>[] functions = { handleApplications,handleNewApp };
+        Func<MemoryStream, bool>[] functions = { handleApplications, handleNewApp, handlePassword };
         public MessageHandler()
         {
 
@@ -65,6 +65,22 @@ namespace Password_Manager
                 Program.passwordForm.addAppToTree(resp.application);
             }));          
             return true;
+        }
+
+        private static bool handlePassword(MemoryStream message)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            PasswordResponse resp = (PasswordResponse)formatter.Deserialize(message);
+            var decryptedPassword = Shared.CryptManager.decrypt(resp.application.Usernames[0].password,
+                Program.passwordForm.M_secretkey);
+
+
+            Program.passwordForm.Invoke((MethodInvoker)(() =>
+            {
+                Program.passwordForm.fillPasswordBox(decryptedPassword);
+            }));
+            return true;    
+
         }
     }
 }

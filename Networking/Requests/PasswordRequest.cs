@@ -7,25 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Networking.Requests
-{   
+{
     [Serializable]
-    public class LoginRequest : MessageBase
+    public class PasswordRequest : MessageBase
     {
-        public const int MessageID = 0;
+        public const int MessageID = 3;
 
-        public LoginRequest(Shared.Username user) :
+        public PasswordRequest(Shared.Application app) :
             base(MessageID, MessageType.Request)
         {
-            username = user;
+            application = app;
         }
-        /**
-         * @brief
-         *      The message contains a Username
-         *      this will be used on server side to ensure
-         *      the client can log in cause he has the correct info
-         *      server should implement this with matching hashs
-         */
-        public Shared.Username username;
+        public Shared.Application application;
 
         public override byte[] ToByteArray()
         {

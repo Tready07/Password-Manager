@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Networking;
-using Networking.Request;
+using Networking.Requests;
 
 namespace Password_Manager_Server
 {

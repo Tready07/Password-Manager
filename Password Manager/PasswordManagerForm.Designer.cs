@@ -87,6 +87,7 @@
             this.applicationTreeView.Size = new System.Drawing.Size(411, 573);
             this.applicationTreeView.TabIndex = 5;
             this.applicationTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.applicationTreeView_AfterSelect);
+            this.applicationTreeView.DoubleClick += new System.EventHandler(this.applicationTreeView_DoubleClick);
             // 
             // toolStrip1
             // 

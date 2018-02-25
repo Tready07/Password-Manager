@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Networking.Request;
+using Networking.Requests;
 
 namespace Password_Manager
 {

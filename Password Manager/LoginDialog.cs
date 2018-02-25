@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Networking;
-using Networking.Request;
+using Networking.Requests;
 
 namespace Password_Manager
 {

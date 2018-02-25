@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Networking.Requests;
 
 namespace Password_Manager
 {
@@ -23,7 +24,7 @@ namespace Password_Manager
         {
             //TODO: Fix names
             List<TreeNode> rootNodes = getRootNodes();
-            NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(),m_secretkey);
+            NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(),M_secretkey);
             newAppForm.Show();
         }
 
@@ -82,6 +83,13 @@ namespace Password_Manager
             return;
         }
 
+        
+
+        public void fillPasswordBox(String password)
+        {
+            this.passwordTextBox.Text = password;
+        }
+
         private void editButton_Click(object sender, EventArgs e)
         {
             if(this.passwordTextBox.ReadOnly)
@@ -95,7 +103,7 @@ namespace Password_Manager
                 this.editButton.Text = "Edit";
             }
         }
-    byte[] m_secretkey;
+    public byte[] M_secretkey { get; private set; }
 
         private void showpwCheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -137,7 +145,7 @@ namespace Password_Manager
                     {
                         var secretkey = Shared.CryptManager.generateKey();
                         File.WriteAllBytes("keyFile", secretkey);
-                        m_secretkey = secretkey;
+                        M_secretkey = secretkey;
 
                         dialog.Close();
                     };
@@ -154,7 +162,7 @@ namespace Password_Manager
                             try
                             {
                                 string filename = fileDialog.FileName;
-                                m_secretkey = File.ReadAllBytes(filename);
+                                M_secretkey = File.ReadAllBytes(filename);
                             }
                             catch (Exception ex)
                             {
@@ -172,7 +180,7 @@ namespace Password_Manager
             }
             else
             {
-                m_secretkey = File.ReadAllBytes("keyFile");
+                M_secretkey = File.ReadAllBytes("keyFile");
             }
             //TODO: send ApplicationsRequests
         }
@@ -180,6 +188,20 @@ namespace Password_Manager
         private void PasswordManagerForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+
+        async private void applicationTreeView_DoubleClick(object sender, EventArgs e)
+        {
+            if (this.applicationTreeView.SelectedNode.Nodes.Count == 0)
+            {
+                Shared.Application app = new Shared.Application();
+                var applicationNode = this.applicationTreeView.SelectedNode.Parent;
+                app.Name = applicationNode.Text;
+                app.Usernames = new Shared.Username[] { new Shared.Username (this.applicationTreeView.SelectedNode.Text) };
+                PasswordRequest request = new PasswordRequest(app);
+                SocketManager manager = SocketManager.Instance;
+                await manager.SendMessage(request);
+            }
         }
     }
 }

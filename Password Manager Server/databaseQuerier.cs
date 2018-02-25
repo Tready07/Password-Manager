@@ -126,7 +126,7 @@ namespace Password_Manager_Server
             String password = "";
             String sqlString = "SELECT password FROM applications WHERE application = @appName AND username = @username AND name = @user ";
             SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
-            command.Parameters.AddWithValue("@name", user);
+            command.Parameters.AddWithValue("@user", user);
             command.Parameters.AddWithValue("@appName", appName);
             command.Parameters.AddWithValue("@username", username);
             SQLiteDataReader reader = command.ExecuteReader();

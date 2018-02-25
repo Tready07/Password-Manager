@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Networking;
-using Networking.Request;
+using Networking.Requests;
 using Networking.Responses;
 using System.Net.Sockets;
 
@@ -12,7 +12,7 @@ namespace Password_Manager_Server
 {
     public class MessageHandler
     {
-        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp};
+        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp, handlePassword};
         public MessageHandler()
         {
 
@@ -71,7 +71,18 @@ namespace Password_Manager_Server
         private static bool handlePassword(byte [] message, ClientSession session)
         {
             //TODO: send Password to client for given application. Don't forget to make the request :D
-            return false;
+            MessageDeserializer ds = new MessageDeserializer(message);
+            PasswordRequest request = (PasswordRequest)ds.getMessage();
+            Console.WriteLine(request.application.Usernames[0].name);
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            var encryptedPw = db.getPassword(request.application.Name,
+                request.application.Usernames[0].name, session.loginUsername.name);
+            request.application.Usernames[0].password = encryptedPw;
+            PasswordResponse resp = new PasswordResponse(request.application);
+            byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+            session.Client.Client.Send(payLoad);
+            return true;
         }
         
     }

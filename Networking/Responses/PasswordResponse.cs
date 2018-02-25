@@ -6,21 +6,22 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Networking.Requests
+namespace Networking.Responses
 {
     [Serializable]
-    public class NewAppRequest : MessageBase
+    public class PasswordResponse : MessageBase
     {
         public const int MessageID = 2;
 
-        public NewAppRequest(Shared.Application app) :
-            base(MessageID, MessageType.Request)
+        public PasswordResponse(Shared.Application app) :
+            base(MessageID, MessageType.Response)
         {
             application = app;
         }
-        public Shared.Application application;
 
-        public override byte[] ToByteArray()
+        public Shared.Application application { get; set; }
+
+        public override byte [] ToByteArray()
         {
             using (var stream = new MemoryStream())
             {
@@ -30,5 +31,6 @@ namespace Networking.Requests
                 return stream.ToArray();
             }
         }
+
     }
 }
