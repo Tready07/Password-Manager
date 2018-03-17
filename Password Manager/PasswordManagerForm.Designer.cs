@@ -68,6 +68,7 @@
             this.passwordCopyButton.TabIndex = 2;
             this.passwordCopyButton.Text = "Copy";
             this.passwordCopyButton.UseVisualStyleBackColor = true;
+            this.passwordCopyButton.Click += new System.EventHandler(this.passwordCopyButton_Click);
             // 
             // showpwCheckBox
             // 

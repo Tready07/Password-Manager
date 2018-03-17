@@ -70,7 +70,6 @@ namespace Password_Manager_Server
 
         private static bool handlePassword(byte [] message, ClientSession session)
         {
-            //TODO: send Password to client for given application. Don't forget to make the request :D
             MessageDeserializer ds = new MessageDeserializer(message);
             PasswordRequest request = (PasswordRequest)ds.getMessage();
             Console.WriteLine(request.application.Usernames[0].name);

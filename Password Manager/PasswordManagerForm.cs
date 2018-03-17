@@ -203,5 +203,10 @@ namespace Password_Manager
                 await manager.SendMessage(request);
             }
         }
+
+        private void passwordCopyButton_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(this.passwordTextBox.Text);
+        }
     }
 }
