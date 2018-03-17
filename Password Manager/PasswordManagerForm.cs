@@ -46,6 +46,31 @@ namespace Password_Manager
                 this.applicationTreeView.Nodes.Add(node);
             }
         }
+
+        public bool doesUsernameExist(string category, string appName, string username)
+        {
+            foreach (TreeNode categoryNode in this.applicationTreeView.Nodes)
+            {
+                if (categoryNode.Text == category)
+                {
+                    foreach (TreeNode appNode in categoryNode.Nodes)
+                    {
+                        if (appNode.Text == appName)
+                        {
+                            foreach (TreeNode userNode in appNode.Nodes)
+                            {
+                                if (userNode.Text == username)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
         
         public void populateTree(Shared.Application[] applications)
         {
