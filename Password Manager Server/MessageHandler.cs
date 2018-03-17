@@ -49,8 +49,12 @@ namespace Password_Manager_Server
 
         private static bool handleApplications(byte [] message,ClientSession session)
         {
-            //TODO: send all of the users apps to him or her or it:D
-            return false;
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(session.loginUsername.name));
+            byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+            session.Client.Client.Send(payLoad);
+            return true;
         }
 
         private static bool handleNewApp(byte [] message, ClientSession session)
