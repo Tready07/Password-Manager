@@ -83,32 +83,48 @@ namespace Password_Manager
         public void addAppToTree(Shared.Application application)
         {
             var rootNodes = getRootNodes();
-            foreach(var appTypeNode in rootNodes)
+
+            TreeNode theAppTypeNode = null;
+            TreeNode theAppNode = null;
+
+            // First, search for the existing app type node and the app node in the TreeView.
+            foreach (var appTypeNode in rootNodes)
             {
                 if (application.Type == appTypeNode.Text)
                 {
-                    foreach(TreeNode appNode in appTypeNode.Nodes)
+                    theAppTypeNode = appTypeNode;
+
+                    foreach (TreeNode appNode in appTypeNode.Nodes)
                     {
                         if (application.Name == appNode.Text)
                         {
-                            appNode.Nodes.Add(application.Usernames[0].name);
-                            return;
+                            theAppNode = appNode;
+                            break;
                         }
                     }
-                    TreeNode newAppNode = new TreeNode(application.Name);
-                    newAppNode.Nodes.Add(application.Usernames[0].name);
-                    appTypeNode.Nodes.Add(newAppNode);
-                    return;
                 }
             }
-            TreeNode newRootNode = new TreeNode(application.Type);
-            TreeNode applicationNode = newRootNode.Nodes.Add(application.Name);
-            applicationNode.Nodes.Add(application.Usernames[0].name);
-            this.applicationTreeView.Nodes.Add(newRootNode);
-            return;
-        }
 
-        
+            // Create the root node (i.e., the app type node) if our search ended up fruitless
+            if (theAppTypeNode == null)
+            {
+                theAppTypeNode = new TreeNode(application.Type);
+                this.applicationTreeView.Nodes.Add(theAppTypeNode);
+            }
+
+            // Create the app node if our search ended up fruitless
+            if (theAppNode == null)
+            {
+                theAppNode = new TreeNode(application.Name);
+                theAppTypeNode.Nodes.Add(theAppNode);
+            }
+
+            // Now add the username underneath theAppNode
+            foreach (var username in application.Usernames)
+            {
+                theAppNode.Nodes.Add(username.name);
+            }
+        }
 
         public void fillPasswordBox(String password)
         {
