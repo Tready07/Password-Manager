@@ -45,14 +45,14 @@
             this.usernameTextBox.Location = new System.Drawing.Point(107, 102);
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(186, 20);
-            this.usernameTextBox.TabIndex = 0;
+            this.usernameTextBox.TabIndex = 3;
             // 
             // appNameTextBox
             // 
             this.appNameTextBox.Location = new System.Drawing.Point(107, 60);
             this.appNameTextBox.Name = "appNameTextBox";
             this.appNameTextBox.Size = new System.Drawing.Size(186, 20);
-            this.appNameTextBox.TabIndex = 0;
+            this.appNameTextBox.TabIndex = 1;
             // 
             // applicationNameLabel
             // 
@@ -60,7 +60,7 @@
             this.applicationNameLabel.Location = new System.Drawing.Point(11, 63);
             this.applicationNameLabel.Name = "applicationNameLabel";
             this.applicationNameLabel.Size = new System.Drawing.Size(90, 13);
-            this.applicationNameLabel.TabIndex = 1;
+            this.applicationNameLabel.TabIndex = 0;
             this.applicationNameLabel.Text = "Application Name";
             // 
             // usernameLabel
@@ -69,7 +69,7 @@
             this.usernameLabel.Location = new System.Drawing.Point(15, 105);
             this.usernameLabel.Name = "usernameLabel";
             this.usernameLabel.Size = new System.Drawing.Size(55, 13);
-            this.usernameLabel.TabIndex = 1;
+            this.usernameLabel.TabIndex = 2;
             this.usernameLabel.Text = "Username";
             // 
             // pwTextBox
@@ -77,7 +77,7 @@
             this.pwTextBox.Location = new System.Drawing.Point(107, 142);
             this.pwTextBox.Name = "pwTextBox";
             this.pwTextBox.Size = new System.Drawing.Size(186, 20);
-            this.pwTextBox.TabIndex = 0;
+            this.pwTextBox.TabIndex = 5;
             this.pwTextBox.UseSystemPasswordChar = true;
             // 
             // passwordLabel
@@ -86,7 +86,7 @@
             this.passwordLabel.Location = new System.Drawing.Point(15, 145);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Size = new System.Drawing.Size(53, 13);
-            this.passwordLabel.TabIndex = 1;
+            this.passwordLabel.TabIndex = 4;
             this.passwordLabel.Text = "Password";
             // 
             // appTypeComboBox
@@ -103,7 +103,7 @@
             this.appTypeComboBox.Location = new System.Drawing.Point(107, 183);
             this.appTypeComboBox.Name = "appTypeComboBox";
             this.appTypeComboBox.Size = new System.Drawing.Size(117, 21);
-            this.appTypeComboBox.TabIndex = 2;
+            this.appTypeComboBox.TabIndex = 7;
             this.appTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.appTypeComboBox_SelectedIndexChanged);
             // 
             // appTypeLabel
@@ -112,7 +112,7 @@
             this.appTypeLabel.Location = new System.Drawing.Point(15, 186);
             this.appTypeLabel.Name = "appTypeLabel";
             this.appTypeLabel.Size = new System.Drawing.Size(86, 13);
-            this.appTypeLabel.TabIndex = 1;
+            this.appTypeLabel.TabIndex = 6;
             this.appTypeLabel.Text = "Application Type";
             // 
             // button1
@@ -120,7 +120,7 @@
             this.button1.Location = new System.Drawing.Point(218, 222);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
+            this.button1.TabIndex = 9;
             this.button1.Text = "Submit";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.submitButton);
@@ -130,7 +130,7 @@
             this.cancelButton.Location = new System.Drawing.Point(107, 222);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 3;
+            this.cancelButton.TabIndex = 8;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 

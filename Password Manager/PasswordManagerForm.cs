@@ -24,7 +24,7 @@ namespace Password_Manager
         {
             //TODO: Fix names
             List<TreeNode> rootNodes = getRootNodes();
-            NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(),M_secretkey);
+            NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(),M_secretkey, this);
             newAppForm.Show();
         }
 
