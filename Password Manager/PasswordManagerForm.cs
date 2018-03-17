@@ -249,5 +249,65 @@ namespace Password_Manager
         {
             Clipboard.SetText(this.passwordTextBox.Text);
         }
+
+        private void newUsernameButton_Click(object sender, EventArgs e)
+        {
+            string appType = null;
+            string appName = null;
+            var selectedNode = this.applicationTreeView.SelectedNode;
+
+            switch (selectedNode.Level)
+            {
+                case 0:
+                    appType = selectedNode.Text;
+                    break;
+                case 1:
+                    appType = selectedNode.Parent.Text;
+                    appName = selectedNode.Text;
+                    break;
+                case 2:
+                    appType = selectedNode.Parent.Parent.Text;
+                    appName = selectedNode.Parent.Text;
+                    break;
+            }
+
+            //TODO: Fix names
+            List<TreeNode> rootNodes = getRootNodes();
+            NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(), M_secretkey, this);
+            newAppForm.appName = appName;
+            newAppForm.appType = appType;
+            newAppForm.Show();
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            using (var dialog = new TaskDialog()
+            {
+                Caption = "Delete Account",
+                InstructionText = "Are you sure you want to delete this account?",
+                Icon = TaskDialogStandardIcon.Warning
+            })
+            {
+                var buttonDelete = new TaskDialogButton("DeleteButton", "Delete user account")
+                {
+                    Default = true,
+                };
+                buttonDelete.Click += (object s, EventArgs ea) =>
+                {
+                    // TODO: Actually delete stuff.
+                    dialog.Close();
+                };
+
+                var buttonCancel = new TaskDialogButton("DontDeleteButton", "Don't delete");
+                buttonCancel.Click += (object s, EventArgs ea) =>
+                {
+                    dialog.Close();
+                };
+
+                dialog.Controls.Add(buttonDelete);
+                dialog.Controls.Add(buttonCancel);
+                dialog.Show();
+            }
+        }
     }
 }

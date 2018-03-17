@@ -36,25 +36,26 @@
             this.applicationTreeView = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.newUsernameButton = new System.Windows.Forms.ToolStripButton();
             this.accountToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.editButton = new System.Windows.Forms.Button();
+            this.buttonDelete = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(515, 34);
+            this.passwordTextBox.Location = new System.Drawing.Point(476, 34);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.ReadOnly = true;
-            this.passwordTextBox.Size = new System.Drawing.Size(209, 20);
+            this.passwordTextBox.Size = new System.Drawing.Size(375, 20);
             this.passwordTextBox.TabIndex = 0;
             this.passwordTextBox.UseSystemPasswordChar = true;
             // 
             // Password
             // 
             this.Password.AutoSize = true;
-            this.Password.Location = new System.Drawing.Point(445, 37);
+            this.Password.Location = new System.Drawing.Point(417, 37);
             this.Password.Name = "Password";
             this.Password.Size = new System.Drawing.Size(53, 13);
             this.Password.TabIndex = 1;
@@ -62,7 +63,7 @@
             // 
             // passwordCopyButton
             // 
-            this.passwordCopyButton.Location = new System.Drawing.Point(515, 60);
+            this.passwordCopyButton.Location = new System.Drawing.Point(476, 84);
             this.passwordCopyButton.Name = "passwordCopyButton";
             this.passwordCopyButton.Size = new System.Drawing.Size(75, 23);
             this.passwordCopyButton.TabIndex = 2;
@@ -73,7 +74,7 @@
             // showpwCheckBox
             // 
             this.showpwCheckBox.AutoSize = true;
-            this.showpwCheckBox.Location = new System.Drawing.Point(730, 36);
+            this.showpwCheckBox.Location = new System.Drawing.Point(476, 61);
             this.showpwCheckBox.Name = "showpwCheckBox";
             this.showpwCheckBox.Size = new System.Drawing.Size(102, 17);
             this.showpwCheckBox.TabIndex = 4;
@@ -94,7 +95,7 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
-            this.toolStripButton2,
+            this.newUsernameButton,
             this.accountToolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -111,13 +112,14 @@
             this.toolStripButton1.Text = "New App";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
-            // toolStripButton2
+            // newUsernameButton
             // 
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(107, 22);
-            this.toolStripButton2.Text = "New Username";
+            this.newUsernameButton.Image = ((System.Drawing.Image)(resources.GetObject("newUsernameButton.Image")));
+            this.newUsernameButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.newUsernameButton.Name = "newUsernameButton";
+            this.newUsernameButton.Size = new System.Drawing.Size(107, 22);
+            this.newUsernameButton.Text = "New Username";
+            this.newUsernameButton.Click += new System.EventHandler(this.newUsernameButton_Click);
             // 
             // accountToolStripButton
             // 
@@ -130,7 +132,7 @@
             // 
             // editButton
             // 
-            this.editButton.Location = new System.Drawing.Point(634, 59);
+            this.editButton.Location = new System.Drawing.Point(557, 84);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(75, 23);
             this.editButton.TabIndex = 7;
@@ -138,11 +140,22 @@
             this.editButton.UseVisualStyleBackColor = true;
             this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Location = new System.Drawing.Point(638, 84);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(75, 23);
+            this.buttonDelete.TabIndex = 8;
+            this.buttonDelete.Text = "Delete";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
             // PasswordManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(863, 600);
+            this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.editButton);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.applicationTreeView);
@@ -171,7 +184,8 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Button editButton;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton newUsernameButton;
         private System.Windows.Forms.ToolStripButton accountToolStripButton;
+        private System.Windows.Forms.Button buttonDelete;
     }
 }
