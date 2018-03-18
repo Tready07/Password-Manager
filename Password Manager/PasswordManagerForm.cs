@@ -174,7 +174,7 @@ namespace Password_Manager
                     InstructionText = "Would you like to browse for your secret key, or generate a new one?",
                     Text = "This key is needed in order to decrypt the passwords you've stored in Password Manager properly.\n\n" +
                            "If you choose to browse for a key file, make sure that this is the same key file that you've " +
-                           "used with Password Manager earlier, or your passwords will look funny.",
+                           "used with Password Manager earlier, or your passwords will not decrypt properly.",
                     OwnerWindowHandle = this.Handle,
                 })
                 {
