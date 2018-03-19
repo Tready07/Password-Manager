@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Networking.Responses
 {
     [Serializable]
-    class DeleteUsernameResponse : MessageBase
+    public class DeleteUsernameResponse : MessageBase
     {
         public const int MessageID = 3;
 
