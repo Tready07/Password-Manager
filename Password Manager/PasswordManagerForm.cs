@@ -131,6 +131,40 @@ namespace Password_Manager
             this.passwordTextBox.Text = password;
         }
 
+        public void deleteUsername(Shared.Application appUser)
+        {
+            var rootNodes = getRootNodes();
+            foreach (var appTypeNode in rootNodes)
+            {
+                if (appUser.Type == appTypeNode.Text)
+                {
+                    foreach (TreeNode appNode in appTypeNode.Nodes)
+                    {
+                        if (appUser.Name == appNode.Text)
+                        {
+                            foreach (TreeNode userNode in appNode.Nodes)
+                            {
+                                if (appUser.Usernames[0].name == userNode.Text)
+                                {
+                                    userNode.Remove();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Reset the selection, in case the username we've deleted is the currently selected node
+            if (this.applicationTreeView.SelectedNode == null)
+            {
+                this.buttonDelete.Enabled = false;
+                this.passwordCopyButton.Enabled = false;
+                this.editButton.Enabled = false;
+                this.passwordTextBox.Text = string.Empty;
+            }
+        }
+
         private void editButton_Click(object sender, EventArgs e)
         {
             if(this.passwordTextBox.ReadOnly)

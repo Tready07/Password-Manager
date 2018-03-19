@@ -13,7 +13,7 @@ namespace Password_Manager
 {
     class MessageHandler
     {
-        Func<MemoryStream, bool>[] functions = { handleApplications, handleNewApp, handlePassword };
+        Func<MemoryStream, bool>[] functions = { handleApplications, handleNewApp, handlePassword, handleDeleteUsername };
         public MessageHandler()
         {
 
@@ -81,6 +81,17 @@ namespace Password_Manager
             }));
             return true;    
 
+        }
+
+        private static bool handleDeleteUsername(MemoryStream message)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            var resp = (DeleteUsernameResponse)formatter.Deserialize(message);
+            Program.passwordForm.Invoke((MethodInvoker)(() =>
+            {
+                Program.passwordForm.deleteUsername(resp.application);
+            }));
+            return true;
         }
     }
 }
