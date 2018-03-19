@@ -7,12 +7,13 @@ using Networking;
 using Networking.Requests;
 using Networking.Responses;
 using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace Password_Manager_Server
 {
     public class MessageHandler
     {
-        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp, handlePassword};
+        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp, handlePassword, handleDeleteUsername};
         public MessageHandler()
         {
 
@@ -87,6 +88,27 @@ namespace Password_Manager_Server
             session.Client.Client.Send(payLoad);
             return true;
         }
-        
+
+        private static bool handleDeleteUsername(byte[] message, ClientSession session)
+        {
+            MessageDeserializer ds = new MessageDeserializer(message);
+            DeleteUsernameRequest request = (DeleteUsernameRequest)ds.getMessage();
+            var app = request.application;
+
+            const string TraceFormat = @"DeleteUsernameRequest received:
+- Application: {0}
+- Category: {1}
+- Username: {2}";
+            Trace.WriteLine(string.Format(TraceFormat, app.Name, app.Type, app.Usernames[0].name), "Server");
+
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            db.removeUsername(app, session.loginUsername.name);
+
+            var response = new DeleteUsernameResponse(app);
+            byte[] payload = MessageUtils.SerializeMessage(response).GetAwaiter().GetResult();
+            session.Client.Client.Send(payload);
+            return false;
+        }
     }
 }
