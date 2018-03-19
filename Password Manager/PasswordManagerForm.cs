@@ -343,13 +343,13 @@ namespace Password_Manager
 
         private async void applicationTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            bool isAppSelected = e.Node.Nodes.Count == 0;
+            bool isUserSelected = e.Node.Level == 2;
 
-            this.buttonDelete.Enabled = isAppSelected;
-            this.editButton.Enabled = isAppSelected;
-            this.passwordCopyButton.Enabled = isAppSelected;
+            this.buttonDelete.Enabled = isUserSelected;
+            this.editButton.Enabled = isUserSelected;
+            this.passwordCopyButton.Enabled = isUserSelected;
 
-            if (isAppSelected)
+            if (isUserSelected)
             {
                 Shared.Application app = new Shared.Application();
                 var applicationNode = this.applicationTreeView.SelectedNode.Parent;
@@ -358,6 +358,10 @@ namespace Password_Manager
                 PasswordRequest request = new PasswordRequest(app);
                 SocketManager manager = SocketManager.Instance;
                 await manager.SendMessage(request);
+            }
+            else
+            {
+                this.passwordTextBox.Text = string.Empty;
             }
         }
     }
