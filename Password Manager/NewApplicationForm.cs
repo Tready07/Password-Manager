@@ -95,5 +95,10 @@ namespace Password_Manager
         }
 
         byte[] secretKey { get; set; }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
