@@ -63,6 +63,7 @@
             // 
             // passwordCopyButton
             // 
+            this.passwordCopyButton.Enabled = false;
             this.passwordCopyButton.Location = new System.Drawing.Point(476, 84);
             this.passwordCopyButton.Name = "passwordCopyButton";
             this.passwordCopyButton.Size = new System.Drawing.Size(75, 23);
@@ -89,7 +90,6 @@
             this.applicationTreeView.Size = new System.Drawing.Size(411, 573);
             this.applicationTreeView.TabIndex = 5;
             this.applicationTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.applicationTreeView_AfterSelect);
-            this.applicationTreeView.DoubleClick += new System.EventHandler(this.applicationTreeView_DoubleClick);
             // 
             // toolStrip1
             // 
@@ -132,6 +132,7 @@
             // 
             // editButton
             // 
+            this.editButton.Enabled = false;
             this.editButton.Location = new System.Drawing.Point(557, 84);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(75, 23);
@@ -142,6 +143,7 @@
             // 
             // buttonDelete
             // 
+            this.buttonDelete.Enabled = false;
             this.buttonDelete.Location = new System.Drawing.Point(638, 84);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);

@@ -158,11 +158,6 @@ namespace Password_Manager
             }           
         }
 
-        private void applicationTreeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-
-        }
-
         private void PasswordManagerForm_Load(object sender, EventArgs e)
         {
             var secretKeyIsPresent = File.Exists("keyFile");
@@ -231,20 +226,6 @@ namespace Password_Manager
             Application.Exit();
         }
 
-        async private void applicationTreeView_DoubleClick(object sender, EventArgs e)
-        {
-            if (this.applicationTreeView.SelectedNode.Nodes.Count == 0)
-            {
-                Shared.Application app = new Shared.Application();
-                var applicationNode = this.applicationTreeView.SelectedNode.Parent;
-                app.Name = applicationNode.Text;
-                app.Usernames = new Shared.Username[] { new Shared.Username (this.applicationTreeView.SelectedNode.Text) };
-                PasswordRequest request = new PasswordRequest(app);
-                SocketManager manager = SocketManager.Instance;
-                await manager.SendMessage(request);
-            }
-        }
-
         private void passwordCopyButton_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(this.passwordTextBox.Text);
@@ -294,7 +275,11 @@ namespace Password_Manager
                 };
                 buttonDelete.Click += (object s, EventArgs ea) =>
                 {
-                    // TODO: Actually delete stuff.
+                    var selectedNode = this.applicationTreeView.SelectedNode;
+                    var username = selectedNode.Text;
+                    var app = selectedNode.Parent.Text;
+
+
                     dialog.Close();
                 };
 
@@ -307,6 +292,26 @@ namespace Password_Manager
                 dialog.Controls.Add(buttonDelete);
                 dialog.Controls.Add(buttonCancel);
                 dialog.Show();
+            }
+        }
+
+        private async void applicationTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            bool isAppSelected = e.Node.Nodes.Count == 0;
+
+            this.buttonDelete.Enabled = isAppSelected;
+            this.editButton.Enabled = isAppSelected;
+            this.passwordCopyButton.Enabled = isAppSelected;
+
+            if (isAppSelected)
+            {
+                Shared.Application app = new Shared.Application();
+                var applicationNode = this.applicationTreeView.SelectedNode.Parent;
+                app.Name = applicationNode.Text;
+                app.Usernames = new Shared.Username[] { new Shared.Username(this.applicationTreeView.SelectedNode.Text) };
+                PasswordRequest request = new PasswordRequest(app);
+                SocketManager manager = SocketManager.Instance;
+                await manager.SendMessage(request);
             }
         }
     }
