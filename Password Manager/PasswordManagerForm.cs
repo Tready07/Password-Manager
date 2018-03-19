@@ -273,12 +273,24 @@ namespace Password_Manager
                 {
                     Default = true,
                 };
-                buttonDelete.Click += (object s, EventArgs ea) =>
+                buttonDelete.Click += async (object s, EventArgs ea) =>
                 {
+                    // Assumption: The selected node is capable of having a parent (since it's
+                    // the app node).
                     var selectedNode = this.applicationTreeView.SelectedNode;
                     var username = selectedNode.Text;
-                    var app = selectedNode.Parent.Text;
+                    var appName = selectedNode.Parent.Text;
+                    var appType = selectedNode.Parent.Parent.Text;
 
+                    Shared.Application app = new Shared.Application();
+                    var applicationNode = this.applicationTreeView.SelectedNode.Parent;
+                    app.Name = appName;
+                    app.Type = appType;
+                    app.Usernames = new Shared.Username[] { new Shared.Username(username) };
+
+                    DeleteUsernameRequest request = new DeleteUsernameRequest(app);
+                    SocketManager manager = SocketManager.Instance;
+                    await manager.SendMessage(request);
 
                     dialog.Close();
                 };
