@@ -8,18 +8,17 @@ using System.Threading.Tasks;
 
 namespace Networking.Responses
 {
-   [Serializable]
-   public class ApplicationsResponse : MessageBase
+    [Serializable]
+    class ChangeUserPasswordResponse : MessageBase
     {
-        public const int MessageID = 0;
+        public const int MessageID = 4;
 
-        public ApplicationsResponse(Shared.Application[] apps) :
+        public ChangeUserPasswordResponse(bool success):
             base(MessageID, MessageType.Response)
         {
-            applications = apps;
+            isSuccessful = success;
         }
-
-        public Shared.Application[] applications { get; set; }
+        public bool isSuccessful { get; set; }
 
         public override byte[] ToByteArray()
         {

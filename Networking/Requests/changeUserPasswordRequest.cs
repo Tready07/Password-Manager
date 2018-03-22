@@ -6,20 +6,19 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Networking.Responses
+namespace Networking.Requests
 {
-   [Serializable]
-   public class ApplicationsResponse : MessageBase
+    [Serializable]
+    public class ChangeUserPasswordRequest : MessageBase
     {
-        public const int MessageID = 0;
-
-        public ApplicationsResponse(Shared.Application[] apps) :
+        public const int MessageID = 5;
+        public ChangeUserPasswordRequest(String plainTextPw) :
             base(MessageID, MessageType.Response)
         {
-            applications = apps;
+            plainTextPassword = plainTextPw;
         }
 
-        public Shared.Application[] applications { get; set; }
+        public String plainTextPassword { get; set; }
 
         public override byte[] ToByteArray()
         {

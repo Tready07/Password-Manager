@@ -7,6 +7,7 @@ using System.Net.Sockets;
 
 namespace Networking
 {
+    //TODO: consider some public file to contain all messageIDs
     /// <summary>
     /// The base class for all messages (i.e., requests and responses) that are sent between the
     /// server and client.
