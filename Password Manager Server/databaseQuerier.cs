@@ -247,5 +247,28 @@ namespace Password_Manager_Server
             return isCorrect;
         }
 
+        public bool changeUserPassword(String user, String newPassword)
+        {
+            bool success= false;
+            String salt = getSalt(user);
+            String encryptedNewPassword = Shared.CryptManager.hash(newPassword + salt);
+            try
+            {
+                String sqlString = "UPDATE users SET password = @password WHERE user = @user";
+                SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+                command.Parameters.AddWithValue("@password", encryptedNewPassword);
+                command.Parameters.AddWithValue("@user", user);
+                int effectedRows = command.ExecuteNonQuery();
+                success = (effectedRows > 0) ? true : false;
+            }
+            catch
+            {
+                return false;
+            }
+
+
+            return success;
+        }
+
     }
 }

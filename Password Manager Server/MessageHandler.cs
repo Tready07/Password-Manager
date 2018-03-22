@@ -110,5 +110,20 @@ namespace Password_Manager_Server
             session.Client.Client.Send(payload);
             return false;
         }
+
+        private static bool handleChangeUserPassword(byte[] message, ClientSession session)
+        {
+            MessageDeserializer ds = new MessageDeserializer(message);
+            ChangeUserPasswordRequest request = (ChangeUserPasswordRequest)ds.getMessage();
+            var plainTextPw = request.plainTextPassword;
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            bool success = db.changeUserPassword(session.loginUsername.name, request.plainTextPassword);
+            ChangeUserPasswordResponse response = new ChangeUserPasswordResponse(success);
+            byte[] payload = MessageUtils.SerializeMessage(response).GetAwaiter().GetResult();
+            session.Client.Client.Send(payload);
+            return true;
+
+        }
     }
 }
