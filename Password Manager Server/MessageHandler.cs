@@ -13,7 +13,7 @@ namespace Password_Manager_Server
 {
     public class MessageHandler
     {
-        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp, handlePassword, handleDeleteUsername};
+        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp, handlePassword, handleDeleteUsername, handleChangeUserPassword};
         public MessageHandler()
         {
 
