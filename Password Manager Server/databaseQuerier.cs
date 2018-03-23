@@ -254,7 +254,7 @@ namespace Password_Manager_Server
             String encryptedNewPassword = Shared.CryptManager.hash(newPassword + salt);
             try
             {
-                String sqlString = "UPDATE users SET password = @password WHERE user = @user";
+                String sqlString = "UPDATE users SET password = @password WHERE name = @user";
                 SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
                 command.Parameters.AddWithValue("@password", encryptedNewPassword);
                 command.Parameters.AddWithValue("@user", user);
