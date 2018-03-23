@@ -364,5 +364,11 @@ namespace Password_Manager
                 this.passwordTextBox.Text = string.Empty;
             }
         }
+
+        private void accountToolStripButton_Click(object sender, EventArgs e)
+        {
+            var accountSettingsDialog = new AccountSettingsDialog();
+            accountSettingsDialog.ShowDialog(this);
+        }
     }
 }

@@ -129,6 +129,7 @@
             this.accountToolStripButton.Size = new System.Drawing.Size(117, 22);
             this.accountToolStripButton.Text = "Account Settings";
             this.accountToolStripButton.ToolTipText = "Account Settings";
+            this.accountToolStripButton.Click += new System.EventHandler(this.accountToolStripButton_Click);
             // 
             // editButton
             // 
