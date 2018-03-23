@@ -271,26 +271,32 @@ namespace Password_Manager
             string appName = null;
             var selectedNode = this.applicationTreeView.SelectedNode;
 
-            switch (selectedNode.Level)
+            List<TreeNode> rootNodes = getRootNodes();
+            var newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(),
+                                                    M_secretkey, this);
+
+            if (selectedNode != null)
             {
-                case 0:
-                    appType = selectedNode.Text;
-                    break;
-                case 1:
-                    appType = selectedNode.Parent.Text;
-                    appName = selectedNode.Text;
-                    break;
-                case 2:
-                    appType = selectedNode.Parent.Parent.Text;
-                    appName = selectedNode.Parent.Text;
-                    break;
+                switch (selectedNode.Level)
+                {
+                    case 0:
+                        appType = selectedNode.Text;
+                        break;
+                    case 1:
+                        appType = selectedNode.Parent.Text;
+                        appName = selectedNode.Text;
+                        break;
+                    case 2:
+                        appType = selectedNode.Parent.Parent.Text;
+                        appName = selectedNode.Parent.Text;
+                        break;
+                }
+
+                //TODO: Fix names
+                newAppForm.appName = appName;
+                newAppForm.appType = appType;
             }
 
-            //TODO: Fix names
-            List<TreeNode> rootNodes = getRootNodes();
-            NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(), M_secretkey, this);
-            newAppForm.appName = appName;
-            newAppForm.appType = appType;
             newAppForm.Show();
         }
 
