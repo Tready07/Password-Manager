@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Networking.Requests;
 
 namespace Password_Manager
 {
@@ -40,9 +41,10 @@ namespace Password_Manager
             }
         }
 
-        private void buttonUpdatePassword_Click(object sender, EventArgs e)
+        private async void buttonUpdatePassword_Click(object sender, EventArgs e)
         {
-
+            var request = new ChangeUserPasswordRequest(this.textboxPassword.Text);
+            await SocketManager.Instance.SendMessage(request);
         }
     }
 }

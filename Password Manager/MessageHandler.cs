@@ -8,12 +8,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Networking.Responses;
 using Networking;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Password_Manager
 {
     class MessageHandler
     {
-        Func<MemoryStream, bool>[] functions = { handleApplications, handleNewApp, handlePassword, handleDeleteUsername };
+        Func<MemoryStream, bool>[] functions = { handleApplications, handleNewApp, handlePassword, handleDeleteUsername, handleChangePassword };
         public MessageHandler()
         {
 
@@ -90,6 +91,42 @@ namespace Password_Manager
             Program.passwordForm.Invoke((MethodInvoker)(() =>
             {
                 Program.passwordForm.deleteUsername(resp.application);
+            }));
+            return true;
+        }
+
+        private static bool handleChangePassword(MemoryStream message)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            var resp = (ChangeUserPasswordResponse)formatter.Deserialize(message);
+            Program.passwordForm.Invoke((MethodInvoker)(() =>
+            {
+                string mainInstruction = null;
+                string text = null;
+                TaskDialogStandardIcon icon = TaskDialogStandardIcon.None;
+
+                if (resp.isSuccessful)
+                {
+                    mainInstruction = "Your account password has been changed";
+                    icon = TaskDialogStandardIcon.Information;
+                }
+                else
+                {
+                    mainInstruction = "Your account password could not be changed";
+                    text = "Please try again later.";
+                    icon = TaskDialogStandardIcon.Error;
+                }
+
+                using (var dialog = new TaskDialog()
+                {
+                    Caption = "Change Password",
+                    InstructionText = mainInstruction,
+                    Text = text,
+                    Icon = icon
+                })
+                {
+                    dialog.Show();
+                }
             }));
             return true;
         }
