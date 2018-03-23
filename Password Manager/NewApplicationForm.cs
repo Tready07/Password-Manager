@@ -22,14 +22,19 @@ namespace Password_Manager
             this.appTypeComboBox.SelectedIndex = 0;
         }
 
-        public NewApplicationForm(String [] appTypes, byte [] key, PasswordManagerForm managerForm)
+        public NewApplicationForm(String[] appTypes, byte[] key, PasswordManagerForm managerForm)
         {
             InitializeComponent();
             this.managerForm = managerForm;
             this.appTypeComboBox.SelectedIndex = 0;
+
             foreach (var appType in appTypes)
             {
-                this.appTypeComboBox.Items.Insert(0, appType);
+                if (!this.appTypeComboBox.Items.Contains(appType))
+                {
+                    this.appTypeComboBox.Items.Insert(0, appType);
+                }
+                
             }
             secretKey = key;
         }
