@@ -270,5 +270,44 @@ namespace Password_Manager_Server
             return success;
         }
 
+        public bool createNewUser(String username, String password, bool isAdmin = false)
+        {
+            String salt = Shared.CryptManager.generateSalt(8);
+            String encryptedPassword = Shared.CryptManager.hash(password + salt);
+            try
+            {
+                String sqlString = "INSERT INTO users VALUES(@name,@password,@isAdmin,@salt)";
+                SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+                command.Parameters.AddWithValue("@name",username);
+                command.Parameters.AddWithValue("@password",encryptedPassword);
+                command.Parameters.AddWithValue("@isAdmin",isAdmin);
+                command.Parameters.AddWithValue("@salt",salt);
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool isAdmin(string username)
+        {
+            try
+            {
+                String sqlString = "SELECT isadmin FROM users WHERE name = @name";
+                SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+                command.Parameters.AddWithValue("@name", username);
+                SQLiteDataReader reader = command.ExecuteReader();
+                reader.Read();
+                bool isAdmin = (bool)reader["isadmin"];
+                return isAdmin;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }

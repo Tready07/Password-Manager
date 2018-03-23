@@ -13,7 +13,7 @@ namespace Password_Manager_Server
 {
     public class MessageHandler
     {
-        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp, handlePassword, handleDeleteUsername, handleChangeUserPassword};
+        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp, handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser};
         public MessageHandler()
         {
 
@@ -40,6 +40,8 @@ namespace Password_Manager_Server
             {
                 Console.Write("The info is True!");
                 session.loginUsername.name = msg.username.name;
+                bool isAdmin = db.isAdmin(msg.username.name);
+                session.isAdmin = isAdmin;
                 ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(msg.username.name));
                 byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
                 session.Client.Client.Send(payLoad);
@@ -123,7 +125,22 @@ namespace Password_Manager_Server
             byte[] payload = MessageUtils.SerializeMessage(response).GetAwaiter().GetResult();
             session.Client.Client.Send(payload);
             return true;
+        }
 
+        private static bool handleCreateNewUser(byte[] message, ClientSession session)
+        {
+            bool success = false;
+            MessageDeserializer ds = new MessageDeserializer(message);
+            CreateNewUserRequest request = (CreateNewUserRequest)ds.getMessage();
+            var userInfo = request.username;
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            if(session.isAdmin)
+            {
+                success = db.createNewUser(userInfo.name, userInfo.password, request.makeAdmin);
+            }
+            
+            return success;
         }
     }
 }

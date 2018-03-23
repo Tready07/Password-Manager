@@ -22,7 +22,7 @@ namespace Password_Manager_Server
             loginUsername = new Username();
         }
         public Username loginUsername { get; set; }
-
+        public bool isAdmin { get; set; }
         /// <summary>
         /// Gets the <see cref="TcpClient" /> for this client connection.
         /// </summary>
