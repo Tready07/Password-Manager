@@ -36,6 +36,8 @@ namespace Shared
          *      this should be encrypted CryptManager
          *      using clientside symmetric key
          */
-        public String password { get; set; } = "";
+      public String password { get; set; } = "";
+
+        public bool isAdmin { get; set; } = false;
     }
 }

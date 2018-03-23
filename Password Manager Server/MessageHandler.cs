@@ -40,8 +40,7 @@ namespace Password_Manager_Server
             {
                 Console.Write("The info is True!");
                 session.loginUsername.name = msg.username.name;
-                bool isAdmin = db.isAdmin(msg.username.name);
-                session.isAdmin = isAdmin;
+                session.loginUsername.isAdmin = db.isAdmin(msg.username.name);
                 ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(msg.username.name));
                 byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
                 session.Client.Client.Send(payLoad);
@@ -135,11 +134,36 @@ namespace Password_Manager_Server
             var userInfo = request.username;
             var con = databaseInitializer.makeConnection();
             DatabaseQuerier db = new DatabaseQuerier(con);
-            if(session.isAdmin)
+            if(session.loginUsername.isAdmin)
             {
                 success = db.createNewUser(userInfo.name, userInfo.password, request.makeAdmin);
             }
             
+            return success;
+        }
+
+        private static bool handleMakeAdmin(byte [] message, ClientSession session)
+        {
+            bool success = false;
+            MessageDeserializer ds = new MessageDeserializer(message);
+            ChangeAdminRequest request = (ChangeAdminRequest)ds.getMessage();
+            var userInfo = request.username;
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            if(db.isAdmin(userInfo.name))
+            {
+                if(db.isSuperAdmin(session.loginUsername.name))
+                {
+                    db.changeAdminPrivileges(userInfo.name, true);
+                }
+            }
+            if(session.loginUsername.isAdmin)
+            {
+                db.changeAdminPrivileges(userInfo.name, true);
+            }
+
+
+
             return success;
         }
     }

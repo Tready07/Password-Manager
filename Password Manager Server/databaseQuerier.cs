@@ -276,7 +276,7 @@ namespace Password_Manager_Server
             String encryptedPassword = Shared.CryptManager.hash(password + salt);
             try
             {
-                String sqlString = "INSERT INTO users VALUES(@name,@password,@isAdmin,@salt)";
+                String sqlString = "INSERT INTO users VALUES(@name,@password,@isAdmin,false,@salt)";
                 SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
                 command.Parameters.AddWithValue("@name",username);
                 command.Parameters.AddWithValue("@password",encryptedPassword);
@@ -296,6 +296,48 @@ namespace Password_Manager_Server
             try
             {
                 String sqlString = "SELECT isadmin FROM users WHERE name = @name";
+                SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+                command.Parameters.AddWithValue("@name", username);
+                SQLiteDataReader reader = command.ExecuteReader();
+                reader.Read();
+                bool isAdmin = (bool)reader["isadmin"];
+                return isAdmin;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public Shared.Username [] getUsers()
+        {
+             String sqlString = "SELECT name, isadmin FROM users";
+             SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+             SQLiteDataReader reader = command.ExecuteReader();
+             List<Shared.Username> users = new List<Shared.Username> ();
+             while(reader.Read())
+             {
+                 Shared.Username username = new Shared.Username(reader["name"].ToString());
+                 username.isAdmin = (bool)reader["isadmin"];
+                 users.Add(username);
+             }
+             return users.ToArray();
+        }
+
+        public bool changeAdminPrivileges(string username, bool admin)
+        {
+            String sqlString = "UPDATE users SET isadmin = @admin WHERE name = @name";
+            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+            command.Parameters.AddWithValue("@admin", admin);
+            command.Parameters.AddWithValue("@name", username);
+            return (command.ExecuteNonQuery() > 0);
+        }
+
+        public bool isSuperAdmin(string username)
+        {
+            try
+            {
+                String sqlString = "SELECT issuperadmin FROM users WHERE name = @name";
                 SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
                 command.Parameters.AddWithValue("@name", username);
                 SQLiteDataReader reader = command.ExecuteReader();
