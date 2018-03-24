@@ -41,9 +41,12 @@ namespace Password_Manager_Server
                 Console.Write("The info is True!");
                 session.loginUsername.name = msg.username.name;
                 session.loginUsername.isAdmin = db.isAdmin(msg.username.name);
-                ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(msg.username.name));
-                byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
-                session.Client.Client.Send(payLoad);
+                LoginResponse loginResponse = new LoginResponse(session.loginUsername.isAdmin);
+                ApplicationsResponse appsResponse = new ApplicationsResponse(db.getApplications(msg.username.name));
+                byte[] loginPayLoad = MessageUtils.SerializeMessage(loginResponse).GetAwaiter().GetResult();
+                byte[] appsPayLoad = MessageUtils.SerializeMessage(appsResponse).GetAwaiter().GetResult();
+                session.Client.Client.Send(loginPayLoad);
+                session.Client.Client.Send(appsPayLoad);
                 return true;
             }
             return false;
