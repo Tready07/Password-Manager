@@ -60,6 +60,7 @@
     <Compile Include="Responses\CreateNewUserResponse.cs" />
     <Compile Include="Responses\DeleteUsernameResponse.cs" />
     <Compile Include="Responses\ChangeAdminResponse.cs" />
+    <Compile Include="Responses\LoginResponse.cs" />
     <Compile Include="Responses\NewAppResponse.cs" />
     <Compile Include="Responses\PasswordResponse.cs" />
   </ItemGroup>
