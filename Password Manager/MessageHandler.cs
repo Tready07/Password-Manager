@@ -14,7 +14,7 @@ namespace Password_Manager
 {
     class MessageHandler
     {
-        Func<MemoryStream, bool>[] functions = { handleApplications, handleNewApp, handlePassword, handleDeleteUsername, handleChangePassword };
+        Func<MemoryStream, bool>[] functions = { handleApplications, handleNewApp, handlePassword, handleDeleteUsername, handleChangePassword, null, null, handleLoginResponse };
         public MessageHandler()
         {
 
@@ -46,10 +46,8 @@ namespace Password_Manager
             //       Otherwise, WinForm will freak out, since we can't make calls to the GUI in
             //       another thread (we can only do it in the thread that the form were created in,
             //       i.e., the GUI thread).
-            Program.loginDialog.Invoke((MethodInvoker)(() =>
+            Program.passwordForm.Invoke((MethodInvoker)(() =>
             {
-                Program.loginDialog.Hide();
-                Program.passwordForm.Show();
                 Program.passwordForm.populateTree(resp.applications);
             }));
             return true;
@@ -127,6 +125,20 @@ namespace Password_Manager
                 {
                     dialog.Show();
                 }
+            }));
+            return true;
+        }
+
+        private static bool handleLoginResponse(MemoryStream message)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            var resp = (LoginResponse)formatter.Deserialize(message);
+            Program.loginDialog.Invoke((MethodInvoker)(() =>
+            {
+                Program.loginDialog.Hide();
+                Program.passwordForm.Show();
+
+                Program.passwordForm.isAdmin = resp.isAdmin;
             }));
             return true;
         }

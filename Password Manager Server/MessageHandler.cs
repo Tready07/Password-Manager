@@ -42,11 +42,8 @@ namespace Password_Manager_Server
                 session.loginUsername.name = msg.username.name;
                 session.loginUsername.isAdmin = db.isAdmin(msg.username.name);
                 LoginResponse loginResponse = new LoginResponse(session.loginUsername.isAdmin);
-                ApplicationsResponse appsResponse = new ApplicationsResponse(db.getApplications(msg.username.name));
                 byte[] loginPayLoad = MessageUtils.SerializeMessage(loginResponse).GetAwaiter().GetResult();
-                byte[] appsPayLoad = MessageUtils.SerializeMessage(appsResponse).GetAwaiter().GetResult();
                 session.Client.Client.Send(loginPayLoad);
-                session.Client.Client.Send(appsPayLoad);
                 return true;
             }
             return false;
