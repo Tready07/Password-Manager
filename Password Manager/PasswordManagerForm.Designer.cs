@@ -40,6 +40,7 @@
             this.accountToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.editButton = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
+            this.adminPanelButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,7 +97,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
             this.newUsernameButton,
-            this.accountToolStripButton});
+            this.accountToolStripButton,
+            this.adminPanelButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(863, 25);
@@ -153,6 +155,15 @@
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
+            // adminPanelButton
+            // 
+            this.adminPanelButton.Image = ((System.Drawing.Image)(resources.GetObject("adminPanelButton.Image")));
+            this.adminPanelButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.adminPanelButton.Name = "adminPanelButton";
+            this.adminPanelButton.Size = new System.Drawing.Size(95, 22);
+            this.adminPanelButton.Text = "Admin Panel";
+            this.adminPanelButton.ToolTipText = "Admin Panel";
+            // 
             // PasswordManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -190,5 +201,6 @@
         private System.Windows.Forms.ToolStripButton newUsernameButton;
         private System.Windows.Forms.ToolStripButton accountToolStripButton;
         private System.Windows.Forms.Button buttonDelete;
+        private System.Windows.Forms.ToolStripButton adminPanelButton;
     }
 }

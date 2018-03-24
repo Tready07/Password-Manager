@@ -180,7 +180,18 @@ namespace Password_Manager
         }
 
         public byte[] M_secretkey { get; private set; }
-        public bool isAdmin { get; internal set; }
+
+        private bool _isAdmin = false;
+        public bool isAdmin
+        {
+            get => _isAdmin;
+            internal set
+            {
+                _isAdmin = value;
+
+                this.adminPanelButton.Visible = _isAdmin;
+            }
+        }
 
         private void showpwCheckBox_CheckedChanged(object sender, EventArgs e)
         {
