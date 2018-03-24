@@ -178,7 +178,9 @@ namespace Password_Manager
                 this.editButton.Text = "Edit";
             }
         }
-    public byte[] M_secretkey { get; private set; }
+
+        public byte[] M_secretkey { get; private set; }
+        public bool isAdmin { get; internal set; }
 
         private void showpwCheckBox_CheckedChanged(object sender, EventArgs e)
         {
@@ -192,7 +194,7 @@ namespace Password_Manager
             }           
         }
 
-        private void PasswordManagerForm_Load(object sender, EventArgs e)
+        private async void PasswordManagerForm_Load(object sender, EventArgs e)
         {
             var secretKeyIsPresent = File.Exists("keyFile");
             if (!secretKeyIsPresent)
@@ -252,7 +254,9 @@ namespace Password_Manager
             {
                 M_secretkey = File.ReadAllBytes("keyFile");
             }
-            //TODO: send ApplicationsRequests
+
+            ApplicationsRequest request = new ApplicationsRequest();
+            await SocketManager.Instance.SendMessage(request);
         }
 
         private void PasswordManagerForm_FormClosed(object sender, FormClosedEventArgs e)
