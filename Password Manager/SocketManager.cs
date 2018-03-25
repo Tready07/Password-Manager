@@ -61,16 +61,6 @@ namespace Password_Manager
         }
 
         /// <summary>
-        /// Sends a message to the server.
-        /// </summary>
-        /// <param name="message">The message to send.</param>
-        /// <returns>The asynchronous operation that represents the message being sent.</returns>
-        public async Task SendMessage(MessageBase message)
-        {
-            this.socket.Send(await MessageUtils.SerializeMessage(message));
-        }
-
-        /// <summary>
         /// Sends a message to the server and returns the response received.
         /// </summary>
         /// <typeparam name="Response">The type of response. This should be a ISerializable.</typeparam>

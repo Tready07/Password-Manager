@@ -8,9 +8,6 @@ namespace Password_Manager
 {
     static class Program
     {
-        public static PasswordManagerForm passwordForm;
-        public static LoginDialog loginDialog;
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
