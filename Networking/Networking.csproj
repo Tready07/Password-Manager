@@ -51,6 +51,7 @@
     <Compile Include="Requests\ChangeAdminRequest.cs" />
     <Compile Include="Requests\NewAppRequest.cs" />
     <Compile Include="Requests\PasswordRequest.cs" />
+    <Compile Include="Requests\SendUsersRequest.cs" />
     <Compile Include="Responses\ApplicationsResponse.cs" />
     <Compile Include="Requests\LoginRequest.cs" />
     <Compile Include="MessageBase.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Responses\LoginResponse.cs" />
     <Compile Include="Responses\NewAppResponse.cs" />
     <Compile Include="Responses\PasswordResponse.cs" />
+    <Compile Include="Responses\SendUsersResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj">
