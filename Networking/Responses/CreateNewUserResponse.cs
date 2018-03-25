@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Networking.Responses
 {
     [Serializable]
-    class CreateNewUserResponse : MessageBase
+    public class CreateNewUserResponse : MessageBase
     {
         public const int MessageID = 5;
 

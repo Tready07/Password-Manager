@@ -13,7 +13,8 @@ namespace Password_Manager_Server
 {
     public class MessageHandler
     {
-        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp, handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser};
+        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp,
+            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers};
         public MessageHandler()
         {
 
@@ -138,13 +139,14 @@ namespace Password_Manager_Server
             {
                 success = db.createNewUser(userInfo.name, userInfo.password, request.makeAdmin);
             }
-            
+            CreateNewUserResponse response = new CreateNewUserResponse(success);
+            byte[] payload = MessageUtils.SerializeMessage(response).GetAwaiter().GetResult();
+            session.Client.Client.Send(payload);
             return success;
         }
 
-        private static bool handleMakeAdmin(byte [] message, ClientSession session)
+        private static bool handleChangeAdmin(byte [] message, ClientSession session)
         {
-            bool success = false;
             MessageDeserializer ds = new MessageDeserializer(message);
             ChangeAdminRequest request = (ChangeAdminRequest)ds.getMessage();
             var userInfo = request.username;
@@ -154,16 +156,36 @@ namespace Password_Manager_Server
             {
                 if(db.isSuperAdmin(session.loginUsername.name))
                 {
-                    db.changeAdminPrivileges(userInfo.name, true);
+                    db.changeAdminPrivileges(userInfo.name, request.makeAdmin);
                 }
             }
             if(session.loginUsername.isAdmin)
             {
-                db.changeAdminPrivileges(userInfo.name, true);
+                db.changeAdminPrivileges(userInfo.name, request.makeAdmin);
             }
+            userInfo.isAdmin = db.isAdmin(userInfo.name);
+            ChangeAdminResponse response = new ChangeAdminResponse(userInfo);
+            byte[] payload = MessageUtils.SerializeMessage(response).GetAwaiter().GetResult();
+            session.Client.Client.Send(payload);
+            return true;
+        }
 
+        private static bool handleSendUsers(byte [] message, ClientSession session)
+        {
+            bool success = false;
+            MessageDeserializer ds = new MessageDeserializer(message);
+            SendUsersRequest request = (SendUsersRequest)ds.getMessage();
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            if(session.loginUsername.isAdmin)
+            {
+                var users = db.getUsers();
+                SendUsersResponse resp = new SendUsersResponse(users);
+                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payload);
+                success = true;
 
-
+            }
             return success;
         }
     }
