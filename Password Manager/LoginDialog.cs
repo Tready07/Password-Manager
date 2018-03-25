@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Networking;
 using Networking.Requests;
+using Networking.Responses;
 
 namespace Password_Manager
 {
@@ -29,23 +31,22 @@ namespace Password_Manager
             SocketManager sktMngr = SocketManager.Instance;
             sktMngr.connect(this.serverAddressTextBox.Text, (int)serverPort.Value);
 
-            // If we get disconnected from the server, then that means we entered some bad login
-            // information.
-            EventHandler badAuthentication = null;
-            badAuthentication = (s, ea) =>
+            LoginResponse resp = await sktMngr.SendRequest<LoginResponse>(msg);
+            if (resp == null)
             {
-                // Disconnect from the Disconnected event so that we're not emitted if we get
-                // disconnected again.
-                sktMngr.Disconnected -= badAuthentication;
-
-                MessageBox.Show(
-                    "Unable to sign in\n\nThe username or password is incorrect.", 
-                    "Can't Sign In", 
-                    MessageBoxButtons.OK);
-            };
-            sktMngr.Disconnected += badAuthentication;
-
-            await sktMngr.SendMessage(msg);
+                using (var taskDialog = new TaskDialog()
+                {
+                    Caption = "Password Manager",
+                    Icon = TaskDialogStandardIcon.Error,
+                    InstructionText = "Unable to log in",
+                    Text = "Make sure the username and password you've entered is correct, and then try again.",
+                    StandardButtons = TaskDialogStandardButtons.Close
+                })
+                {
+                    taskDialog.Show();
+                }
+                return;
+            }
         }
     }
 }
