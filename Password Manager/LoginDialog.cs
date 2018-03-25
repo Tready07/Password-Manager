@@ -48,5 +48,10 @@ namespace Password_Manager
                 return;
             }
         }
+
+        private void LoginDialog_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

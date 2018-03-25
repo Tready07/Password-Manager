@@ -163,6 +163,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "LoginDialog";
             this.Text = "Login";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LoginDialog_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.serverPort)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
