@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using Networking;
 using System.Diagnostics;
 using System.IO;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Password_Manager
 {
@@ -125,6 +124,58 @@ namespace Password_Manager
         public async Task SendMessage(MessageBase message)
         {
             this.socket.Send(await MessageUtils.SerializeMessage(message));
+        }
+
+        /// <summary>
+        /// Sends a message to the server and returns the response received.
+        /// </summary>
+        /// <typeparam name="Response">The type of response. This should be a ISerializable.</typeparam>
+        /// <param name="message">The request to send.</param>
+        /// <returns>The response or <c>null</c> if the message couldn't be fetched because the server disconnected.</returns>
+        public async Task<TResponse> SendRequest<TResponse>(MessageBase request) where TResponse : class
+        {
+            this.socket.Send(await MessageUtils.SerializeMessage(request));
+
+            // Read the message header
+            byte[] buffer = new byte[MessageHeader.HeaderSize];
+            int bytesReceived = await this.socket.ReceiveAsync(buffer);
+            if (bytesReceived == 0)
+            {
+                // We got disconnected from the server, return null.
+                return null;
+            }
+            else if (bytesReceived != buffer.Length)
+            {
+                // The message header couldn't be read.
+                throw new BadHeaderException("Unable to read the header from the socket");
+            }
+
+            int messageID = 0;
+            int messageSize = 0;
+            using (var memoryStream = new MemoryStream(buffer))
+            {
+                var messageHeader = MessageUtils.DeserializeMessageHeader(memoryStream);
+                messageSize = messageHeader.Size;
+                messageID = messageHeader.ID;
+            }
+
+            int totalSizeRead = 0;
+            byte[] messageData = new byte[messageSize];
+            int bufferSize = Math.Min(messageSize, 4096);
+            do
+            {
+                bytesReceived = await this.socket.ReceiveAsync(messageData, totalSizeRead, bufferSize, SocketFlags.None);
+                bufferSize = Math.Min(messageSize - totalSizeRead, 4096);
+                totalSizeRead += bytesReceived;
+            }
+            while (totalSizeRead < messageSize);
+
+            // Deserialize the message, and return it.
+            using (var memoryStream = new MemoryStream(messageData))
+            {
+                var formatter = new BinaryFormatter();
+                return (TResponse)formatter.Deserialize(memoryStream);
+            }
         }
     }
 }
