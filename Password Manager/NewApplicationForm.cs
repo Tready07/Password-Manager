@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Networking.Requests;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Networking.Responses;
 
 namespace Password_Manager
 {
@@ -94,8 +95,9 @@ namespace Password_Manager
             app.Type = appTypeComboBox.Text;
             app.Name = appNameTextBox.Text;
             NewAppRequest request = new NewAppRequest(app);
-            SocketManager manager = SocketManager.Instance;
-            await manager.SendMessage(request);
+            var response = await SocketManager.Instance.SendRequest<NewAppResponse>(request);
+
+            this.managerForm.addAppToTree(response.application);
             this.Close();
         }
 
