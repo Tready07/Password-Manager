@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Networking.Requests;
+using Networking.Responses;
 
 namespace Password_Manager
 {
@@ -267,7 +268,8 @@ namespace Password_Manager
             }
 
             ApplicationsRequest request = new ApplicationsRequest();
-            await SocketManager.Instance.SendMessage(request);
+            var response = await SocketManager.Instance.SendRequest<ApplicationsResponse>(request);
+            this.populateTree(response.applications);
         }
 
         private void PasswordManagerForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -344,8 +346,8 @@ namespace Password_Manager
                     app.Usernames = new Shared.Username[] { new Shared.Username(username) };
 
                     DeleteUsernameRequest request = new DeleteUsernameRequest(app);
-                    SocketManager manager = SocketManager.Instance;
-                    await manager.SendMessage(request);
+                    var response = await SocketManager.Instance.SendRequest<DeleteUsernameResponse>(request);
+                    this.deleteUsername(response.application);
 
                     dialog.Close();
                 };
@@ -376,9 +378,11 @@ namespace Password_Manager
                 var applicationNode = this.applicationTreeView.SelectedNode.Parent;
                 app.Name = applicationNode.Text;
                 app.Usernames = new Shared.Username[] { new Shared.Username(this.applicationTreeView.SelectedNode.Text) };
+
                 PasswordRequest request = new PasswordRequest(app);
-                SocketManager manager = SocketManager.Instance;
-                await manager.SendMessage(request);
+                var response = await SocketManager.Instance.SendRequest<PasswordResponse>(request);
+                var password = Shared.CryptManager.decrypt(response.application.Usernames[0].password, M_secretkey);
+                this.fillPasswordBox(password);
             }
             else
             {
@@ -390,6 +394,12 @@ namespace Password_Manager
         {
             var accountSettingsDialog = new AccountSettingsDialog();
             accountSettingsDialog.ShowDialog(this);
+        }
+
+        private void adminPanelButton_Click(object sender, EventArgs e)
+        {
+            var adminPanelDialog = new AdminPanelDialog();
+            adminPanelDialog.ShowDialog(this);
         }
     }
 }

@@ -20,10 +20,10 @@ namespace Networking
         /// The size of the message header.
         /// </summary>
         /// <remarks>
-        /// This is composed of the following: the magic number (4 bytes) + the message type (1 byte) +
-        /// the payload size (4 bytes).
+        /// This is composed of the following: the magic number (4 bytes) + message ID (4 bytes) +
+        /// the message type (1 byte) + the payload size (4 bytes).
         /// </remarks>
-        public const int HeaderSize = 9;
+        public const int HeaderSize = 13;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageHeader" /> struct.

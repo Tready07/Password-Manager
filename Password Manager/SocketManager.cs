@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using Networking;
 using System.Diagnostics;
 using System.IO;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Password_Manager
 {
@@ -37,62 +36,6 @@ namespace Password_Manager
         public void connect(String host, int port)
         {   
             socket.Connect(host, port);
-
-            // Spawn a new Task for reading messages received from the server once we're connected.
-            Task.Factory.StartNew(() =>
-            {
-                var networkStream = new NetworkStream(this.socket);
-                while (true)
-                {
-                    if (!this.socket.Poll(Timeout, SelectMode.SelectRead))
-                    {
-                        // Nothing to read, try again later.
-                        continue;
-                    }
-
-                    // Have we disconnected from the server?
-                    if (this.socket.Available == 0)
-                    {
-                        Trace.WriteLine("Server has disconnected from client.", "Client");
-                        this.Disconnect();
-                        break;
-                    }
-
-                    // Read incoming message
-                    var buffer = new byte[4096];
-                    int actualBytesRead = networkStream.Read(buffer, 0, buffer.Length);
-                    try
-                    {
-                        using (var stream = new MemoryStream(buffer))
-                        {
-                            var messageHeader = MessageUtils.DeserializeMessageHeader(stream);
-
-                            Debug.WriteLine("Message ID: " + messageHeader.ID.ToString(), "Client");
-                            Debug.WriteLine("Message Type: " + messageHeader.Type.ToString(), "Client");
-                            Debug.WriteLine("Message Size: " + messageHeader.Size.ToString(), "Client");
-
-                            if (actualBytesRead - MessageHeader.HeaderSize < messageHeader.Size)
-                            {
-                                // There's more data that needs to be received from the server, so
-                                // don't process this message yet.
-
-                                // TODO: Implement this properly.
-                                Debug.WriteLine("Not enough data was sent from the server to complete this message.", "Client");
-                                Debug.WriteLine("Skipping...");
-                                continue;
-                            }
-
-                            Debug.WriteLine("Processing message...", "Client");
-                            MessageHandler handler = new MessageHandler();
-                            handler.handleMessage(stream,messageHeader);
-                        }
-                    }
-                    catch (BadHeaderException ex)
-                    {
-                        Trace.WriteLine("Bad message header was received from server: " + ex, "Client");
-                    }
-                }
-            });
         }
 
         /// <summary>
@@ -118,13 +61,55 @@ namespace Password_Manager
         }
 
         /// <summary>
-        /// Sends a message to the server.
+        /// Sends a message to the server and returns the response received.
         /// </summary>
-        /// <param name="message">The message to send.</param>
-        /// <returns>The asynchronous operation that represents the message being sent.</returns>
-        public async Task SendMessage(MessageBase message)
+        /// <typeparam name="Response">The type of response. This should be a ISerializable.</typeparam>
+        /// <param name="message">The request to send.</param>
+        /// <returns>The response or <c>null</c> if the message couldn't be fetched because the server disconnected.</returns>
+        public async Task<TResponse> SendRequest<TResponse>(MessageBase request) where TResponse : class
         {
-            this.socket.Send(await MessageUtils.SerializeMessage(message));
+            this.socket.Send(await MessageUtils.SerializeMessage(request));
+
+            // Read the message header
+            byte[] buffer = new byte[MessageHeader.HeaderSize];
+            int bytesReceived = await this.socket.ReceiveAsync(buffer);
+            if (bytesReceived == 0)
+            {
+                // We got disconnected from the server, return null.
+                return null;
+            }
+            else if (bytesReceived != buffer.Length)
+            {
+                // The message header couldn't be read.
+                throw new BadHeaderException("Unable to read the header from the socket");
+            }
+
+            int messageID = 0;
+            int messageSize = 0;
+            using (var memoryStream = new MemoryStream(buffer))
+            {
+                var messageHeader = MessageUtils.DeserializeMessageHeader(memoryStream);
+                messageSize = messageHeader.Size;
+                messageID = messageHeader.ID;
+            }
+
+            int totalSizeRead = 0;
+            byte[] messageData = new byte[messageSize];
+            int bufferSize = Math.Min(messageSize, 4096);
+            do
+            {
+                bytesReceived = await this.socket.ReceiveAsync(messageData, totalSizeRead, bufferSize, SocketFlags.None);
+                bufferSize = Math.Min(messageSize - totalSizeRead, 4096);
+                totalSizeRead += bytesReceived;
+            }
+            while (totalSizeRead < messageSize);
+
+            // Deserialize the message, and return it.
+            using (var memoryStream = new MemoryStream(messageData))
+            {
+                var formatter = new BinaryFormatter();
+                return (TResponse)formatter.Deserialize(memoryStream);
+            }
         }
     }
 }

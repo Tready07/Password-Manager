@@ -8,9 +8,6 @@ namespace Password_Manager
 {
     static class Program
     {
-        public static PasswordManagerForm passwordForm;
-        public static LoginDialog loginDialog;
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -21,10 +18,20 @@ namespace Password_Manager
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            passwordForm = new PasswordManagerForm();
-
-            loginDialog = new LoginDialog();
-            loginDialog.Show();
+            var dialog = new LoginDialog();
+            dialog.FormClosed += (object s, FormClosedEventArgs a) =>
+            {
+                if (dialog.isLoginSuccess)
+                {
+                    var form = new PasswordManagerForm();
+                    form.Show();
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            };
+            dialog.Show();
 
             Application.Run();
         }

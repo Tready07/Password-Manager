@@ -65,6 +65,7 @@
     <Compile Include="Responses\NewAppResponse.cs" />
     <Compile Include="Responses\PasswordResponse.cs" />
     <Compile Include="Responses\SendUsersResponse.cs" />
+    <Compile Include="SocketExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.csproj">
