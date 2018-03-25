@@ -46,6 +46,7 @@
             // 
             // passwordTextBox
             // 
+            this.passwordTextBox.Enabled = false;
             this.passwordTextBox.Location = new System.Drawing.Point(476, 34);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.ReadOnly = true;
@@ -76,6 +77,7 @@
             // showpwCheckBox
             // 
             this.showpwCheckBox.AutoSize = true;
+            this.showpwCheckBox.Enabled = false;
             this.showpwCheckBox.Location = new System.Drawing.Point(476, 61);
             this.showpwCheckBox.Name = "showpwCheckBox";
             this.showpwCheckBox.Size = new System.Drawing.Size(102, 17);

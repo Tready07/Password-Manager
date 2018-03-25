@@ -159,6 +159,8 @@ namespace Password_Manager
             // Reset the selection, in case the username we've deleted is the currently selected node
             if (this.applicationTreeView.SelectedNode == null)
             {
+                this.passwordTextBox.Enabled = false;
+                this.showpwCheckBox.Enabled = false;
                 this.buttonDelete.Enabled = false;
                 this.passwordCopyButton.Enabled = false;
                 this.editButton.Enabled = false;
@@ -368,6 +370,8 @@ namespace Password_Manager
         {
             bool isUserSelected = e.Node.Level == 2;
 
+            this.passwordTextBox.Enabled = isUserSelected;
+            this.showpwCheckBox.Enabled = isUserSelected;
             this.buttonDelete.Enabled = isUserSelected;
             this.editButton.Enabled = isUserSelected;
             this.passwordCopyButton.Enabled = isUserSelected;
