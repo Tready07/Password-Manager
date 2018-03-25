@@ -29,68 +29,32 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PasswordManagerForm));
-            this.passwordTextBox = new System.Windows.Forms.TextBox();
-            this.Password = new System.Windows.Forms.Label();
-            this.passwordCopyButton = new System.Windows.Forms.Button();
-            this.showpwCheckBox = new System.Windows.Forms.CheckBox();
             this.applicationTreeView = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.newUsernameButton = new System.Windows.Forms.ToolStripButton();
             this.accountToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.adminPanelButton = new System.Windows.Forms.ToolStripButton();
-            this.editButton = new System.Windows.Forms.Button();
+            this.splitcontainerMain = new System.Windows.Forms.SplitContainer();
             this.buttonDelete = new System.Windows.Forms.Button();
+            this.editButton = new System.Windows.Forms.Button();
+            this.showpwCheckBox = new System.Windows.Forms.CheckBox();
+            this.passwordCopyButton = new System.Windows.Forms.Button();
+            this.labelPassword = new System.Windows.Forms.Label();
+            this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitcontainerMain)).BeginInit();
+            this.splitcontainerMain.Panel1.SuspendLayout();
+            this.splitcontainerMain.Panel2.SuspendLayout();
+            this.splitcontainerMain.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // passwordTextBox
-            // 
-            this.passwordTextBox.Enabled = false;
-            this.passwordTextBox.Location = new System.Drawing.Point(476, 34);
-            this.passwordTextBox.Name = "passwordTextBox";
-            this.passwordTextBox.ReadOnly = true;
-            this.passwordTextBox.Size = new System.Drawing.Size(375, 20);
-            this.passwordTextBox.TabIndex = 0;
-            this.passwordTextBox.UseSystemPasswordChar = true;
-            // 
-            // Password
-            // 
-            this.Password.AutoSize = true;
-            this.Password.Location = new System.Drawing.Point(417, 37);
-            this.Password.Name = "Password";
-            this.Password.Size = new System.Drawing.Size(53, 13);
-            this.Password.TabIndex = 1;
-            this.Password.Text = "Password";
-            // 
-            // passwordCopyButton
-            // 
-            this.passwordCopyButton.Enabled = false;
-            this.passwordCopyButton.Location = new System.Drawing.Point(476, 84);
-            this.passwordCopyButton.Name = "passwordCopyButton";
-            this.passwordCopyButton.Size = new System.Drawing.Size(75, 23);
-            this.passwordCopyButton.TabIndex = 2;
-            this.passwordCopyButton.Text = "Copy";
-            this.passwordCopyButton.UseVisualStyleBackColor = true;
-            this.passwordCopyButton.Click += new System.EventHandler(this.passwordCopyButton_Click);
-            // 
-            // showpwCheckBox
-            // 
-            this.showpwCheckBox.AutoSize = true;
-            this.showpwCheckBox.Enabled = false;
-            this.showpwCheckBox.Location = new System.Drawing.Point(476, 61);
-            this.showpwCheckBox.Name = "showpwCheckBox";
-            this.showpwCheckBox.Size = new System.Drawing.Size(102, 17);
-            this.showpwCheckBox.TabIndex = 4;
-            this.showpwCheckBox.Text = "Show Password";
-            this.showpwCheckBox.UseVisualStyleBackColor = true;
-            this.showpwCheckBox.CheckedChanged += new System.EventHandler(this.showpwCheckBox_CheckedChanged);
             // 
             // applicationTreeView
             // 
-            this.applicationTreeView.Location = new System.Drawing.Point(0, 28);
+            this.applicationTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.applicationTreeView.Location = new System.Drawing.Point(0, 0);
             this.applicationTreeView.Name = "applicationTreeView";
-            this.applicationTreeView.Size = new System.Drawing.Size(411, 573);
+            this.applicationTreeView.Size = new System.Drawing.Size(287, 575);
             this.applicationTreeView.TabIndex = 5;
             this.applicationTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.applicationTreeView_AfterSelect);
             // 
@@ -145,65 +109,132 @@
             this.adminPanelButton.ToolTipText = "Admin Panel";
             this.adminPanelButton.Click += new System.EventHandler(this.adminPanelButton_Click);
             // 
-            // editButton
+            // splitcontainerMain
             // 
-            this.editButton.Enabled = false;
-            this.editButton.Location = new System.Drawing.Point(557, 84);
-            this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(75, 23);
-            this.editButton.TabIndex = 7;
-            this.editButton.Text = "Edit";
-            this.editButton.UseVisualStyleBackColor = true;
-            this.editButton.Click += new System.EventHandler(this.editButton_Click);
+            this.splitcontainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitcontainerMain.Location = new System.Drawing.Point(0, 25);
+            this.splitcontainerMain.Name = "splitcontainerMain";
+            // 
+            // splitcontainerMain.Panel1
+            // 
+            this.splitcontainerMain.Panel1.Controls.Add(this.applicationTreeView);
+            // 
+            // splitcontainerMain.Panel2
+            // 
+            this.splitcontainerMain.Panel2.Controls.Add(this.buttonDelete);
+            this.splitcontainerMain.Panel2.Controls.Add(this.editButton);
+            this.splitcontainerMain.Panel2.Controls.Add(this.showpwCheckBox);
+            this.splitcontainerMain.Panel2.Controls.Add(this.passwordCopyButton);
+            this.splitcontainerMain.Panel2.Controls.Add(this.labelPassword);
+            this.splitcontainerMain.Panel2.Controls.Add(this.passwordTextBox);
+            this.splitcontainerMain.Size = new System.Drawing.Size(863, 575);
+            this.splitcontainerMain.SplitterDistance = 287;
+            this.splitcontainerMain.TabIndex = 9;
             // 
             // buttonDelete
             // 
+            this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonDelete.Enabled = false;
-            this.buttonDelete.Location = new System.Drawing.Point(638, 84);
+            this.buttonDelete.Location = new System.Drawing.Point(477, 62);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
-            this.buttonDelete.TabIndex = 8;
+            this.buttonDelete.TabIndex = 14;
             this.buttonDelete.Text = "Delete";
             this.buttonDelete.UseVisualStyleBackColor = true;
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
+            // editButton
+            // 
+            this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.editButton.Enabled = false;
+            this.editButton.Location = new System.Drawing.Point(396, 62);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(75, 23);
+            this.editButton.TabIndex = 13;
+            this.editButton.Text = "Edit";
+            this.editButton.UseVisualStyleBackColor = true;
+            // 
+            // showpwCheckBox
+            // 
+            this.showpwCheckBox.AutoSize = true;
+            this.showpwCheckBox.Enabled = false;
+            this.showpwCheckBox.Location = new System.Drawing.Point(19, 66);
+            this.showpwCheckBox.Name = "showpwCheckBox";
+            this.showpwCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.showpwCheckBox.TabIndex = 12;
+            this.showpwCheckBox.Text = "&Show Password";
+            this.showpwCheckBox.UseVisualStyleBackColor = true;
+            this.showpwCheckBox.CheckedChanged += new System.EventHandler(this.showpwCheckBox_CheckedChanged);
+            // 
+            // passwordCopyButton
+            // 
+            this.passwordCopyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.passwordCopyButton.Enabled = false;
+            this.passwordCopyButton.Location = new System.Drawing.Point(315, 62);
+            this.passwordCopyButton.Name = "passwordCopyButton";
+            this.passwordCopyButton.Size = new System.Drawing.Size(75, 23);
+            this.passwordCopyButton.TabIndex = 11;
+            this.passwordCopyButton.Text = "Copy";
+            this.passwordCopyButton.UseVisualStyleBackColor = true;
+            // 
+            // labelPassword
+            // 
+            this.labelPassword.AutoSize = true;
+            this.labelPassword.Location = new System.Drawing.Point(16, 14);
+            this.labelPassword.Margin = new System.Windows.Forms.Padding(3, 0, 3, 5);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(56, 13);
+            this.labelPassword.TabIndex = 10;
+            this.labelPassword.Text = "&Password:";
+            // 
+            // passwordTextBox
+            // 
+            this.passwordTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.passwordTextBox.Enabled = false;
+            this.passwordTextBox.Location = new System.Drawing.Point(19, 35);
+            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(20, 3, 20, 3);
+            this.passwordTextBox.Name = "passwordTextBox";
+            this.passwordTextBox.ReadOnly = true;
+            this.passwordTextBox.Size = new System.Drawing.Size(533, 20);
+            this.passwordTextBox.TabIndex = 9;
+            this.passwordTextBox.UseSystemPasswordChar = true;
             // 
             // PasswordManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(863, 600);
-            this.Controls.Add(this.buttonDelete);
-            this.Controls.Add(this.editButton);
+            this.Controls.Add(this.splitcontainerMain);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.applicationTreeView);
-            this.Controls.Add(this.showpwCheckBox);
-            this.Controls.Add(this.passwordCopyButton);
-            this.Controls.Add(this.Password);
-            this.Controls.Add(this.passwordTextBox);
             this.Name = "PasswordManagerForm";
             this.Text = "Password Manager";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PasswordManagerForm_FormClosed);
             this.Load += new System.EventHandler(this.PasswordManagerForm_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.splitcontainerMain.Panel1.ResumeLayout(false);
+            this.splitcontainerMain.Panel2.ResumeLayout(false);
+            this.splitcontainerMain.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitcontainerMain)).EndInit();
+            this.splitcontainerMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox passwordTextBox;
-        private System.Windows.Forms.Label Password;
-        private System.Windows.Forms.Button passwordCopyButton;
-        private System.Windows.Forms.CheckBox showpwCheckBox;
         private System.Windows.Forms.TreeView applicationTreeView;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.ToolStripButton newUsernameButton;
         private System.Windows.Forms.ToolStripButton accountToolStripButton;
-        private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.ToolStripButton adminPanelButton;
+        private System.Windows.Forms.SplitContainer splitcontainerMain;
+        private System.Windows.Forms.Button buttonDelete;
+        private System.Windows.Forms.Button editButton;
+        private System.Windows.Forms.CheckBox showpwCheckBox;
+        private System.Windows.Forms.Button passwordCopyButton;
+        private System.Windows.Forms.Label labelPassword;
+        private System.Windows.Forms.TextBox passwordTextBox;
     }
 }
