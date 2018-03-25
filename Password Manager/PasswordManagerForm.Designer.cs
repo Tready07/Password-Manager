@@ -38,9 +38,9 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.newUsernameButton = new System.Windows.Forms.ToolStripButton();
             this.accountToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.adminPanelButton = new System.Windows.Forms.ToolStripButton();
             this.editButton = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
-            this.adminPanelButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,6 +133,16 @@
             this.accountToolStripButton.ToolTipText = "Account Settings";
             this.accountToolStripButton.Click += new System.EventHandler(this.accountToolStripButton_Click);
             // 
+            // adminPanelButton
+            // 
+            this.adminPanelButton.Image = ((System.Drawing.Image)(resources.GetObject("adminPanelButton.Image")));
+            this.adminPanelButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.adminPanelButton.Name = "adminPanelButton";
+            this.adminPanelButton.Size = new System.Drawing.Size(95, 22);
+            this.adminPanelButton.Text = "Admin Panel";
+            this.adminPanelButton.ToolTipText = "Admin Panel";
+            this.adminPanelButton.Click += new System.EventHandler(this.adminPanelButton_Click);
+            // 
             // editButton
             // 
             this.editButton.Enabled = false;
@@ -154,15 +164,6 @@
             this.buttonDelete.Text = "Delete";
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
-            // 
-            // adminPanelButton
-            // 
-            this.adminPanelButton.Image = ((System.Drawing.Image)(resources.GetObject("adminPanelButton.Image")));
-            this.adminPanelButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.adminPanelButton.Name = "adminPanelButton";
-            this.adminPanelButton.Size = new System.Drawing.Size(95, 22);
-            this.adminPanelButton.Text = "Admin Panel";
-            this.adminPanelButton.ToolTipText = "Admin Panel";
             // 
             // PasswordManagerForm
             // 

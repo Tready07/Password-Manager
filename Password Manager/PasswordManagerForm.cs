@@ -395,5 +395,11 @@ namespace Password_Manager
             var accountSettingsDialog = new AccountSettingsDialog();
             accountSettingsDialog.ShowDialog(this);
         }
+
+        private void adminPanelButton_Click(object sender, EventArgs e)
+        {
+            var adminPanelDialog = new AdminPanelDialog();
+            adminPanelDialog.ShowDialog(this);
+        }
     }
 }
