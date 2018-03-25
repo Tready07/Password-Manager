@@ -53,5 +53,10 @@ namespace Password_Manager
         {
             Application.Exit();
         }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -38,12 +38,13 @@
             this.labelServer = new System.Windows.Forms.Label();
             this.labelMainInstruction = new System.Windows.Forms.Label();
             this.labelInstruction = new System.Windows.Forms.Label();
+            this.buttonClose = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.serverPort)).BeginInit();
             this.SuspendLayout();
             // 
             // submitButton
             // 
-            this.submitButton.Location = new System.Drawing.Point(344, 203);
+            this.submitButton.Location = new System.Drawing.Point(263, 205);
             this.submitButton.Margin = new System.Windows.Forms.Padding(3, 20, 3, 10);
             this.submitButton.Name = "submitButton";
             this.submitButton.Size = new System.Drawing.Size(84, 25);
@@ -143,6 +144,16 @@
             this.labelInstruction.Text = "Connect to a server, enter your username and your password, and press Login to co" +
     "ntinue.";
             // 
+            // buttonClose
+            // 
+            this.buttonClose.Location = new System.Drawing.Point(353, 205);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(75, 25);
+            this.buttonClose.TabIndex = 10;
+            this.buttonClose.Text = "E&xit";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
             // LoginDialog
             // 
             this.AcceptButton = this.submitButton;
@@ -150,6 +161,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(440, 249);
+            this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.labelInstruction);
             this.Controls.Add(this.labelMainInstruction);
             this.Controls.Add(this.serverPort);
@@ -182,6 +194,7 @@
         private System.Windows.Forms.Label labelServer;
         private System.Windows.Forms.Label labelMainInstruction;
         private System.Windows.Forms.Label labelInstruction;
+        private System.Windows.Forms.Button buttonClose;
     }
 }
 
