@@ -21,10 +21,20 @@ namespace Password_Manager
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            passwordForm = new PasswordManagerForm();
-
-            loginDialog = new LoginDialog();
-            loginDialog.Show();
+            var dialog = new LoginDialog();
+            dialog.FormClosed += (object s, FormClosedEventArgs a) =>
+            {
+                if (dialog.isLoginSuccess)
+                {
+                    var form = new PasswordManagerForm();
+                    form.Show();
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            };
+            dialog.Show();
 
             Application.Run();
         }

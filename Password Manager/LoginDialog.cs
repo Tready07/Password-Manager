@@ -21,6 +21,9 @@ namespace Password_Manager
             InitializeComponent();
         }
 
+        public bool isAdmin { get; private set; } = false;
+        public bool isLoginSuccess { get; private set; } = false;
+
         private async void loginSubmitButton(object sender, EventArgs e)
         { 
             Console.WriteLine("The Submit button was clicked!");
@@ -45,13 +48,13 @@ namespace Password_Manager
                 {
                     taskDialog.Show();
                 }
-                return;
             }
-        }
-
-        private void LoginDialog_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.Exit();
+            else
+            {
+                this.isAdmin = resp.isAdmin;
+                this.isLoginSuccess = true;
+                this.Close();
+            }
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
