@@ -36,62 +36,6 @@ namespace Password_Manager
         public void connect(String host, int port)
         {   
             socket.Connect(host, port);
-
-            // Spawn a new Task for reading messages received from the server once we're connected.
-            Task.Factory.StartNew(() =>
-            {
-                var networkStream = new NetworkStream(this.socket);
-                while (true)
-                {
-                    if (!this.socket.Poll(Timeout, SelectMode.SelectRead))
-                    {
-                        // Nothing to read, try again later.
-                        continue;
-                    }
-
-                    // Have we disconnected from the server?
-                    if (this.socket.Available == 0)
-                    {
-                        Trace.WriteLine("Server has disconnected from client.", "Client");
-                        this.Disconnect();
-                        break;
-                    }
-
-                    // Read incoming message
-                    var buffer = new byte[4096];
-                    int actualBytesRead = networkStream.Read(buffer, 0, buffer.Length);
-                    try
-                    {
-                        using (var stream = new MemoryStream(buffer))
-                        {
-                            var messageHeader = MessageUtils.DeserializeMessageHeader(stream);
-
-                            Debug.WriteLine("Message ID: " + messageHeader.ID.ToString(), "Client");
-                            Debug.WriteLine("Message Type: " + messageHeader.Type.ToString(), "Client");
-                            Debug.WriteLine("Message Size: " + messageHeader.Size.ToString(), "Client");
-
-                            if (actualBytesRead - MessageHeader.HeaderSize < messageHeader.Size)
-                            {
-                                // There's more data that needs to be received from the server, so
-                                // don't process this message yet.
-
-                                // TODO: Implement this properly.
-                                Debug.WriteLine("Not enough data was sent from the server to complete this message.", "Client");
-                                Debug.WriteLine("Skipping...");
-                                continue;
-                            }
-
-                            Debug.WriteLine("Processing message...", "Client");
-                            MessageHandler handler = new MessageHandler();
-                            handler.handleMessage(stream,messageHeader);
-                        }
-                    }
-                    catch (BadHeaderException ex)
-                    {
-                        Trace.WriteLine("Bad message header was received from server: " + ex, "Client");
-                    }
-                }
-            });
         }
 
         /// <summary>
