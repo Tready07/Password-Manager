@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Networking.Requests;
+using Networking.Responses;
 
 namespace Password_Manager
 {
@@ -44,7 +45,34 @@ namespace Password_Manager
         private async void buttonUpdatePassword_Click(object sender, EventArgs e)
         {
             var request = new ChangeUserPasswordRequest(this.textboxPassword.Text);
-            await SocketManager.Instance.SendMessage(request);
+            var resp = await SocketManager.Instance.SendRequest<ChangeUserPasswordResponse>(request);
+
+            string mainInstruction = null;
+            string text = null;
+            TaskDialogStandardIcon icon = TaskDialogStandardIcon.None;
+
+            if (resp.isSuccessful)
+            {
+                mainInstruction = "Your account password has been changed";
+                icon = TaskDialogStandardIcon.Information;
+            }
+            else
+            {
+                mainInstruction = "Your account password could not be changed";
+                text = "Please try again later.";
+                icon = TaskDialogStandardIcon.Error;
+            }
+
+            using (var dialog = new TaskDialog()
+            {
+                Caption = "Change Password",
+                InstructionText = mainInstruction,
+                Text = text,
+                Icon = icon
+            })
+            {
+                dialog.Show();
+            }
         }
     }
 }

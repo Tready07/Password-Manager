@@ -99,32 +99,7 @@ namespace Password_Manager
             var resp = (ChangeUserPasswordResponse)formatter.Deserialize(message);
             Program.passwordForm.Invoke((MethodInvoker)(() =>
             {
-                string mainInstruction = null;
-                string text = null;
-                TaskDialogStandardIcon icon = TaskDialogStandardIcon.None;
 
-                if (resp.isSuccessful)
-                {
-                    mainInstruction = "Your account password has been changed";
-                    icon = TaskDialogStandardIcon.Information;
-                }
-                else
-                {
-                    mainInstruction = "Your account password could not be changed";
-                    text = "Please try again later.";
-                    icon = TaskDialogStandardIcon.Error;
-                }
-
-                using (var dialog = new TaskDialog()
-                {
-                    Caption = "Change Password",
-                    InstructionText = mainInstruction,
-                    Text = text,
-                    Icon = icon
-                })
-                {
-                    dialog.Show();
-                }
             }));
             return true;
         }
