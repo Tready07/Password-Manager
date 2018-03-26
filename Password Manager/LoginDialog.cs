@@ -46,6 +46,7 @@ namespace Password_Manager
                         Caption = "Password Manager",
                         Icon = TaskDialogStandardIcon.Error,
                         InstructionText = "Unable to log in",
+                        OwnerWindowHandle = this.Handle,
                         Text = "Make sure the username and password you've entered is correct, and then try again.",
                         StandardButtons = TaskDialogStandardButtons.Close
                     })
@@ -69,6 +70,7 @@ namespace Password_Manager
                     InstructionText = "Unable to connect to the server",
                     Text = "Make sure that the server is running on the specified host address and port, and then try again.",
                     StandardButtons = TaskDialogStandardButtons.Close,
+                    OwnerWindowHandle = this.Handle,
                     DetailsCollapsedLabel = "Show error",
                     DetailsExpandedLabel = "Hide error",
                     DetailsExpandedText = string.Format("{1} (0x{0:X8})", ex.ErrorCode, ex.Message)
