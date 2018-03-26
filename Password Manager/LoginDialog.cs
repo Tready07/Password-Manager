@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -32,28 +33,49 @@ namespace Password_Manager
             Shared.Username user = new Shared.Username(username, password);
             LoginRequest msg = new LoginRequest(user);
             SocketManager sktMngr = SocketManager.Instance;
-            sktMngr.connect(this.serverAddressTextBox.Text, (int)serverPort.Value);
 
-            LoginResponse resp = await sktMngr.SendRequest<LoginResponse>(msg);
-            if (resp == null)
+            try
+            {
+                sktMngr.connect(this.serverAddressTextBox.Text, (int)serverPort.Value);
+
+                LoginResponse resp = await sktMngr.SendRequest<LoginResponse>(msg);
+                if (resp == null)
+                {
+                    using (var taskDialog = new TaskDialog()
+                    {
+                        Caption = "Password Manager",
+                        Icon = TaskDialogStandardIcon.Error,
+                        InstructionText = "Unable to log in",
+                        Text = "Make sure the username and password you've entered is correct, and then try again.",
+                        StandardButtons = TaskDialogStandardButtons.Close
+                    })
+                    {
+                        taskDialog.Show();
+                    }
+                }
+                else
+                {
+                    this.isAdmin = resp.isAdmin;
+                    this.isLoginSuccess = true;
+                    this.Close();
+                }
+            }
+            catch (SocketException ex)
             {
                 using (var taskDialog = new TaskDialog()
                 {
                     Caption = "Password Manager",
                     Icon = TaskDialogStandardIcon.Error,
-                    InstructionText = "Unable to log in",
-                    Text = "Make sure the username and password you've entered is correct, and then try again.",
-                    StandardButtons = TaskDialogStandardButtons.Close
+                    InstructionText = "Unable to connect to the server",
+                    Text = "Make sure that the server is running on the specified host address and port, and then try again.",
+                    StandardButtons = TaskDialogStandardButtons.Close,
+                    DetailsCollapsedLabel = "Show error",
+                    DetailsExpandedLabel = "Hide error",
+                    DetailsExpandedText = string.Format("{1} (0x{0:X8})", ex.ErrorCode, ex.Message)
                 })
                 {
                     taskDialog.Show();
                 }
-            }
-            else
-            {
-                this.isAdmin = resp.isAdmin;
-                this.isLoginSuccess = true;
-                this.Close();
             }
         }
 
