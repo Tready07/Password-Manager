@@ -173,6 +173,9 @@
             this.Controls.Add(this.pwTextBox);
             this.Controls.Add(this.usernameTextBox);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "NewApplicationForm";
             this.Text = "New Application";
             this.ResumeLayout(false);
