@@ -68,7 +68,7 @@ namespace Password_Manager
                     Caption = "Password Manager",
                     Icon = TaskDialogStandardIcon.Error,
                     InstructionText = "Unable to connect to the server",
-                    Text = "Make sure that the server is running on the specified host address and port, and then try again.",
+                    Text = "Make sure that the server is running, and then try again.",
                     StandardButtons = TaskDialogStandardButtons.Close,
                     OwnerWindowHandle = this.Handle,
                     DetailsCollapsedLabel = "Show error",

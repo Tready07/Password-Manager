@@ -130,9 +130,9 @@
             this.labelMainInstruction.Location = new System.Drawing.Point(7, 9);
             this.labelMainInstruction.Name = "labelMainInstruction";
             this.labelMainInstruction.Padding = new System.Windows.Forms.Padding(10);
-            this.labelMainInstruction.Size = new System.Drawing.Size(293, 41);
+            this.labelMainInstruction.Size = new System.Drawing.Size(288, 41);
             this.labelMainInstruction.TabIndex = 0;
-            this.labelMainInstruction.Text = "Sign in to Password Manager to begin";
+            this.labelMainInstruction.Text = "Log in to Password Manager to begin";
             // 
             // labelInstruction
             // 
@@ -173,6 +173,9 @@
             this.Controls.Add(this.usernameTextBox);
             this.Controls.Add(this.submitButton);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "LoginDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";

@@ -42,6 +42,7 @@
             this.passwordCopyButton = new System.Windows.Forms.Button();
             this.labelPassword = new System.Windows.Forms.Label();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitcontainerMain)).BeginInit();
             this.splitcontainerMain.Panel1.SuspendLayout();
@@ -63,6 +64,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
             this.newUsernameButton,
+            this.toolStripSeparator1,
             this.accountToolStripButton,
             this.adminPanelButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -199,6 +201,11 @@
             this.passwordTextBox.TabIndex = 9;
             this.passwordTextBox.UseSystemPasswordChar = true;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // PasswordManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -236,5 +243,6 @@
         private System.Windows.Forms.Button passwordCopyButton;
         private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.TextBox passwordTextBox;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
