@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Net.Sockets;
 
 namespace Password_Manager_Server
 {
@@ -33,8 +34,18 @@ namespace Password_Manager_Server
             var con = new SQLiteConnection();
             con = databaseInitializer.makeConnection(con);
 
-            server = new Server();
-            server.Start();
+            try
+            {
+                server = new Server();
+                server.Start();
+            }
+            catch (SocketException)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("The server is already running.");
+                Console.WriteLine("This instance will now close.");
+                Console.ForegroundColor = originalFgColor;
+            }
         }
 
         private static void OnCancelKeyPressed(object sender, ConsoleCancelEventArgs e)
