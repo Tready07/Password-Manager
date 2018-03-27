@@ -34,6 +34,7 @@
             this.columnRole = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonAddUser = new System.Windows.Forms.Button();
             this.buttonDeleteUser = new System.Windows.Forms.Button();
+            this.buttonChangeRole = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // labelMainInstruction
@@ -59,6 +60,7 @@
             this.listviewAccounts.TabIndex = 3;
             this.listviewAccounts.UseCompatibleStateImageBehavior = false;
             this.listviewAccounts.View = System.Windows.Forms.View.Details;
+            this.listviewAccounts.SelectedIndexChanged += new System.EventHandler(this.listviewAccounts_SelectedIndexChanged);
             // 
             // columnUsername
             // 
@@ -78,15 +80,29 @@
             this.buttonAddUser.TabIndex = 4;
             this.buttonAddUser.Text = "&Add...";
             this.buttonAddUser.UseVisualStyleBackColor = true;
+            this.buttonAddUser.Click += new System.EventHandler(this.buttonAddUser_Click);
             // 
             // buttonDeleteUser
             // 
+            this.buttonDeleteUser.Enabled = false;
             this.buttonDeleteUser.Location = new System.Drawing.Point(115, 53);
             this.buttonDeleteUser.Name = "buttonDeleteUser";
             this.buttonDeleteUser.Size = new System.Drawing.Size(93, 23);
             this.buttonDeleteUser.TabIndex = 5;
             this.buttonDeleteUser.Text = "&Remove";
             this.buttonDeleteUser.UseVisualStyleBackColor = true;
+            this.buttonDeleteUser.Click += new System.EventHandler(this.buttonDeleteUser_Click);
+            // 
+            // buttonChangeRole
+            // 
+            this.buttonChangeRole.Enabled = false;
+            this.buttonChangeRole.Location = new System.Drawing.Point(214, 53);
+            this.buttonChangeRole.Name = "buttonChangeRole";
+            this.buttonChangeRole.Size = new System.Drawing.Size(93, 23);
+            this.buttonChangeRole.TabIndex = 5;
+            this.buttonChangeRole.Text = "Change &role";
+            this.buttonChangeRole.UseVisualStyleBackColor = true;
+            this.buttonChangeRole.Click += new System.EventHandler(this.buttonChangeRole_Click);
             // 
             // AdminPanelDialog
             // 
@@ -94,6 +110,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(712, 519);
+            this.Controls.Add(this.buttonChangeRole);
             this.Controls.Add(this.buttonDeleteUser);
             this.Controls.Add(this.buttonAddUser);
             this.Controls.Add(this.listviewAccounts);
@@ -101,6 +118,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AdminPanelDialog";
             this.Text = "Admin Panel";
+            this.Load += new System.EventHandler(this.AdminPanelDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -114,5 +132,6 @@
         private System.Windows.Forms.ColumnHeader columnRole;
         private System.Windows.Forms.Button buttonAddUser;
         private System.Windows.Forms.Button buttonDeleteUser;
+        private System.Windows.Forms.Button buttonChangeRole;
     }
 }
