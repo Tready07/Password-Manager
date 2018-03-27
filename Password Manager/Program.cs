@@ -24,6 +24,7 @@ namespace Password_Manager
                 if (dialog.isLoginSuccess)
                 {
                     var form = new PasswordManagerForm();
+                    form.isAdmin = dialog.isAdmin;
                     form.Show();
                 }
                 else
