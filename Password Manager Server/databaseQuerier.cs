@@ -276,7 +276,7 @@ namespace Password_Manager_Server
             String encryptedPassword = Shared.CryptManager.hash(password + salt);
             try
             {
-                String sqlString = "INSERT INTO users VALUES(@name,@password,@isAdmin,false,@salt)";
+                String sqlString = "INSERT INTO users VALUES(@name,@password,@isAdmin,0,@salt)";
                 SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
                 command.Parameters.AddWithValue("@name",username);
                 command.Parameters.AddWithValue("@password",encryptedPassword);
