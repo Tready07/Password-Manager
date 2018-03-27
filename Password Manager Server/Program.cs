@@ -8,21 +8,20 @@ namespace Password_Manager_Server
 {
     class Program
     {
+        private readonly static string Header = new string ('-', Console.BufferWidth - 1);
         private static Server server;
 
-        public static async Task Main()
+        public static void Main()
         {
             Console.CancelKeyPress += OnCancelKeyPressed;
 
             // Print a fancy header
             var originalFgColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Blue;
-
-            string header = new string('-', Console.BufferWidth - 1);
-            Console.WriteLine(header);
+            Console.WriteLine(Header);
             Console.WriteLine("Password Manager Server");
             Console.WriteLine("Press CTRL+C to stop the server");
-            Console.WriteLine(header);
+            Console.WriteLine(Header);
 
             Console.ForegroundColor = originalFgColor;
 #if DEBUG
