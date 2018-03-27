@@ -18,6 +18,18 @@ namespace Password_Manager
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            SocketManager.Instance.Disconnected += (object s, EventArgs a) =>
+            {
+                ShowLoginDialog();
+            };
+
+            ShowLoginDialog();
+
+            Application.Run();
+        }
+
+        static void ShowLoginDialog()
+        {
             var dialog = new LoginDialog();
             dialog.FormClosed += (object s, FormClosedEventArgs a) =>
             {
@@ -33,8 +45,6 @@ namespace Password_Manager
                 }
             };
             dialog.Show();
-
-            Application.Run();
         }
     }
 }
