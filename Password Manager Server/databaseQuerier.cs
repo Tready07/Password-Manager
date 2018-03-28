@@ -351,5 +351,20 @@ namespace Password_Manager_Server
             }
         }
 
+        public bool deleteUser(string user)
+        {
+            try
+            {
+                String sqlString = "DELETE FROM users WHERE name = @name";
+                SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+                command.Parameters.AddWithValue("@name", user);
+                return (command.ExecuteNonQuery() > 0);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 }

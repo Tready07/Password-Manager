@@ -9,6 +9,7 @@ using Networking.Responses;
 using System.Net.Sockets;
 using System.Diagnostics;
 
+//TODO: Clean up so that only one connection and one querier in this class.
 namespace Password_Manager_Server
 {
     public class MessageHandler
@@ -187,6 +188,26 @@ namespace Password_Manager_Server
 
             }
             return success;
+        }
+
+        private static bool handleDeleteUser(byte [] message, ClientSession session)
+        {
+            bool success = false;
+            MessageDeserializer ds = new MessageDeserializer(message);
+            DeleteUserRequest request = (DeleteUserRequest) ds.getMessage();
+            var con = databaseInitializer.makeConnection();
+            DatabaseQuerier db = new DatabaseQuerier(con);
+            if(db.deleteUser(request.username))
+            {
+                DeleteUserResponse resp = new DeleteUserResponse(request.username);
+                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payload);
+            }
+            else
+            {
+                //error with request handle this
+            }
+            
         }
     }
 }
