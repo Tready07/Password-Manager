@@ -33,6 +33,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.newUsernameButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.accountToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.adminPanelButton = new System.Windows.Forms.ToolStripButton();
             this.splitcontainerMain = new System.Windows.Forms.SplitContainer();
@@ -42,7 +43,6 @@
             this.passwordCopyButton = new System.Windows.Forms.Button();
             this.labelPassword = new System.Windows.Forms.Label();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitcontainerMain)).BeginInit();
             this.splitcontainerMain.Panel1.SuspendLayout();
@@ -90,6 +90,11 @@
             this.newUsernameButton.Size = new System.Drawing.Size(107, 22);
             this.newUsernameButton.Text = "New Username";
             this.newUsernameButton.Click += new System.EventHandler(this.newUsernameButton_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // accountToolStripButton
             // 
@@ -143,6 +148,7 @@
             this.buttonDelete.TabIndex = 14;
             this.buttonDelete.Text = "Delete";
             this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
             // editButton
             // 
@@ -154,6 +160,7 @@
             this.editButton.TabIndex = 13;
             this.editButton.Text = "Edit";
             this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
             // showpwCheckBox
             // 
@@ -177,6 +184,7 @@
             this.passwordCopyButton.TabIndex = 11;
             this.passwordCopyButton.Text = "Copy";
             this.passwordCopyButton.UseVisualStyleBackColor = true;
+            this.passwordCopyButton.Click += new System.EventHandler(this.passwordCopyButton_Click);
             // 
             // labelPassword
             // 
@@ -200,11 +208,6 @@
             this.passwordTextBox.Size = new System.Drawing.Size(533, 20);
             this.passwordTextBox.TabIndex = 9;
             this.passwordTextBox.UseSystemPasswordChar = true;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // PasswordManagerForm
             // 
