@@ -8,6 +8,7 @@ using Networking.Requests;
 using Networking.Responses;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.Data.SQLite;
 
 //TODO: Clean up so that only one connection and one querier in this class.
 namespace Password_Manager_Server
@@ -16,14 +17,15 @@ namespace Password_Manager_Server
     {
         Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp,
             handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers};
-        public MessageHandler()
+
+        static MessageHandler()
         {
             con = databaseInitializer.makeConnection();
             db = new DatabaseQuerier(con);
         }
 
-        private  SQLiteConnection con;
-        private DatabaseQuerier db;
+        private static SQLiteConnection con;
+        private static DatabaseQuerier db;
 
         public bool handleMessage(byte [] message, ClientSession session, MessageHeader header)
         {
