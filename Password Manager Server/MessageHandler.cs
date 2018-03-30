@@ -196,6 +196,7 @@ namespace Password_Manager_Server
             {
                 if(!db.isAdmin(request.username))
                 {
+                    db.deleteUser(request.username);
                     DeleteUserResponse resp = new DeleteUserResponse(request.username);
                     byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
                     session.Client.Client.Send(payload);
@@ -203,6 +204,7 @@ namespace Password_Manager_Server
                 }
                 else if (db.isSuperAdmin(session.loginUsername.name))
                 {
+                    db.deleteUser(request.username);
                     DeleteUserResponse resp = new DeleteUserResponse(request.username);
                     byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
                     session.Client.Client.Send(payload);
