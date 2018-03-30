@@ -163,7 +163,7 @@ namespace Password_Manager_Server
         {
             String sqlString = "UPDATE applications SET password = @password WHERE application = @appName AND username = @username AND name = @user";
             SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
-            command.Parameters.AddWithValue("@name", user);
+            command.Parameters.AddWithValue("@user", user);
             command.Parameters.AddWithValue("@appName", app.Name);
             command.Parameters.AddWithValue("@username", app.Usernames[0].name);
             command.Parameters.AddWithValue("@password", app.Usernames[0].password);

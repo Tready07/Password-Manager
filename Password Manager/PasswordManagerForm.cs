@@ -168,7 +168,7 @@ namespace Password_Manager
             }
         }
 
-        private void editButton_Click(object sender, EventArgs e)
+        private async void editButton_Click(object sender, EventArgs e)
         {
             if(this.passwordTextBox.ReadOnly)
             {
@@ -179,6 +179,23 @@ namespace Password_Manager
             {
                 this.passwordTextBox.ReadOnly = true;
                 this.editButton.Text = "Edit";
+
+                // Assumption: The selected node is capable of having a parent (since it's
+                // the app node).
+                var selectedNode = this.applicationTreeView.SelectedNode;
+                var username = selectedNode.Text;
+                var appName = selectedNode.Parent.Text;
+                var appType = selectedNode.Parent.Parent.Text;
+
+                var encryptedPw = Shared.CryptManager.encrypt(this.passwordTextBox.Text, M_secretkey);
+
+                var app = new Shared.Application(appName, new Shared.Username[] { new Shared.Username(username, encryptedPw) }, appType);
+                var request = new PasswordRequest(app);
+                request.updatePassword = true;
+
+                var response = await SocketManager.Instance.SendRequest<PasswordResponse>(request);
+                var password = Shared.CryptManager.decrypt(response.application.Usernames[0].password, M_secretkey);
+                this.fillPasswordBox(password);
             }
         }
 
