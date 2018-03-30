@@ -18,11 +18,6 @@ namespace Password_Manager
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            SocketManager.Instance.Disconnected += (object s, EventArgs a) =>
-            {
-                ShowLoginDialog();
-            };
-
             ShowLoginDialog();
 
             Application.Run();

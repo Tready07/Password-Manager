@@ -16,7 +16,7 @@ namespace Password_Manager_Server
     public class MessageHandler
     {
         Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp,
-            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers};
+            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers, handleDeleteUser};
 
         static MessageHandler()
         {
@@ -186,6 +186,7 @@ namespace Password_Manager_Server
             DeleteUserRequest request = (DeleteUserRequest) ds.getMessage();
             if(db.deleteUser(request.username))
             {
+                // TODO: Delete permission (super admin? admin?)
                 DeleteUserResponse resp = new DeleteUserResponse(request.username);
                 byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
                 session.Client.Client.Send(payload);

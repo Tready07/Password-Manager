@@ -75,9 +75,19 @@ namespace Password_Manager
             })
             {
                 var deleteButton = new TaskDialogButton("DeleteButton", "Delete user");
-                deleteButton.Click += (object s, EventArgs a) =>
+                deleteButton.Click += async (object s, EventArgs a) =>
                 {
                     confirmDialog.Close();
+
+                    if (this.listviewAccounts.SelectedItems.Count != 1)
+                    {
+                        return;
+                    }
+
+                    var selectedItem = this.listviewAccounts.SelectedItems[0];
+
+                    var response = await SocketManager.Instance.SendRequest<DeleteUserResponse>(new DeleteUserRequest(selectedItem.SubItems[0].Text));
+                    selectedItem.Remove();
                 };
 
                 var cancelButton = new TaskDialogButton("CancelButton", "Don't delete");
