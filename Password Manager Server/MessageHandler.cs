@@ -84,7 +84,7 @@ namespace Password_Manager_Server
             Console.WriteLine(request.application.Usernames[0].name); 
             if(request.updatePassword)
             {
-                db.setPassword(request.application,session.loginUsername.name)
+                db.setPassword(request.application, session.loginUsername.name);
             }      
             var encryptedPw = db.getPassword(request.application.Name,
                 request.application.Usernames[0].name, session.loginUsername.name);
