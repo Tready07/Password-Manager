@@ -14,7 +14,7 @@ namespace Networking.Responses
         public const int MessageID = 9;
 
         public DeleteUserResponse(String user) :
-            base(MessageID, MessageType.response)
+            base(MessageID, MessageType.Response)
         {
             username = user;
         }

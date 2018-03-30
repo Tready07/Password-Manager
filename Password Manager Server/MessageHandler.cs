@@ -187,12 +187,14 @@ namespace Password_Manager_Server
                 DeleteUserResponse resp = new DeleteUserResponse(request.username);
                 byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
                 session.Client.Client.Send(payload);
+                success = true;
             }
             else
             {
                 //error with request handle this
+                success = false;
             }
-            
+            return success;
         }
     }
 }
