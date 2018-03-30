@@ -10,7 +10,6 @@ using System.Net.Sockets;
 using System.Diagnostics;
 using System.Data.SQLite;
 
-//TODO: Clean up so that only one connection and one querier in this class.
 namespace Password_Manager_Server
 {
     public class MessageHandler
