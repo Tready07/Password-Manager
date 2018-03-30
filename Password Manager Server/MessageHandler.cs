@@ -18,8 +18,12 @@ namespace Password_Manager_Server
             handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers};
         public MessageHandler()
         {
-
+            con = databaseInitializer.makeConnection();
+            db = new DatabaseQuerier(con);
         }
+
+        private  SQLiteConnection con;
+        private DatabaseQuerier db;
 
         public bool handleMessage(byte [] message, ClientSession session, MessageHeader header)
         {
@@ -36,8 +40,6 @@ namespace Password_Manager_Server
             LoginRequest msg =(LoginRequest) ds.getMessage();
             Console.WriteLine(msg.username.name);
             Console.WriteLine(msg.username.password);
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
             if(db.checkLoginInfo(msg.username.name,msg.username.password))
             {
                 Console.Write("The info is True!");
@@ -53,7 +55,6 @@ namespace Password_Manager_Server
 
         private static bool handleApplications(byte [] message,ClientSession session)
         {
-            var con = databaseInitializer.makeConnection();
             DatabaseQuerier db = new DatabaseQuerier(con);
             ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(session.loginUsername.name));
             byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
@@ -66,9 +67,7 @@ namespace Password_Manager_Server
             MessageDeserializer ds = new MessageDeserializer(message);
             NewAppRequest request = (NewAppRequest)ds.getMessage();
             Console.WriteLine(request.application.Usernames[0].name);
-            Console.WriteLine(request.application.Usernames[0].password);
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
+            Console.WriteLine(request.application.Usernames[0].password);            
             db.addUsername(request.application, session.loginUsername.name);
             NewAppResponse resp = new NewAppResponse(request.application);
             byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
@@ -80,9 +79,7 @@ namespace Password_Manager_Server
         {
             MessageDeserializer ds = new MessageDeserializer(message);
             PasswordRequest request = (PasswordRequest)ds.getMessage();
-            Console.WriteLine(request.application.Usernames[0].name);
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
+            Console.WriteLine(request.application.Usernames[0].name);        
             var encryptedPw = db.getPassword(request.application.Name,
                 request.application.Usernames[0].name, session.loginUsername.name);
             request.application.Usernames[0].password = encryptedPw;
@@ -104,8 +101,6 @@ namespace Password_Manager_Server
 - Username: {2}";
             Trace.WriteLine(string.Format(TraceFormat, app.Name, app.Type, app.Usernames[0].name), "Server");
 
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
             db.removeUsername(app, session.loginUsername.name);
 
             var response = new DeleteUsernameResponse(app);
@@ -119,8 +114,6 @@ namespace Password_Manager_Server
             MessageDeserializer ds = new MessageDeserializer(message);
             ChangeUserPasswordRequest request = (ChangeUserPasswordRequest)ds.getMessage();
             var plainTextPw = request.plainTextPassword;
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
             bool success = db.changeUserPassword(session.loginUsername.name, request.plainTextPassword);
             ChangeUserPasswordResponse response = new ChangeUserPasswordResponse(success);
             byte[] payload = MessageUtils.SerializeMessage(response).GetAwaiter().GetResult();
@@ -134,8 +127,6 @@ namespace Password_Manager_Server
             MessageDeserializer ds = new MessageDeserializer(message);
             CreateNewUserRequest request = (CreateNewUserRequest)ds.getMessage();
             var userInfo = request.username;
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
             if(session.loginUsername.isAdmin)
             {
                 success = db.createNewUser(userInfo.name, userInfo.password, request.makeAdmin);
@@ -151,8 +142,6 @@ namespace Password_Manager_Server
             MessageDeserializer ds = new MessageDeserializer(message);
             ChangeAdminRequest request = (ChangeAdminRequest)ds.getMessage();
             var userInfo = request.username;
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
             if(db.isAdmin(userInfo.name))
             {
                 if(db.isSuperAdmin(session.loginUsername.name))
@@ -176,8 +165,6 @@ namespace Password_Manager_Server
             bool success = false;
             MessageDeserializer ds = new MessageDeserializer(message);
             SendUsersRequest request = (SendUsersRequest)ds.getMessage();
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
             if(session.loginUsername.isAdmin)
             {
                 var users = db.getUsers();
@@ -195,8 +182,6 @@ namespace Password_Manager_Server
             bool success = false;
             MessageDeserializer ds = new MessageDeserializer(message);
             DeleteUserRequest request = (DeleteUserRequest) ds.getMessage();
-            var con = databaseInitializer.makeConnection();
-            DatabaseQuerier db = new DatabaseQuerier(con);
             if(db.deleteUser(request.username))
             {
                 DeleteUserResponse resp = new DeleteUserResponse(request.username);
