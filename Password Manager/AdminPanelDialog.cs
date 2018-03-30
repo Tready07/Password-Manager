@@ -103,9 +103,9 @@ namespace Password_Manager
             var selectedItem = this.listviewAccounts.SelectedItems[0];
 
             var username = new Shared.Username(selectedItem.Text);
-            bool isAdmin = selectedItem.SubItems[0].Text != "Administrator";
+            bool isAdmin = selectedItem.SubItems[1].Text != "Administrator";
             var response = await SocketManager.Instance.SendRequest<ChangeAdminResponse>(new ChangeAdminRequest(username, isAdmin));
-            selectedItem.SubItems[0].Text = response.username.isAdmin ? "Administrator" : "Standard";
+            selectedItem.SubItems[1].Text = response.username.isAdmin ? "Administrator" : "Standard";
         }
     }
 }
