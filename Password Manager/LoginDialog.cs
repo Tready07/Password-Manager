@@ -22,6 +22,7 @@ namespace Password_Manager
             InitializeComponent();
         }
 
+        public string userName { get { return this.usernameTextBox.Text; } }
         public bool isAdmin { get; private set; } = false;
         public bool isLoginSuccess { get; private set; } = false;
 

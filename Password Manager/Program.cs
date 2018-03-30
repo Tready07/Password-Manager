@@ -35,8 +35,11 @@ namespace Password_Manager
             {
                 if (dialog.isLoginSuccess)
                 {
+                    var userName = new Shared.Username(dialog.userName);
+                    userName.isAdmin = dialog.isAdmin;
+
                     var form = new PasswordManagerForm();
-                    form.isAdmin = dialog.isAdmin;
+                    form.LoggedInUser = userName;
                     form.Show();
                 }
                 else

@@ -184,15 +184,14 @@ namespace Password_Manager
 
         public byte[] M_secretkey { get; private set; }
 
-        private bool _isAdmin = false;
-        public bool isAdmin
+        private Shared.Username loggedInUser;
+        public Shared.Username LoggedInUser
         {
-            get => _isAdmin;
-            internal set
+            get => this.loggedInUser;
+            set
             {
-                _isAdmin = value;
-
-                this.adminPanelButton.Visible = _isAdmin;
+                this.loggedInUser = value;
+                this.adminPanelButton.Visible = this.loggedInUser.isAdmin;
             }
         }
 
