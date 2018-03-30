@@ -188,18 +188,30 @@ namespace Password_Manager_Server
             bool success = false;
             MessageDeserializer ds = new MessageDeserializer(message);
             DeleteUserRequest request = (DeleteUserRequest) ds.getMessage();
-            if(db.deleteUser(request.username))
+            if(db.isSuperAdmin(request.username))
             {
-                // TODO: Delete permission (super admin? admin?)
-                DeleteUserResponse resp = new DeleteUserResponse(request.username);
-                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
-                session.Client.Client.Send(payload);
-                success = true;
+                return false;
             }
-            else
+            if(db.isAdmin(session.loginUsername.name))
             {
-                //error with request handle this
-                success = false;
+                if(!db.isAdmin(request.username))
+                {
+                    DeleteUserResponse resp = new DeleteUserResponse(request.username);
+                    byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                    session.Client.Client.Send(payload);
+                    success = true;
+                }
+                else if (db.isSuperAdmin(session.loginUsername.name))
+                {
+                    DeleteUserResponse resp = new DeleteUserResponse(request.username);
+                    byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                    session.Client.Client.Send(payload);
+                    success = true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             return success;
         }
