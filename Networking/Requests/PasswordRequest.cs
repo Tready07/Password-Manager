@@ -12,13 +12,13 @@ namespace Networking.Requests
     public class PasswordRequest : MessageBase
     {
         public const int MessageID = 3;
-
         public PasswordRequest(Shared.Application app) :
             base(MessageID, MessageType.Request)
         {
             application = app;
         }
         public Shared.Application application;
+        public bool updatePassword {get; set;} = false;
 
         public override byte[] ToByteArray()
         {
