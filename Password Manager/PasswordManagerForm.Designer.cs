@@ -52,12 +52,17 @@
             // 
             // applicationTreeView
             // 
+            this.applicationTreeView.AllowDrop = true;
             this.applicationTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.applicationTreeView.Location = new System.Drawing.Point(0, 0);
             this.applicationTreeView.Name = "applicationTreeView";
             this.applicationTreeView.Size = new System.Drawing.Size(287, 575);
             this.applicationTreeView.TabIndex = 5;
+            this.applicationTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.applicationTreeView_ItemDrag);
             this.applicationTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.applicationTreeView_AfterSelect);
+            this.applicationTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.applicationTreeView_DragDrop);
+            this.applicationTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.applicationTreeView_DragEnter);
+            this.applicationTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.applicationTreeView_DragOver);
             // 
             // toolStrip1
             // 

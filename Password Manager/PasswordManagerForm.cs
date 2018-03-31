@@ -421,5 +421,42 @@ namespace Password_Manager
             var adminPanelDialog = new AdminPanelDialog();
             adminPanelDialog.ShowDialog(this);
         }
+
+        private void applicationTreeView_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            var draggedNode = (TreeNode)e.Item;
+            if (draggedNode.Level == 1)
+            {
+                //it is an application
+                DoDragDrop(e.Item, DragDropEffects.Move);
+            }
+        }
+
+        private void applicationTreeView_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.AllowedEffect;
+        }
+
+        private void applicationTreeView_DragDrop(object sender, DragEventArgs e)
+        {
+            TreeNode treenode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+            Point targetPoint = applicationTreeView.PointToClient(new Point(e.X, e.Y));
+            TreeNode targetNode = applicationTreeView.GetNodeAt(targetPoint);
+            if (treenode.Level - 1 == targetNode.Level)
+            {
+                treenode.Remove();
+                targetNode.Nodes.Add(treenode);
+                //TODO: Send Message Change App Type
+            }
+        }
+
+        private void applicationTreeView_DragOver(object sender, DragEventArgs e)
+        {
+            // Retrieve the client coordinates of the mouse position.
+            Point targetPoint = applicationTreeView.PointToClient(new Point(e.X, e.Y));
+
+            // Select the node at the mouse position.
+            applicationTreeView.SelectedNode = applicationTreeView.GetNodeAt(targetPoint);
+        }
     }
 }
