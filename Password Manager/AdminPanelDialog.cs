@@ -86,8 +86,25 @@ namespace Password_Manager
 
                     var selectedItem = this.listviewAccounts.SelectedItems[0];
 
-                    var response = await SocketManager.Instance.SendRequest<DeleteUserResponse>(new DeleteUserRequest(selectedItem.SubItems[0].Text));
-                    selectedItem.Remove();
+                    try
+                    {
+                        var response = await SocketManager.Instance.SendRequest<DeleteUserResponse>(new DeleteUserRequest(selectedItem.SubItems[0].Text));
+                        selectedItem.Remove();
+                    }
+                    catch (ResponseException ex)
+                    {
+                        using (var dialog = new TaskDialog()
+                        {
+                            Caption = "Password Manager",
+                            InstructionText = "Unable to remove this user",
+                            Text = ex.Message,
+                            Icon = TaskDialogStandardIcon.Error,
+                            StandardButtons = TaskDialogStandardButtons.Close
+                        })
+                        {
+                            dialog.Show();
+                        }
+                    }
                 };
 
                 var cancelButton = new TaskDialogButton("CancelButton", "Don't delete");
