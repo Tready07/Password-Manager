@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
+using Networking.Responses;
 
 namespace Password_Manager
 {
@@ -88,6 +89,7 @@ namespace Password_Manager
                     return null;
                 }
 
+                MessageType messageType;
                 int messageID = 0;
                 int messageSize = 0;
                 using (var memoryStream = new MemoryStream(buffer))
@@ -95,6 +97,7 @@ namespace Password_Manager
                     var messageHeader = MessageUtils.DeserializeMessageHeader(memoryStream);
                     messageSize = messageHeader.Size;
                     messageID = messageHeader.ID;
+                    messageType = messageHeader.Type;
                 }
 
                 int totalSizeRead = 0;
@@ -114,11 +117,25 @@ namespace Password_Manager
                 }
                 while (totalSizeRead < messageSize);
 
-                // Deserialize the message, and return it.
-                using (var memoryStream = new MemoryStream(messageData))
+                if (messageType == MessageType.Response)
                 {
-                    var formatter = new BinaryFormatter();
-                    return (TResponse)formatter.Deserialize(memoryStream);
+                    // Deserialize the message, and return it.
+                    using (var memoryStream = new MemoryStream(messageData))
+                    {
+                        var formatter = new BinaryFormatter();
+                        return (TResponse)formatter.Deserialize(memoryStream);
+                    }
+                }
+                else
+                {
+                    // Deserialize the message, and throw the error.
+                    using (var memoryStream = new MemoryStream(messageData))
+                    {
+                        var formatter = new BinaryFormatter();
+                        var error = (ErrorResponse)formatter.Deserialize(memoryStream);
+
+                        throw new ResponseException(error.Message);
+                    }
                 }
             }
             catch (SocketException ex) when (ex.ErrorCode == 10054)
