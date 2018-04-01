@@ -189,9 +189,14 @@ namespace Password_Manager_Server
             DeleteUserRequest request = (DeleteUserRequest) ds.getMessage();
             if(db.isSuperAdmin(request.username))
             {
+                ErrorResponse resp = new ErrorResponse(DeleteUsernameResponse.MessageID,
+                    "You do not have permission to delete this user");
+                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payload);
                 return false;
             }
-            if(db.isAdmin(session.loginUsername.name))
+
+            if (db.isAdmin(session.loginUsername.name))
             {
                 if(!db.isAdmin(request.username))
                 {
@@ -211,7 +216,11 @@ namespace Password_Manager_Server
                 }
                 else
                 {
-                    return false;
+                    ErrorResponse resp = new ErrorResponse(DeleteUsernameResponse.MessageID,
+                        "You do not have permission to delete this user");
+                    byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                    session.Client.Client.Send(payload);
+                    success = false;
                 }
             }
             return success;
