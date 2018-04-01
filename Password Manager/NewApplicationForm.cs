@@ -67,38 +67,36 @@ namespace Password_Manager
 
         private async void submitButton(object sender, EventArgs e)
         {
-            if (this.managerForm.doesUsernameExist(this.appTypeComboBox.Text,
-                                                   this.appNameTextBox.Text,
-                                                   this.usernameTextBox.Text))
+            try
             {
-                using (var dialog = new TaskDialog()
+                Shared.Application app = new Shared.Application();
+                String plainTextPw = pwTextBox.Text;
+                var encryptedPw = Shared.CryptManager.encrypt(plainTextPw, secretKey);
+                Shared.Username username = new Shared.Username(usernameTextBox.Text, encryptedPw);
+                Shared.Username[] userName = new Shared.Username[] { username };
+                app.Usernames = userName;
+                app.Type = appTypeComboBox.Text;
+                app.Name = appNameTextBox.Text;
+                NewAppRequest request = new NewAppRequest(app);
+                var response = await SocketManager.Instance.SendRequest<NewAppResponse>(request);
+
+                this.managerForm.addAppToTree(response.application);
+                this.Close();
+            }
+            catch (ResponseException ex)
+            {
+                using (var details = new TaskDialog()
                 {
-                    Caption = "Cannot Add Account",
-                    InstructionText = "Unable to add this user",
-                    Text = "This user already exists in the database. Please enter a different username for this application.",
-                    StandardButtons = TaskDialogStandardButtons.Close,
-                    Icon = TaskDialogStandardIcon.Error
+                    Caption = "Cannot Add User",
+                    InstructionText = "Unable to add this application and user",
+                    Text = ex.Message,
+                    Icon = TaskDialogStandardIcon.Error,
+                    StandardButtons = TaskDialogStandardButtons.Close
                 })
                 {
-                    dialog.Show();
-                    return;
+                    details.Show();
                 }
             }
-
-
-            Shared.Application app = new Shared.Application();
-            String plainTextPw = pwTextBox.Text;
-            var encryptedPw = Shared.CryptManager.encrypt(plainTextPw,secretKey);
-            Shared.Username username = new Shared.Username(usernameTextBox.Text,encryptedPw);
-            Shared.Username[] userName = new Shared.Username[] {username};
-            app.Usernames = userName;
-            app.Type = appTypeComboBox.Text;
-            app.Name = appNameTextBox.Text;
-            NewAppRequest request = new NewAppRequest(app);
-            var response = await SocketManager.Instance.SendRequest<NewAppResponse>(request);
-
-            this.managerForm.addAppToTree(response.application);
-            this.Close();
         }
 
         byte[] secretKey { get; set; }
