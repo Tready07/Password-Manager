@@ -157,9 +157,12 @@ namespace Password_Manager_Server
             MessageDeserializer ds = new MessageDeserializer(message);
             ChangeAdminRequest request = (ChangeAdminRequest)ds.getMessage();
             var userInfo = request.username;
-            if(db.isSuperAdmin(request.username))
+            if(db.isSuperAdmin(userInfo.name))
             {
-                //prob error statemetn here.
+                ErrorResponse resp = new ErrorResponse(DeleteUsernameResponse.MessageID,
+                    "You can't demote yourself, silly.");
+                byte[] respPayload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(respPayload);
                 return false;
             }
             if(db.isAdmin(userInfo.name))
@@ -167,6 +170,14 @@ namespace Password_Manager_Server
                 if(db.isSuperAdmin(session.loginUsername.name))
                 {
                     db.changeAdminPrivileges(userInfo.name, request.makeAdmin);
+                }
+                else
+                {
+                    ErrorResponse resp = new ErrorResponse(DeleteUsernameResponse.MessageID,
+                        "You don't have permission to change this user's role.");
+                    byte[] respPayload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                    session.Client.Client.Send(respPayload);
+                    return false;
                 }
             }
             if(session.loginUsername.isAdmin)
