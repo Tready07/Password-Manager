@@ -230,7 +230,7 @@ namespace Password_Manager_Server
         {
             bool success = false;
             MessageDeserializer ds = new MessageDeserializer(message);
-            ChangeAppTypeRequest request =(ChangeAppTypeRequest) ds.getMessage()
+            ChangeAppTypeRequest request = (ChangeAppTypeRequest)ds.getMessage();
             success = db.changeAppType(request.app,session.loginUsername.name);
             return success;
         }
