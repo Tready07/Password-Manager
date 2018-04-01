@@ -129,10 +129,27 @@ namespace Password_Manager
 
             var selectedItem = this.listviewAccounts.SelectedItems[0];
 
-            var username = new Shared.Username(selectedItem.Text);
-            bool isAdmin = selectedItem.SubItems[1].Text != "Administrator";
-            var response = await SocketManager.Instance.SendRequest<ChangeAdminResponse>(new ChangeAdminRequest(username, isAdmin));
-            selectedItem.SubItems[1].Text = response.username.isAdmin ? "Administrator" : "Standard";
+            try
+            {
+                var username = new Shared.Username(selectedItem.Text);
+                bool isAdmin = selectedItem.SubItems[1].Text != "Administrator";
+                var response = await SocketManager.Instance.SendRequest<ChangeAdminResponse>(new ChangeAdminRequest(username, isAdmin));
+                selectedItem.SubItems[1].Text = response.username.isAdmin ? "Administrator" : "Standard";
+            }
+            catch (ResponseException ex)
+            {
+                using (var dialog = new TaskDialog()
+                {
+                    Caption = "Cannot Change Role",
+                    InstructionText = "Unable to change the role for this user",
+                    Text = ex.Message,
+                    StandardButtons = TaskDialogStandardButtons.Close,
+                    Icon = TaskDialogStandardIcon.Error
+                })
+                {
+                    dialog.Show();
+                }
+            }
         }
     }
 }
