@@ -152,6 +152,11 @@ namespace Password_Manager_Server
             MessageDeserializer ds = new MessageDeserializer(message);
             ChangeAdminRequest request = (ChangeAdminRequest)ds.getMessage();
             var userInfo = request.username;
+            if(db.isSuperAdmin(request.username))
+            {
+                //prob error statemetn here.
+                return false;
+            }
             if(db.isAdmin(userInfo.name))
             {
                 if(db.isSuperAdmin(session.loginUsername.name))
