@@ -342,7 +342,7 @@ namespace Password_Manager_Server
                 command.Parameters.AddWithValue("@name", username);
                 SQLiteDataReader reader = command.ExecuteReader();
                 reader.Read();
-                bool isAdmin = (bool)reader["isadmin"];
+                bool isAdmin = (bool)reader["issuperadmin"];
                 return isAdmin;
             }
             catch
