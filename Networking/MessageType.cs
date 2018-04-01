@@ -15,6 +15,11 @@ namespace Networking
         /// <summary>
         /// The message being sent contains response data.
         /// </summary>
-        Response
+        Response,
+
+        /// <summary>
+        /// The message being sent contains response error.
+        /// </summary>
+        ErrorResponse
     }
 }
