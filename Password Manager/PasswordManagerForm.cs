@@ -437,16 +437,43 @@ namespace Password_Manager
             e.Effect = e.AllowedEffect;
         }
 
-        private void applicationTreeView_DragDrop(object sender, DragEventArgs e)
+        private async void applicationTreeView_DragDrop(object sender, DragEventArgs e)
         {
             TreeNode treenode = (TreeNode)e.Data.GetData(typeof(TreeNode));
             Point targetPoint = applicationTreeView.PointToClient(new Point(e.X, e.Y));
             TreeNode targetNode = applicationTreeView.GetNodeAt(targetPoint);
             if (treenode.Level - 1 == targetNode.Level)
             {
-                treenode.Remove();
-                targetNode.Nodes.Add(treenode);
                 //TODO: Send Message Change App Type
+                var appType = targetNode.Text;
+                var appName = treenode.Text;
+                var applicationNames = new List<Shared.Username>(treenode.Nodes.Count);
+                foreach (TreeNode appNode in treenode.Nodes)
+                {
+                    applicationNames.Add(new Shared.Username(appNode.Text));
+                }
+
+                var app = new Shared.Application(appName, applicationNames.ToArray(), appType);
+                var response = await SocketManager.Instance.SendRequest<ChangeAppTypeResponse>(new ChangeAppTypeRequest(app));
+                if (response.isSuccess)
+                {
+                    treenode.Remove();
+                    targetNode.Nodes.Add(treenode);
+                }
+                else
+                {
+                    using (var dialog = new TaskDialog()
+                    {
+                        Caption = "Cannot Change App Type",
+                        InstructionText = "Unable to change the type for this application",
+                        Text = "An existing application already exists under this type.",
+                        Icon = TaskDialogStandardIcon.Error,
+                        StandardButtons = TaskDialogStandardButtons.Close
+                    })
+                    {
+                        dialog.Show();
+                    }
+                }
             }
         }
 
