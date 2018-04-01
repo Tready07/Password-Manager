@@ -15,7 +15,7 @@ namespace Password_Manager_Server
     public class MessageHandler
     {
         Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp,
-            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers, handleDeleteUser};
+            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers, handleDeleteUser, handleChangeAppType};
 
         static MessageHandler()
         {
@@ -266,6 +266,11 @@ namespace Password_Manager_Server
             MessageDeserializer ds = new MessageDeserializer(message);
             ChangeAppTypeRequest request = (ChangeAppTypeRequest)ds.getMessage();
             success = db.changeAppType(request.app,session.loginUsername.name);
+
+            ChangeAppTypeResponse resp = new ChangeAppTypeResponse(success);
+            byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+            session.Client.Client.Send(payload);
+
             return success;
         }
     }

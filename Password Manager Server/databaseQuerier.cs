@@ -401,6 +401,7 @@ namespace Password_Manager_Server
                 String sqlString = "UPDATE APPLICATIONS set application_type = @application_type WHERE application = @application AND name = @name AND username = @username";
                 SQLiteCommand command = new SQLiteCommand(sqlString,dbConnection);
                 command.Parameters.AddWithValue("@application", app.Name);
+                command.Parameters.AddWithValue("application_type", app.Type);
                 command.Parameters.AddWithValue("@name", user);
                 foreach(var username in app.Usernames)
                 {
@@ -410,7 +411,7 @@ namespace Password_Manager_Server
                 return true;
 
             }
-            catch 
+            catch (Exception)
             {
                 return false;
             }
