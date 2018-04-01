@@ -69,11 +69,16 @@ namespace Password_Manager_Server
             NewAppRequest request = (NewAppRequest)ds.getMessage();
             Console.WriteLine(request.application.Usernames[0].name);
             Console.WriteLine(request.application.Usernames[0].password);            
-            db.addUsername(request.application, session.loginUsername.name);
-            NewAppResponse resp = new NewAppResponse(request.application);
-            byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
-            session.Client.Client.Send(payLoad);
-            return true;
+            if(db.addUsername(request.application, session.loginUsername.name))
+            {
+                NewAppResponse resp = new NewAppResponse(request.application);
+                byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payLoad);
+                return true
+            }
+            else{
+                return false;
+            }
         }
 
         private static bool handlePassword(byte [] message, ClientSession session)

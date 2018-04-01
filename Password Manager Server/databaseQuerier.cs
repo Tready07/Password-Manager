@@ -175,17 +175,26 @@ namespace Password_Manager_Server
          *      adds a new username to the database fields in all of the parameters
          *      in the applications table
          */      
-        public void addUsername(Shared.Application app, String user)
+        public bool addUsername(Shared.Application app, String user)
         {
-            String sqlString = "INSERT INTO applications (name, application, application_type, username, password) " +
-                "VALUES (@name, @appName, @appType, @username, @password)";
-            SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
-            command.Parameters.AddWithValue("@name", user);
-            command.Parameters.AddWithValue("@appName", app.Name);
-            command.Parameters.AddWithValue("@appType", app.Type);
-            command.Parameters.AddWithValue("@username", app.Usernames[0].name);
-            command.Parameters.AddWithValue("@password", app.Usernames[0].password);
-            command.ExecuteNonQuery();
+            try
+            {
+                String sqlString = "INSERT INTO applications (name, application, application_type, username, password) " +
+                    "VALUES (@name, @appName, @appType, @username, @password)";
+                SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+                command.Parameters.AddWithValue("@name", user);
+                command.Parameters.AddWithValue("@appName", app.Name);
+                command.Parameters.AddWithValue("@appType", app.Type);
+                command.Parameters.AddWithValue("@username", app.Usernames[0].name);
+                command.Parameters.AddWithValue("@password", app.Usernames[0].password);
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
         }
 
         /**
