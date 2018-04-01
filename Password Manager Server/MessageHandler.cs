@@ -74,9 +74,14 @@ namespace Password_Manager_Server
                 NewAppResponse resp = new NewAppResponse(request.application);
                 byte[] payLoad = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
                 session.Client.Client.Send(payLoad);
-                return true
+                return true;
             }
-            else{
+            else
+            {
+                ErrorResponse resp = new ErrorResponse(NewAppResponse.MessageID,
+                    "A username for this application already exists");
+                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payload);
                 return false;
             }
         }
