@@ -145,6 +145,14 @@ namespace Password_Manager_Server
             if(session.loginUsername.isAdmin)
             {
                 success = db.createNewUser(userInfo.name, userInfo.password, request.makeAdmin);
+                if (!success)
+                {
+                    ErrorResponse resp = new ErrorResponse(CreateNewUserResponse.MessageID,
+                        "Another user with this username already exists");
+                    byte[] respPayload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                    session.Client.Client.Send(respPayload);
+                    return false;
+                }
             }
             CreateNewUserResponse response = new CreateNewUserResponse(success);
             byte[] payload = MessageUtils.SerializeMessage(response).GetAwaiter().GetResult();

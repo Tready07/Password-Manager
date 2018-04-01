@@ -44,17 +44,34 @@ namespace Password_Manager
             }
 
             // TODO: Should we check isAdmin via Shared.Username instead of CreateNewUserRequest constructor?
-            var username = new Shared.Username(addUserDialog.userName, addUserDialog.password);
-            var response = await SocketManager.Instance.SendRequest<CreateNewUserResponse>(new CreateNewUserRequest(username, addUserDialog.isAdmin));
-            if (response.isSuccessful)
+            try
             {
-                var userItem = new ListViewItem(addUserDialog.userName);
-                userItem.SubItems.Add(new ListViewItem.ListViewSubItem()
+                var username = new Shared.Username(addUserDialog.userName, addUserDialog.password);
+                var response = await SocketManager.Instance.SendRequest<CreateNewUserResponse>(new CreateNewUserRequest(username, addUserDialog.isAdmin));
+                if (response.isSuccessful)
                 {
-                    Text = addUserDialog.isAdmin ? "Administrator" : "Standard"
-                });
+                    var userItem = new ListViewItem(addUserDialog.userName);
+                    userItem.SubItems.Add(new ListViewItem.ListViewSubItem()
+                    {
+                        Text = addUserDialog.isAdmin ? "Administrator" : "Standard"
+                    });
 
-                this.listviewAccounts.Items.Add(userItem);
+                    this.listviewAccounts.Items.Add(userItem);
+                }
+            }
+            catch (ResponseException ex)
+            {
+                using (var dialog = new TaskDialog()
+                {
+                    Caption = "Password Manager",
+                    InstructionText = "Unable to be add this user",
+                    Text = ex.Message,
+                    Icon = TaskDialogStandardIcon.Error,
+                    StandardButtons = TaskDialogStandardButtons.Close
+                })
+                {
+                    dialog.Show();
+                }
             }
         }
 
