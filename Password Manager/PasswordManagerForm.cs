@@ -149,6 +149,19 @@ namespace Password_Manager
                                 if (appUser.Usernames[0].name == userNode.Text)
                                 {
                                     userNode.Remove();
+
+                                    // While we're add it, delete the app and the app type if this
+                                    // was the only username and app remaining.
+                                    if (appNode.Nodes.Count == 0)
+                                    {
+                                        appNode.Remove();
+                                    }
+
+                                    if (appTypeNode.Nodes.Count == 0)
+                                    {
+                                        appTypeNode.Remove();
+                                    }
+
                                     break;
                                 }
                             }
@@ -475,7 +488,6 @@ namespace Password_Manager
             TreeNode targetNode = applicationTreeView.GetNodeAt(targetPoint);
             if (treenode.Level - 1 == targetNode.Level)
             {
-                //TODO: Send Message Change App Type
                 var appType = targetNode.Text;
                 var appName = treenode.Text;
                 var applicationNames = new List<Shared.Username>(treenode.Nodes.Count);
@@ -488,8 +500,27 @@ namespace Password_Manager
                 var response = await SocketManager.Instance.SendRequest<ChangeAppTypeResponse>(new ChangeAppTypeRequest(app));
                 if (response.isSuccess)
                 {
+                    // Remove the parent node if there's no longer any other app beneath it
+                    var parentNode = treenode.Parent;
                     treenode.Remove();
-                    targetNode.Nodes.Add(treenode);
+                    if (parentNode.Nodes.Count == 0)
+                    {
+                        parentNode.Remove();
+                    }
+
+                    // Before we add this tree node to the target app type node, check to see if
+                    // the target has an existing app beneath it, because if so, we're just going
+                    // to merge the two nodes together.
+                    var appNode = targetNode.Nodes.Cast<TreeNode>().FirstOrDefault(x => x.Text == treenode.Text);
+                    if (appNode == null)
+                    {
+                        targetNode.Nodes.Add(treenode);
+                    }
+                    else
+                    {
+                        // Take my babies.
+                        appNode.Nodes.AddRange(treenode.Nodes.Cast<TreeNode>().ToArray());
+                    }
                 }
                 else
                 {
@@ -558,7 +589,15 @@ namespace Password_Manager
                     }
                     else
                     {
+                        // Clean up the parent app type node if there's no longer any app type there
+                        var appTypeNode = selectedNode.Parent;
                         selectedNode.Remove();
+                        if (appTypeNode.Nodes.Count == 0)
+                        {
+                            appTypeNode.Remove();
+                        }
+
+
                         app.Name = editDialog.AppName;
                         app.Type = editDialog.AppType;
                         this.addAppToTree(app);
