@@ -96,6 +96,7 @@
             // 
             // newUsernameButton
             // 
+            this.newUsernameButton.Enabled = false;
             this.newUsernameButton.Image = ((System.Drawing.Image)(resources.GetObject("newUsernameButton.Image")));
             this.newUsernameButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newUsernameButton.Name = "newUsernameButton";

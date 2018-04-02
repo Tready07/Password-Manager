@@ -407,6 +407,7 @@ namespace Password_Manager
             bool isAppSelected = e.Node.Level == 1;
             bool isUserSelected = e.Node.Level == 2;
 
+            this.newUsernameButton.Enabled = isAppSelected;
             this.toolstripEditButton.Enabled = isAppSelected;
 
             if (isUserSelected)
