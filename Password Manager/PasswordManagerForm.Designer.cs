@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PasswordManagerForm));
             this.applicationTreeView = new System.Windows.Forms.TreeView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.newUsernameButton = new System.Windows.Forms.ToolStripButton();
+            this.toolstripEditButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.accountToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.adminPanelButton = new System.Windows.Forms.ToolStripButton();
@@ -43,7 +45,7 @@
             this.passwordCopyButton = new System.Windows.Forms.Button();
             this.labelPassword = new System.Windows.Forms.Label();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
-            this.toolstripEditButton = new System.Windows.Forms.ToolStripButton();
+            this.imageListAppTreeView = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitcontainerMain)).BeginInit();
             this.splitcontainerMain.Panel1.SuspendLayout();
@@ -55,8 +57,11 @@
             // 
             this.applicationTreeView.AllowDrop = true;
             this.applicationTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.applicationTreeView.ImageIndex = 0;
+            this.applicationTreeView.ImageList = this.imageListAppTreeView;
             this.applicationTreeView.Location = new System.Drawing.Point(0, 0);
             this.applicationTreeView.Name = "applicationTreeView";
+            this.applicationTreeView.SelectedImageIndex = 0;
             this.applicationTreeView.Size = new System.Drawing.Size(287, 575);
             this.applicationTreeView.TabIndex = 5;
             this.applicationTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.applicationTreeView_ItemDrag);
@@ -97,6 +102,17 @@
             this.newUsernameButton.Size = new System.Drawing.Size(107, 22);
             this.newUsernameButton.Text = "New Username";
             this.newUsernameButton.Click += new System.EventHandler(this.newUsernameButton_Click);
+            // 
+            // toolstripEditButton
+            // 
+            this.toolstripEditButton.Enabled = false;
+            this.toolstripEditButton.Image = ((System.Drawing.Image)(resources.GetObject("toolstripEditButton.Image")));
+            this.toolstripEditButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolstripEditButton.Name = "toolstripEditButton";
+            this.toolstripEditButton.Size = new System.Drawing.Size(111, 22);
+            this.toolstripEditButton.Text = "Edit Application";
+            this.toolstripEditButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolstripEditButton.Click += new System.EventHandler(this.toolstripEditButton_Click);
             // 
             // toolStripSeparator1
             // 
@@ -216,16 +232,13 @@
             this.passwordTextBox.TabIndex = 9;
             this.passwordTextBox.UseSystemPasswordChar = true;
             // 
-            // toolstripEditButton
+            // imageListAppTreeView
             // 
-            this.toolstripEditButton.Enabled = false;
-            this.toolstripEditButton.Image = ((System.Drawing.Image)(resources.GetObject("toolstripEditButton.Image")));
-            this.toolstripEditButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolstripEditButton.Name = "toolstripEditButton";
-            this.toolstripEditButton.Size = new System.Drawing.Size(111, 22);
-            this.toolstripEditButton.Text = "Edit Application";
-            this.toolstripEditButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolstripEditButton.Click += new System.EventHandler(this.toolstripEditButton_Click);
+            this.imageListAppTreeView.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListAppTreeView.ImageStream")));
+            this.imageListAppTreeView.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListAppTreeView.Images.SetKeyName(0, "AppType");
+            this.imageListAppTreeView.Images.SetKeyName(1, "AppName");
+            this.imageListAppTreeView.Images.SetKeyName(2, "AppUser");
             // 
             // PasswordManagerForm
             // 
@@ -266,5 +279,6 @@
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolstripEditButton;
+        private System.Windows.Forms.ImageList imageListAppTreeView;
     }
 }

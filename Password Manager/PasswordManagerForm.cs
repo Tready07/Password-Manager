@@ -111,6 +111,8 @@ namespace Password_Manager
             if (theAppTypeNode == null)
             {
                 theAppTypeNode = new TreeNode(application.Type);
+                theAppTypeNode.ImageKey = "AppType";
+                theAppTypeNode.SelectedImageKey = "AppType";
                 this.applicationTreeView.Nodes.Add(theAppTypeNode);
             }
 
@@ -118,13 +120,17 @@ namespace Password_Manager
             if (theAppNode == null)
             {
                 theAppNode = new TreeNode(application.Name);
+                theAppNode.ImageKey = "AppName";
+                theAppNode.SelectedImageKey = "AppName";
                 theAppTypeNode.Nodes.Add(theAppNode);
             }
 
             // Now add the username underneath theAppNode
             foreach (var username in application.Usernames)
             {
-                theAppNode.Nodes.Add(username.name);
+                var userNode = theAppNode.Nodes.Add(username.name);
+                userNode.ImageKey = "AppUser";
+                userNode.SelectedImageKey = "AppUser";
             }
         }
 
