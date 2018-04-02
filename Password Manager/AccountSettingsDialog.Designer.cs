@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AccountSettingsDialog));
             this.labelMainInstruction = new System.Windows.Forms.Label();
             this.groupboxChangePassword = new System.Windows.Forms.GroupBox();
-            this.labelPassword = new System.Windows.Forms.Label();
-            this.textboxPassword = new System.Windows.Forms.TextBox();
             this.buttonUpdatePassword = new System.Windows.Forms.Button();
-            this.groupboxDeleteAccount = new System.Windows.Forms.GroupBox();
+            this.textboxPassword = new System.Windows.Forms.TextBox();
+            this.labelPassword = new System.Windows.Forms.Label();
             this.labelDeleteAccount = new System.Windows.Forms.Label();
-            this.buttonDelete = new System.Windows.Forms.Button();
+            this.groupboxDeleteAccount = new System.Windows.Forms.GroupBox();
             this.groupboxChangePassword.SuspendLayout();
             this.groupboxDeleteAccount.SuspendLayout();
             this.SuspendLayout();
@@ -64,23 +64,6 @@
             this.groupboxChangePassword.TabStop = false;
             this.groupboxChangePassword.Text = "Change account password";
             // 
-            // labelPassword
-            // 
-            this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(6, 25);
-            this.labelPassword.Name = "labelPassword";
-            this.labelPassword.Size = new System.Drawing.Size(87, 15);
-            this.labelPassword.TabIndex = 0;
-            this.labelPassword.Text = "New password:";
-            // 
-            // textboxPassword
-            // 
-            this.textboxPassword.Location = new System.Drawing.Point(9, 43);
-            this.textboxPassword.Name = "textboxPassword";
-            this.textboxPassword.Size = new System.Drawing.Size(404, 23);
-            this.textboxPassword.TabIndex = 3;
-            this.textboxPassword.UseSystemPasswordChar = true;
-            // 
             // buttonUpdatePassword
             // 
             this.buttonUpdatePassword.Location = new System.Drawing.Point(293, 72);
@@ -91,42 +74,47 @@
             this.buttonUpdatePassword.UseVisualStyleBackColor = true;
             this.buttonUpdatePassword.Click += new System.EventHandler(this.buttonUpdatePassword_Click);
             // 
-            // groupboxDeleteAccount
+            // textboxPassword
             // 
-            this.groupboxDeleteAccount.Controls.Add(this.buttonDelete);
-            this.groupboxDeleteAccount.Controls.Add(this.labelDeleteAccount);
-            this.groupboxDeleteAccount.Location = new System.Drawing.Point(12, 164);
-            this.groupboxDeleteAccount.Name = "groupboxDeleteAccount";
-            this.groupboxDeleteAccount.Size = new System.Drawing.Size(419, 101);
-            this.groupboxDeleteAccount.TabIndex = 3;
-            this.groupboxDeleteAccount.TabStop = false;
-            this.groupboxDeleteAccount.Text = "Delete your account";
+            this.textboxPassword.Location = new System.Drawing.Point(9, 43);
+            this.textboxPassword.Name = "textboxPassword";
+            this.textboxPassword.Size = new System.Drawing.Size(404, 23);
+            this.textboxPassword.TabIndex = 3;
+            this.textboxPassword.UseSystemPasswordChar = true;
+            // 
+            // labelPassword
+            // 
+            this.labelPassword.AutoSize = true;
+            this.labelPassword.Location = new System.Drawing.Point(6, 25);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(87, 15);
+            this.labelPassword.TabIndex = 0;
+            this.labelPassword.Text = "New password:";
             // 
             // labelDeleteAccount
             // 
             this.labelDeleteAccount.Location = new System.Drawing.Point(6, 19);
             this.labelDeleteAccount.Name = "labelDeleteAccount";
-            this.labelDeleteAccount.Size = new System.Drawing.Size(407, 31);
+            this.labelDeleteAccount.Size = new System.Drawing.Size(407, 81);
             this.labelDeleteAccount.TabIndex = 0;
-            this.labelDeleteAccount.Text = "Press Delete account to delete your account. All usernames stored in the Password" +
-    " Manager will be deleted, and you won\'t be able to log in again.";
+            this.labelDeleteAccount.Text = resources.GetString("labelDeleteAccount.Text");
             // 
-            // buttonDelete
+            // groupboxDeleteAccount
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(293, 72);
-            this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(120, 23);
-            this.buttonDelete.TabIndex = 1;
-            this.buttonDelete.Text = "Delete account";
-            this.buttonDelete.UseVisualStyleBackColor = true;
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            this.groupboxDeleteAccount.Controls.Add(this.labelDeleteAccount);
+            this.groupboxDeleteAccount.Location = new System.Drawing.Point(12, 164);
+            this.groupboxDeleteAccount.Name = "groupboxDeleteAccount";
+            this.groupboxDeleteAccount.Size = new System.Drawing.Size(419, 110);
+            this.groupboxDeleteAccount.TabIndex = 3;
+            this.groupboxDeleteAccount.TabStop = false;
+            this.groupboxDeleteAccount.Text = "Delete your account";
             // 
             // AccountSettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(441, 282);
+            this.ClientSize = new System.Drawing.Size(441, 286);
             this.Controls.Add(this.groupboxDeleteAccount);
             this.Controls.Add(this.groupboxChangePassword);
             this.Controls.Add(this.labelMainInstruction);
@@ -151,8 +139,7 @@
         private System.Windows.Forms.Button buttonUpdatePassword;
         private System.Windows.Forms.TextBox textboxPassword;
         private System.Windows.Forms.Label labelPassword;
-        private System.Windows.Forms.GroupBox groupboxDeleteAccount;
-        private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Label labelDeleteAccount;
+        private System.Windows.Forms.GroupBox groupboxDeleteAccount;
     }
 }
