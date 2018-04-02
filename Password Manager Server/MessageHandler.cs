@@ -15,7 +15,7 @@ namespace Password_Manager_Server
     public class MessageHandler
     {
         Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp,
-            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers, handleDeleteUser, handleChangeAppType};
+            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers, handleDeleteUser, handleChangeAppType, handleEditApp};
 
         static MessageHandler()
         {
@@ -291,7 +291,10 @@ namespace Password_Manager_Server
             }
             else
             {
-                // send error;
+                ErrorResponse resp = new ErrorResponse(DeleteUsernameResponse.MessageID,
+                    "Unknown error");
+                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payload);
                 return false;
             }
          

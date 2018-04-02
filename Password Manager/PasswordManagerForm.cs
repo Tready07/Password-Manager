@@ -517,9 +517,10 @@ namespace Password_Manager
             applicationTreeView.SelectedNode = applicationTreeView.GetNodeAt(targetPoint);
         }
 
-        private void toolstripEditButton_Click(object sender, EventArgs e)
+        private async void toolstripEditButton_Click(object sender, EventArgs e)
         {
-            // ASSUMPTION: SelectedNode.Level == 1
+            // ASSUMPTION: SelectedNode.Level == 1, which should be true since toolstripEditButton
+            //             is only enabled if SelectedNode.Level == 1.
             var selectedNode = this.applicationTreeView.SelectedNode;
             var appName = selectedNode.Text;
             var appType = selectedNode.Parent.Text;
@@ -532,7 +533,53 @@ namespace Password_Manager
             List<TreeNode> rootNodes = getRootNodes();
             var app = new Shared.Application(appName, appUsernames, appType);
             var editDialog = new EditApplicationForm(rootNodes.Select(node => node.Text).ToArray(), app);
-            editDialog.ShowDialog();
+            if (editDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                try
+                {
+                    var request = new EditApplicationRequest(app);
+                    request.NewAppName = editDialog.AppName;
+                    request.NewAppType = editDialog.AppType;
+                    var response = await SocketManager.Instance.SendRequest<EditApplicationResponse>(request);
+                    if (!response.isSuccess)
+                    {
+                        using (var dialog = new TaskDialog()
+                        {
+                            Caption = "Cannot Change App Properties",
+                            InstructionText = "Unable to change the properties for this app",
+                            Text = "Something went wrong. Try again later.",
+                            StandardButtons = TaskDialogStandardButtons.Close,
+                            Icon = TaskDialogStandardIcon.Error,
+                            OwnerWindowHandle = this.Handle
+                        })
+                        {
+                            dialog.Show();
+                        }
+                    }
+                    else
+                    {
+                        selectedNode.Remove();
+                        app.Name = editDialog.AppName;
+                        app.Type = editDialog.AppType;
+                        this.addAppToTree(app);
+                    }
+                }
+                catch (ResponseException ex)
+                {
+                    using (var dialog = new TaskDialog()
+                    {
+                        Caption = "Cannot Change App Properties",
+                        InstructionText = "Unable to change the properties for this app",
+                        Text = ex.Message,
+                        StandardButtons = TaskDialogStandardButtons.Close,
+                        Icon = TaskDialogStandardIcon.Error,
+                        OwnerWindowHandle = this.Handle
+                    })
+                    {
+                        dialog.Show();
+                    }
+                }
+            }
         }
     }
 }
