@@ -43,6 +43,7 @@
             this.passwordCopyButton = new System.Windows.Forms.Button();
             this.labelPassword = new System.Windows.Forms.Label();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
+            this.toolstripEditButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitcontainerMain)).BeginInit();
             this.splitcontainerMain.Panel1.SuspendLayout();
@@ -69,6 +70,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
             this.newUsernameButton,
+            this.toolstripEditButton,
             this.toolStripSeparator1,
             this.accountToolStripButton,
             this.adminPanelButton});
@@ -214,6 +216,17 @@
             this.passwordTextBox.TabIndex = 9;
             this.passwordTextBox.UseSystemPasswordChar = true;
             // 
+            // toolstripEditButton
+            // 
+            this.toolstripEditButton.Enabled = false;
+            this.toolstripEditButton.Image = ((System.Drawing.Image)(resources.GetObject("toolstripEditButton.Image")));
+            this.toolstripEditButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolstripEditButton.Name = "toolstripEditButton";
+            this.toolstripEditButton.Size = new System.Drawing.Size(111, 22);
+            this.toolstripEditButton.Text = "Edit Application";
+            this.toolstripEditButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolstripEditButton.Click += new System.EventHandler(this.toolstripEditButton_Click);
+            // 
             // PasswordManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -252,5 +265,6 @@
         private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolstripEditButton;
     }
 }

@@ -384,6 +384,7 @@ namespace Password_Manager
 
         private async void applicationTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            bool isAppSelected = e.Node.Level == 1;
             bool isUserSelected = e.Node.Level == 2;
 
             this.passwordTextBox.Enabled = isUserSelected;
@@ -391,6 +392,8 @@ namespace Password_Manager
             this.buttonDelete.Enabled = isUserSelected;
             this.editButton.Enabled = isUserSelected;
             this.passwordCopyButton.Enabled = isUserSelected;
+
+            this.toolstripEditButton.Enabled = isAppSelected;
 
             if (isUserSelected)
             {
@@ -484,6 +487,24 @@ namespace Password_Manager
 
             // Select the node at the mouse position.
             applicationTreeView.SelectedNode = applicationTreeView.GetNodeAt(targetPoint);
+        }
+
+        private void toolstripEditButton_Click(object sender, EventArgs e)
+        {
+            // ASSUMPTION: SelectedNode.Level == 1
+            var selectedNode = this.applicationTreeView.SelectedNode;
+            var appName = selectedNode.Text;
+            var appType = selectedNode.Parent.Text;
+            var appUsernames = new Shared.Username[selectedNode.Nodes.Count];
+            for (int i = 0; i < appUsernames.Length; i++)
+            {
+                appUsernames[i] = new Shared.Username(selectedNode.Nodes[i].Text);
+            }
+
+            List<TreeNode> rootNodes = getRootNodes();
+            var app = new Shared.Application(appName, appUsernames, appType);
+            var editDialog = new EditApplicationForm(rootNodes.Select(node => node.Text).ToArray(), app);
+            editDialog.ShowDialog();
         }
     }
 }
