@@ -388,12 +388,6 @@ namespace Password_Manager
             bool isAppSelected = e.Node.Level == 1;
             bool isUserSelected = e.Node.Level == 2;
 
-            this.passwordTextBox.Enabled = isUserSelected;
-            this.showpwCheckBox.Enabled = isUserSelected;
-            this.buttonDelete.Enabled = isUserSelected;
-            this.editButton.Enabled = isUserSelected;
-            this.passwordCopyButton.Enabled = isUserSelected;
-
             this.toolstripEditButton.Enabled = isAppSelected;
 
             if (isUserSelected)
@@ -409,6 +403,12 @@ namespace Password_Manager
                     var response = await SocketManager.Instance.SendRequest<PasswordResponse>(request);
                     var password = Shared.CryptManager.decrypt(response.application.Usernames[0].password, M_secretkey);
                     this.fillPasswordBox(password);
+
+                    this.passwordTextBox.Enabled = true;
+                    this.showpwCheckBox.Enabled = true;
+                    this.buttonDelete.Enabled = true;
+                    this.editButton.Enabled = true;
+                    this.passwordCopyButton.Enabled = true;
                 }
                 catch (CryptographicException ex)
                 {
@@ -432,6 +432,11 @@ namespace Password_Manager
             }
             else
             {
+                this.passwordTextBox.Enabled = false;
+                this.showpwCheckBox.Enabled = false;
+                this.buttonDelete.Enabled = false;
+                this.editButton.Enabled = false;
+                this.passwordCopyButton.Enabled = false;
                 this.passwordTextBox.Text = string.Empty;
             }
         }
