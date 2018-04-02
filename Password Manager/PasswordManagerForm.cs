@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Networking.Requests;
 using Networking.Responses;
+using System.Security.Cryptography;
 
 namespace Password_Manager
 {
@@ -402,10 +403,32 @@ namespace Password_Manager
                 app.Name = applicationNode.Text;
                 app.Usernames = new Shared.Username[] { new Shared.Username(this.applicationTreeView.SelectedNode.Text) };
 
-                PasswordRequest request = new PasswordRequest(app);
-                var response = await SocketManager.Instance.SendRequest<PasswordResponse>(request);
-                var password = Shared.CryptManager.decrypt(response.application.Usernames[0].password, M_secretkey);
-                this.fillPasswordBox(password);
+                try
+                {
+                    PasswordRequest request = new PasswordRequest(app);
+                    var response = await SocketManager.Instance.SendRequest<PasswordResponse>(request);
+                    var password = Shared.CryptManager.decrypt(response.application.Usernames[0].password, M_secretkey);
+                    this.fillPasswordBox(password);
+                }
+                catch (CryptographicException ex)
+                {
+                    using (var dialog = new TaskDialog()
+                    {
+                        Caption = "Cannot Decrypt Password",
+                        Icon = TaskDialogStandardIcon.Error,
+                        InstructionText = "Unable to decrypt the password for this account",
+                        Text = "Make sure that the key file currently in use is the same key " +
+                               "used to encrypt your passwords previously.",
+                        StandardButtons = TaskDialogStandardButtons.Close,
+                        DetailsExpandedText = ex.Message,
+                        DetailsExpandedLabel = "Hide error",
+                        DetailsCollapsedLabel = "Show error",
+                        OwnerWindowHandle = this.Handle
+                    })
+                    {
+                        dialog.Show();
+                    }
+                }
             }
             else
             {
