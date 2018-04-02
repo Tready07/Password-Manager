@@ -43,54 +43,54 @@
             // 
             // usernameTextBox
             // 
-            this.usernameTextBox.Location = new System.Drawing.Point(130, 99);
+            this.usernameTextBox.Location = new System.Drawing.Point(130, 128);
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(328, 23);
-            this.usernameTextBox.TabIndex = 4;
+            this.usernameTextBox.TabIndex = 6;
             // 
             // appNameTextBox
             // 
-            this.appNameTextBox.Location = new System.Drawing.Point(130, 70);
+            this.appNameTextBox.Location = new System.Drawing.Point(130, 99);
             this.appNameTextBox.Name = "appNameTextBox";
             this.appNameTextBox.Size = new System.Drawing.Size(328, 23);
-            this.appNameTextBox.TabIndex = 2;
+            this.appNameTextBox.TabIndex = 4;
             // 
             // applicationNameLabel
             // 
             this.applicationNameLabel.AutoSize = true;
-            this.applicationNameLabel.Location = new System.Drawing.Point(8, 73);
+            this.applicationNameLabel.Location = new System.Drawing.Point(8, 102);
             this.applicationNameLabel.Name = "applicationNameLabel";
             this.applicationNameLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.applicationNameLabel.Size = new System.Drawing.Size(116, 15);
-            this.applicationNameLabel.TabIndex = 1;
+            this.applicationNameLabel.TabIndex = 3;
             this.applicationNameLabel.Text = "Application &Name:";
             // 
             // usernameLabel
             // 
             this.usernameLabel.AutoSize = true;
-            this.usernameLabel.Location = new System.Drawing.Point(51, 102);
+            this.usernameLabel.Location = new System.Drawing.Point(51, 131);
             this.usernameLabel.Name = "usernameLabel";
             this.usernameLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.usernameLabel.Size = new System.Drawing.Size(73, 15);
-            this.usernameLabel.TabIndex = 3;
+            this.usernameLabel.TabIndex = 5;
             this.usernameLabel.Text = "&Username:";
             // 
             // pwTextBox
             // 
-            this.pwTextBox.Location = new System.Drawing.Point(130, 128);
+            this.pwTextBox.Location = new System.Drawing.Point(130, 157);
             this.pwTextBox.Name = "pwTextBox";
             this.pwTextBox.Size = new System.Drawing.Size(328, 23);
-            this.pwTextBox.TabIndex = 6;
+            this.pwTextBox.TabIndex = 8;
             this.pwTextBox.UseSystemPasswordChar = true;
             // 
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(54, 131);
+            this.passwordLabel.Location = new System.Drawing.Point(54, 160);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.passwordLabel.Size = new System.Drawing.Size(70, 15);
-            this.passwordLabel.TabIndex = 5;
+            this.passwordLabel.TabIndex = 7;
             this.passwordLabel.Text = "&Password:";
             // 
             // appTypeComboBox
@@ -104,20 +104,20 @@
             "Shopping",
             "Other",
             "Add Custom Type"});
-            this.appTypeComboBox.Location = new System.Drawing.Point(130, 157);
+            this.appTypeComboBox.Location = new System.Drawing.Point(130, 70);
             this.appTypeComboBox.Name = "appTypeComboBox";
             this.appTypeComboBox.Size = new System.Drawing.Size(328, 23);
-            this.appTypeComboBox.TabIndex = 8;
+            this.appTypeComboBox.TabIndex = 2;
             this.appTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.appTypeComboBox_SelectedIndexChanged);
             // 
             // appTypeLabel
             // 
             this.appTypeLabel.AutoSize = true;
-            this.appTypeLabel.Location = new System.Drawing.Point(15, 160);
+            this.appTypeLabel.Location = new System.Drawing.Point(15, 73);
             this.appTypeLabel.Name = "appTypeLabel";
             this.appTypeLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.appTypeLabel.Size = new System.Drawing.Size(109, 15);
-            this.appTypeLabel.TabIndex = 7;
+            this.appTypeLabel.TabIndex = 1;
             this.appTypeLabel.Text = "Application &Type:";
             // 
             // buttonSubmit
