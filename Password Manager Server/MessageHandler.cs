@@ -262,16 +262,39 @@ namespace Password_Manager_Server
 
         private static bool handleChangeAppType(byte [] message, ClientSession session)
         {
-            bool success = false;
+            bool success = true;
             MessageDeserializer ds = new MessageDeserializer(message);
             ChangeAppTypeRequest request = (ChangeAppTypeRequest)ds.getMessage();
-            success = db.changeAppType(request.app,session.loginUsername.name);
-
+            var applications = request.apps;
+            foreach(var app in applications)
+            {
+                success &= db.changeAppType(app, session.loginUsername.name);
+            }
+            //TODO: check success and throw error?
             ChangeAppTypeResponse resp = new ChangeAppTypeResponse(success);
             byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
             session.Client.Client.Send(payload);
 
             return success;
+        }
+
+        private static bool handleEditApp(byte [] message, ClientSession session)
+        {
+            MessageDeserializer ds = new MessageDeserializer(message);
+            EditApplicationRequest request = (EditApplicationRequest)ds.getMessage();
+            if(db.editApp(request.AppToEdit, request.NewAppName, request.NewAppType, session.loginUsername.name))
+            {
+                EditApplicationResponse resp = new EditApplicationResponse(true);
+                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payload);
+                return true;
+            }
+            else
+            {
+                // send error;
+                return false;
+            }
+         
         }
     }
 }

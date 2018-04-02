@@ -417,5 +417,31 @@ namespace Password_Manager_Server
             }
         }
 
+        public bool editApp(Shared.Application appToEdit, string newName, string newAppType, string user)
+        {
+            try
+            {
+                String sqlString = "UPDATE APPLICATIONS set application_type = @newAppType, application = @newAppName" +
+                    " WHERE name = @user AND username = @username AND application = @oldAppName";
+                SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+                command.Parameters.AddWithValue("@newAppType", newAppType);
+                command.Parameters.AddWithValue("@newAppName", newName);
+                command.Parameters.AddWithValue("@user", user);
+                command.Parameters.AddWithValue("@oldAppName", appToEdit.Name);
+                var usernames = appToEdit.Usernames;
+                foreach(var name in usernames)
+                {
+                    command.Parameters.AddWithValue("@username", name.name);
+                    command.ExecuteNonQuery();
+                }
+                
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
     }
 }
