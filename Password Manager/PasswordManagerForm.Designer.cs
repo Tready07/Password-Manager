@@ -62,7 +62,7 @@
             this.applicationTreeView.Location = new System.Drawing.Point(0, 0);
             this.applicationTreeView.Name = "applicationTreeView";
             this.applicationTreeView.SelectedImageIndex = 0;
-            this.applicationTreeView.Size = new System.Drawing.Size(287, 575);
+            this.applicationTreeView.Size = new System.Drawing.Size(260, 536);
             this.applicationTreeView.TabIndex = 5;
             this.applicationTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.applicationTreeView_ItemDrag);
             this.applicationTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.applicationTreeView_AfterSelect);
@@ -81,7 +81,7 @@
             this.adminPanelButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(863, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(784, 25);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -158,15 +158,15 @@
             this.splitcontainerMain.Panel2.Controls.Add(this.passwordCopyButton);
             this.splitcontainerMain.Panel2.Controls.Add(this.labelPassword);
             this.splitcontainerMain.Panel2.Controls.Add(this.passwordTextBox);
-            this.splitcontainerMain.Size = new System.Drawing.Size(863, 575);
-            this.splitcontainerMain.SplitterDistance = 287;
+            this.splitcontainerMain.Size = new System.Drawing.Size(784, 536);
+            this.splitcontainerMain.SplitterDistance = 260;
             this.splitcontainerMain.TabIndex = 9;
             // 
             // buttonDelete
             // 
             this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonDelete.Enabled = false;
-            this.buttonDelete.Location = new System.Drawing.Point(477, 62);
+            this.buttonDelete.Location = new System.Drawing.Point(425, 62);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 14;
@@ -178,7 +178,7 @@
             // 
             this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.editButton.Enabled = false;
-            this.editButton.Location = new System.Drawing.Point(396, 62);
+            this.editButton.Location = new System.Drawing.Point(344, 62);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(75, 23);
             this.editButton.TabIndex = 13;
@@ -202,7 +202,7 @@
             // 
             this.passwordCopyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.passwordCopyButton.Enabled = false;
-            this.passwordCopyButton.Location = new System.Drawing.Point(315, 62);
+            this.passwordCopyButton.Location = new System.Drawing.Point(263, 62);
             this.passwordCopyButton.Name = "passwordCopyButton";
             this.passwordCopyButton.Size = new System.Drawing.Size(75, 23);
             this.passwordCopyButton.TabIndex = 11;
@@ -229,7 +229,7 @@
             this.passwordTextBox.Margin = new System.Windows.Forms.Padding(20, 3, 20, 3);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.ReadOnly = true;
-            this.passwordTextBox.Size = new System.Drawing.Size(533, 20);
+            this.passwordTextBox.Size = new System.Drawing.Size(481, 20);
             this.passwordTextBox.TabIndex = 9;
             this.passwordTextBox.UseSystemPasswordChar = true;
             // 
@@ -245,9 +245,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(863, 600);
+            this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(this.splitcontainerMain);
             this.Controls.Add(this.toolStrip1);
+            this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "PasswordManagerForm";
             this.Text = "Password Manager";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PasswordManagerForm_FormClosed);
