@@ -405,7 +405,7 @@ namespace Password_Manager_Server
                 command.Parameters.AddWithValue("@name", user);
                 foreach(var username in app.Usernames)
                 {
-                    command.Parameters.AddWithValue("@username",username);
+                    command.Parameters.AddWithValue("@username",username.name);
                     command.ExecuteNonQuery();
                 }
                 return true;

@@ -642,13 +642,65 @@ namespace Password_Manager
             }
         }
 
-        private void applicationTreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        private async void applicationTreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
+            
             if(!String.IsNullOrEmpty(e.Label))
             {
-                //SEND EDIT APP TYPE request
-                e.Node.EndEdit(false);
-                applicationTreeView.LabelEdit = false;
+                if (e.Node.Level == 0)
+                {
+                    //GET ALL APPS AND USER NAMES AND SEND CHANGE APPTYPE REQ
+                    var appNodes = e.Node.Nodes;
+                    List<Shared.Application> apps = new List<Shared.Application>();
+                    foreach(TreeNode appNode in appNodes)
+                    {
+                        Shared.Application app = new Shared.Application();
+                        List<Shared.Username> usernames = new List<Shared.Username>();
+                        foreach(TreeNode usernameNode in appNode.Nodes)
+                        {
+                            Shared.Username username = new Shared.Username(usernameNode.Text);
+                            usernames.Add(username);
+                        }
+                        app.Name = appNode.Text;
+                        app.Type = e.Label;
+                        app.Usernames = usernames.ToArray();
+                        apps.Add(app);
+                    }
+                    var request = new ChangeAppTypeRequest(apps.ToArray());
+                    var response = await SocketManager.Instance.SendRequest<ChangeAppTypeResponse>(request);
+                    if(response.isSuccess)
+                    {
+                        e.Node.EndEdit(false);
+                        applicationTreeView.LabelEdit = false;
+                    }
+                }
+
+                else
+                {
+                    // SEND EDITAPP REQUEST
+
+                    var usernameNodes = e.Node.Nodes;
+                    Shared.Application app = new Shared.Application();
+                    List<Shared.Username> usernames = new List<Shared.Username>();
+                    foreach(TreeNode usernameNode in usernameNodes)
+                    {
+                        Shared.Username username = new Shared.Username(usernameNode.Text);
+                        usernames.Add(username);
+                    }
+                    app.Usernames = usernames.ToArray();
+                    app.Type = e.Node.Parent.Text;
+                    app.Name = e.Node.Text;
+                    var request = new EditApplicationRequest(app);
+                    request.NewAppName = e.Label;
+                    request.NewAppType = app.Type;
+                    var response = await SocketManager.Instance.SendRequest<EditApplicationResponse>(request);
+                    if(response.isSuccess)
+                    {
+                        e.Node.EndEdit(false);
+                        applicationTreeView.LabelEdit = false;
+                    }
+                }
+
             }
         }
     }
