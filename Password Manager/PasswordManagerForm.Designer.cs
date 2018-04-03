@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PasswordManagerForm));
             this.applicationTreeView = new System.Windows.Forms.TreeView();
+            this.imageListAppTreeView = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.newUsernameButton = new System.Windows.Forms.ToolStripButton();
@@ -45,7 +46,6 @@
             this.passwordCopyButton = new System.Windows.Forms.Button();
             this.labelPassword = new System.Windows.Forms.Label();
             this.passwordTextBox = new System.Windows.Forms.TextBox();
-            this.imageListAppTreeView = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitcontainerMain)).BeginInit();
             this.splitcontainerMain.Panel1.SuspendLayout();
@@ -59,16 +59,27 @@
             this.applicationTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.applicationTreeView.ImageIndex = 0;
             this.applicationTreeView.ImageList = this.imageListAppTreeView;
+            this.applicationTreeView.LabelEdit = true;
             this.applicationTreeView.Location = new System.Drawing.Point(0, 0);
             this.applicationTreeView.Name = "applicationTreeView";
             this.applicationTreeView.SelectedImageIndex = 0;
             this.applicationTreeView.Size = new System.Drawing.Size(260, 536);
             this.applicationTreeView.TabIndex = 5;
+            this.applicationTreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.applicationTreeView_AfterLabelEdit);
             this.applicationTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.applicationTreeView_ItemDrag);
             this.applicationTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.applicationTreeView_AfterSelect);
+            this.applicationTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.applicationTreeView_NodeMouseDoubleClick);
             this.applicationTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.applicationTreeView_DragDrop);
             this.applicationTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.applicationTreeView_DragEnter);
             this.applicationTreeView.DragOver += new System.Windows.Forms.DragEventHandler(this.applicationTreeView_DragOver);
+            // 
+            // imageListAppTreeView
+            // 
+            this.imageListAppTreeView.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListAppTreeView.ImageStream")));
+            this.imageListAppTreeView.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListAppTreeView.Images.SetKeyName(0, "AppType");
+            this.imageListAppTreeView.Images.SetKeyName(1, "AppName");
+            this.imageListAppTreeView.Images.SetKeyName(2, "AppUser");
             // 
             // toolStrip1
             // 
@@ -232,14 +243,6 @@
             this.passwordTextBox.Size = new System.Drawing.Size(481, 20);
             this.passwordTextBox.TabIndex = 9;
             this.passwordTextBox.UseSystemPasswordChar = true;
-            // 
-            // imageListAppTreeView
-            // 
-            this.imageListAppTreeView.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListAppTreeView.ImageStream")));
-            this.imageListAppTreeView.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListAppTreeView.Images.SetKeyName(0, "AppType");
-            this.imageListAppTreeView.Images.SetKeyName(1, "AppName");
-            this.imageListAppTreeView.Images.SetKeyName(2, "AppUser");
             // 
             // PasswordManagerForm
             // 

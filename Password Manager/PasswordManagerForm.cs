@@ -631,5 +631,26 @@ namespace Password_Manager
                 }
             }
         }
+
+        private void applicationTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            var selectedNode = applicationTreeView.GetNodeAt(e.X, e.Y);         
+            if(selectedNode.Level !=2)
+            {
+                applicationTreeView.LabelEdit = true;
+                selectedNode.BeginEdit();
+            }
+        }
+
+        private void applicationTreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            if(!String.IsNullOrEmpty(e.Label))
+            {
+                //SEND EDIT APP TYPE request
+                e.Node.EndEdit(false);
+                applicationTreeView.LabelEdit = false;
+            }
+        }
     }
+    
 }
