@@ -552,7 +552,11 @@ namespace Password_Manager
             Point targetPoint = applicationTreeView.PointToClient(new Point(e.X, e.Y));
 
             // Select the node at the mouse position.
-            applicationTreeView.SelectedNode = applicationTreeView.GetNodeAt(targetPoint);
+            if(applicationTreeView.GetNodeAt(targetPoint).Level == 0)
+            {
+                applicationTreeView.SelectedNode = applicationTreeView.GetNodeAt(targetPoint);
+            }
+            
         }
 
         private async void toolstripEditButton_Click(object sender, EventArgs e)
