@@ -251,6 +251,7 @@
             this.ClientSize = new System.Drawing.Size(784, 561);
             this.Controls.Add(this.splitcontainerMain);
             this.Controls.Add(this.toolStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "PasswordManagerForm";
             this.Text = "Password Manager";
