@@ -55,7 +55,7 @@ namespace Password_Manager
                             var buttonSave = new TaskDialogButton("SaveButton", "Generate key file");
                             buttonSave.Click += (object sender, EventArgs args) =>
                             {
-                                dialog.Close();
+                                d.Close();
 
                                 var saveKeyDialog = new SaveFileDialog()
                                 {
