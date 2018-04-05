@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -22,6 +24,7 @@ namespace Password_Manager
             InitializeComponent();
         }
 
+        public byte[] keyData { get; private set; } = null;
         public string userName { get { return this.usernameTextBox.Text; } }
         public bool isAdmin { get; private set; } = false;
         public bool isLoginSuccess { get; private set; } = false;
@@ -85,6 +88,47 @@ namespace Password_Manager
         private void buttonClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void buttonBrowseKeyFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog()
+            {
+                Title = "Browse for Key File",
+                Filter = "Key File (*.key)|*.key",
+                Multiselect = false
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                this.textboxKeyFilePath.Text = dialog.FileName;
+                this.keyData = File.ReadAllBytes(dialog.FileName);
+                Properties.Settings.Default.KeyFilePath = dialog.FileName;
+            }
+        }
+
+        private void LoginDialog_Load(object sender, EventArgs e)
+        {
+            this.serverAddressTextBox.Text = Properties.Settings.Default.Host;
+            this.serverPort.Value = Properties.Settings.Default.Port;
+            this.usernameTextBox.Text = Properties.Settings.Default.Username;
+
+            string keyFilePath = Properties.Settings.Default.KeyFilePath;
+            try
+            {
+                this.keyData = File.ReadAllBytes(keyFilePath);
+                this.textboxKeyFilePath.Text = keyFilePath;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(string.Format("Failed to load key file {0}:\n{1}", keyFilePath, ex));
+            }
+        }
+
+        private void LoginDialog_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Properties.Settings.Default.Host = this.serverAddressTextBox.Text;
+            Properties.Settings.Default.Username = this.usernameTextBox.Text;
+            Properties.Settings.Default.Port = (int)this.serverPort.Value;
         }
     }
 }

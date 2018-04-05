@@ -40,12 +40,15 @@
             this.labelMainInstruction = new System.Windows.Forms.Label();
             this.labelInstruction = new System.Windows.Forms.Label();
             this.buttonClose = new System.Windows.Forms.Button();
+            this.labelKeyFile = new System.Windows.Forms.Label();
+            this.textboxKeyFilePath = new System.Windows.Forms.TextBox();
+            this.buttonBrowseKeyFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.serverPort)).BeginInit();
             this.SuspendLayout();
             // 
             // submitButton
             // 
-            this.submitButton.Location = new System.Drawing.Point(263, 205);
+            this.submitButton.Location = new System.Drawing.Point(263, 238);
             this.submitButton.Margin = new System.Windows.Forms.Padding(3, 20, 3, 10);
             this.submitButton.Name = "submitButton";
             this.submitButton.Size = new System.Drawing.Size(84, 25);
@@ -147,7 +150,7 @@
             // 
             // buttonClose
             // 
-            this.buttonClose.Location = new System.Drawing.Point(353, 205);
+            this.buttonClose.Location = new System.Drawing.Point(353, 238);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(75, 25);
             this.buttonClose.TabIndex = 10;
@@ -155,13 +158,44 @@
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
+            // labelKeyFile
+            // 
+            this.labelKeyFile.AutoSize = true;
+            this.labelKeyFile.Location = new System.Drawing.Point(31, 189);
+            this.labelKeyFile.Name = "labelKeyFile";
+            this.labelKeyFile.Size = new System.Drawing.Size(50, 15);
+            this.labelKeyFile.TabIndex = 11;
+            this.labelKeyFile.Text = "Key File:";
+            // 
+            // textboxKeyFilePath
+            // 
+            this.textboxKeyFilePath.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.textboxKeyFilePath.Location = new System.Drawing.Point(87, 186);
+            this.textboxKeyFilePath.Name = "textboxKeyFilePath";
+            this.textboxKeyFilePath.ReadOnly = true;
+            this.textboxKeyFilePath.Size = new System.Drawing.Size(260, 23);
+            this.textboxKeyFilePath.TabIndex = 12;
+            // 
+            // buttonBrowseKeyFile
+            // 
+            this.buttonBrowseKeyFile.Location = new System.Drawing.Point(353, 185);
+            this.buttonBrowseKeyFile.Name = "buttonBrowseKeyFile";
+            this.buttonBrowseKeyFile.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseKeyFile.TabIndex = 13;
+            this.buttonBrowseKeyFile.Text = "&Browse...";
+            this.buttonBrowseKeyFile.UseVisualStyleBackColor = true;
+            this.buttonBrowseKeyFile.Click += new System.EventHandler(this.buttonBrowseKeyFile_Click);
+            // 
             // LoginDialog
             // 
             this.AcceptButton = this.submitButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(440, 249);
+            this.ClientSize = new System.Drawing.Size(440, 275);
+            this.Controls.Add(this.buttonBrowseKeyFile);
+            this.Controls.Add(this.textboxKeyFilePath);
+            this.Controls.Add(this.labelKeyFile);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.labelInstruction);
             this.Controls.Add(this.labelMainInstruction);
@@ -181,6 +215,8 @@
             this.Name = "LoginDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LoginDialog_FormClosed);
+            this.Load += new System.EventHandler(this.LoginDialog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.serverPort)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -200,6 +236,9 @@
         private System.Windows.Forms.Label labelMainInstruction;
         private System.Windows.Forms.Label labelInstruction;
         private System.Windows.Forms.Button buttonClose;
+        private System.Windows.Forms.Label labelKeyFile;
+        private System.Windows.Forms.TextBox textboxKeyFilePath;
+        private System.Windows.Forms.Button buttonBrowseKeyFile;
     }
 }
 

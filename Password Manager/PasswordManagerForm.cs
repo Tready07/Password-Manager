@@ -219,7 +219,7 @@ namespace Password_Manager
             }
         }
 
-        public byte[] M_secretkey { get; private set; }
+        public byte[] M_secretkey { get; set; }
 
         private Shared.Username loggedInUser;
         public Shared.Username LoggedInUser
@@ -246,65 +246,6 @@ namespace Password_Manager
 
         private async void PasswordManagerForm_Load(object sender, EventArgs e)
         {
-            var secretKeyIsPresent = File.Exists("keyFile");
-            if (!secretKeyIsPresent)
-            {
-                using (var dialog = new TaskDialog()
-                {
-                    Caption = "Browse for Secret Key",
-                    InstructionText = "Would you like to browse for your secret key, or generate a new one?",
-                    Text = "This key is needed in order to decrypt the passwords you've stored in Password Manager properly.\n\n" +
-                           "If you choose to browse for a key file, make sure that this is the same key file that you've " +
-                           "used with Password Manager earlier, or your passwords will not decrypt properly.",
-                    OwnerWindowHandle = this.Handle,
-                })
-                {
-                    var buttonGenerate = new TaskDialogButton("GenerateButton", "Generate new key")
-                    {
-                        Default = true,
-                    };
-                    buttonGenerate.Click += (object s, EventArgs ea) =>
-                    {
-                        var secretkey = Shared.CryptManager.generateKey();
-                        File.WriteAllBytes("keyFile", secretkey);
-                        M_secretkey = secretkey;
-
-                        dialog.Close();
-                    };
-
-                    var buttonBrowse = new TaskDialogButton("BrowseButton", "Browse for key");
-                    buttonBrowse.Click += (object s, EventArgs ea) =>
-                    {
-                        OpenFileDialog fileDialog = new OpenFileDialog();
-                        fileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                        fileDialog.FilterIndex = 2;
-                        fileDialog.RestoreDirectory = true;
-                        if (fileDialog.ShowDialog() == DialogResult.OK)
-                        {
-                            try
-                            {
-                                string filename = fileDialog.FileName;
-                                M_secretkey = File.ReadAllBytes(filename);
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
-                            }
-                        }
-
-                        dialog.Close();
-                    };
-
-                    dialog.Controls.Add(buttonGenerate);
-                    dialog.Controls.Add(buttonBrowse);
-                    dialog.Show();
-                }
-            }
-            else
-            {
-                M_secretkey = File.ReadAllBytes("keyFile");
-            }
-
             ApplicationsRequest request = new ApplicationsRequest();
             var response = await SocketManager.Instance.SendRequest<ApplicationsResponse>(request);
             this.populateTree(response.applications);
