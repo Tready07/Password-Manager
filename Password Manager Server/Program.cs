@@ -9,7 +9,7 @@ namespace Password_Manager_Server
     class Program
     {
         private readonly static string Header = new string ('-', Console.BufferWidth - 1);
-        private static Server server;
+        private static Server server = new Server();
 
         public static void Main()
         {
@@ -21,6 +21,8 @@ namespace Password_Manager_Server
             Console.WriteLine(Header);
             Console.WriteLine("Password Manager Server");
             Console.WriteLine("Press CTRL+C to stop the server");
+            Console.WriteLine();
+            Console.WriteLine(string.Format("Server will be listening on {0}", server.Address));
             Console.WriteLine(Header);
 
             Console.ForegroundColor = originalFgColor;
@@ -35,7 +37,6 @@ namespace Password_Manager_Server
 
             try
             {
-                server = new Server();
                 server.Start();
             }
             catch (SocketException)

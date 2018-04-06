@@ -34,6 +34,17 @@ namespace Password_Manager_Server
         }
 
         /// <summary>
+        /// Gets the <see cref="IPEndPoint" /> that the server is listening on.
+        /// </summary>
+        public IPEndPoint Address
+        {
+            get
+            {
+                return (IPEndPoint)this.tcpListener.LocalEndpoint;
+            }
+        }
+
+        /// <summary>
         /// Start accepting clients.
         /// </summary>
         public void Start()
