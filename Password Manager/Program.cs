@@ -33,79 +33,20 @@ namespace Password_Manager
 
         static void ShowLoginDialog()
         {
-            var dialog = new LoginDialog();
-            dialog.FormClosed += (object s, FormClosedEventArgs a) =>
+            var loginDialog = new LoginDialog();
+            loginDialog.LoginSucceeded += (object sender, EventArgs e) =>
             {
-                if (dialog.isLoginSuccess)
+                var passwordManagerForm = new PasswordManagerForm()
                 {
-                    var userName = new Shared.Username(dialog.userName);
-                    userName.isAdmin = dialog.isAdmin;
-
-                    if (dialog.keyData == null)
+                    M_secretkey = loginDialog.keyData,
+                    LoggedInUser = new Shared.Username(loginDialog.userName)
                     {
-                        using (var d = new TaskDialog()
-                        {
-                            Caption = "Generate Key File",
-                            InstructionText = "Would you like to generate a key file?",
-                            Text = "A key file is needed in order to encrypt your password. " +
-                                   "You'll be asked to save the key file somewhere on your PC. " ,
-                            Icon = TaskDialogStandardIcon.None,
-                        })
-                        {
-                            var buttonSave = new TaskDialogButton("SaveButton", "Generate key file");
-                            buttonSave.Click += (object sender, EventArgs args) =>
-                            {
-                                d.Close();
-
-                                var saveKeyDialog = new SaveFileDialog()
-                                {
-                                    Title = "Save Key File",
-                                    Filter = "Key File (*.key)|*.key",
-                                };
-                                if (saveKeyDialog.ShowDialog() == DialogResult.OK)
-                                {
-                                    var secretkey = Shared.CryptManager.generateKey();
-                                    File.WriteAllBytes(saveKeyDialog.FileName, secretkey);
-
-                                    var form = new PasswordManagerForm();
-                                    form.M_secretkey = secretkey;
-                                    form.LoggedInUser = userName;
-                                    form.Show();
-                                }
-                                else
-                                {
-                                    ShowLoginDialog();
-                                }
-                            };
-                            buttonSave.Default = true;
-
-                            var buttonClose = new TaskDialogButton("CloseButton", "Cancel");
-                            buttonClose.Click += (object sender, EventArgs args) =>
-                            {
-                                d.Close();
-
-                                ShowLoginDialog();
-                            };
-
-                            d.Controls.Add(buttonSave);
-                            d.Controls.Add(buttonClose);
-                            d.Show();
-                        }
+                        isAdmin = loginDialog.isAdmin
                     }
-                    else
-                    {
-                        var form = new PasswordManagerForm();
-                        form.M_secretkey = dialog.keyData;
-                        form.LoggedInUser = userName;
-                        form.Show();
-                    }
-                }
-                else
-                {
-                    Application.Exit();
-                }
+                };
+                passwordManagerForm.Show();
             };
-            dialog.Show();
+            loginDialog.Show();
         }
     }
 }

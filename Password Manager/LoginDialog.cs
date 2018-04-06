@@ -27,7 +27,8 @@ namespace Password_Manager
         public byte[] keyData { get; private set; } = null;
         public string userName { get { return this.usernameTextBox.Text; } }
         public bool isAdmin { get; private set; } = false;
-        public bool isLoginSuccess { get; private set; } = false;
+
+        public event EventHandler LoginSucceeded;
 
         private async void loginSubmitButton(object sender, EventArgs e)
         { 
@@ -61,8 +62,9 @@ namespace Password_Manager
                 else
                 {
                     this.isAdmin = resp.isAdmin;
-                    this.isLoginSuccess = true;
                     this.Close();
+
+                    this.LoginSucceeded?.Invoke(this, EventArgs.Empty);
                 }
             }
             catch (SocketException ex)
