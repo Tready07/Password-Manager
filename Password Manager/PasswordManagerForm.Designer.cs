@@ -68,6 +68,7 @@
             this.applicationTreeView.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.applicationTreeView_AfterLabelEdit);
             this.applicationTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.applicationTreeView_ItemDrag);
             this.applicationTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.applicationTreeView_AfterSelect);
+            this.applicationTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.applicationTreeView_NodeMouseClick);
             this.applicationTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.applicationTreeView_NodeMouseDoubleClick);
             this.applicationTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.applicationTreeView_DragDrop);
             this.applicationTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.applicationTreeView_DragEnter);

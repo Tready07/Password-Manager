@@ -575,12 +575,6 @@ namespace Password_Manager
 
         private void applicationTreeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            var selectedNode = applicationTreeView.GetNodeAt(e.X, e.Y);         
-            if(selectedNode.Level !=2)
-            {
-                applicationTreeView.LabelEdit = true;
-                selectedNode.BeginEdit();
-            }
         }
 
         private async void applicationTreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
@@ -642,6 +636,42 @@ namespace Password_Manager
                     }
                 }
 
+            }
+        }
+
+        private DateTime? appTreeViewLastClick;
+        private TreeNode appTreeViewLastNodeClicked;
+        private void applicationTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            var selectedNode = applicationTreeView.GetNodeAt(e.X, e.Y);
+            if (selectedNode.Level != 2)
+            {
+                // Is this the first click?
+                if (!appTreeViewLastClick.HasValue)
+                {
+                    appTreeViewLastClick = DateTime.Now;
+                    appTreeViewLastNodeClicked = selectedNode;
+                }
+                else
+                {
+                    // In order for us to consider the second click to be a rename action, the user:
+                    // - Must have done the second click so slow such that Windows wouldn't interpret it as a double-click
+                    // - Must be clicking the same node for the second time
+                    // - Must have clicked on a TreeNode's label
+                    // - Must not be editing the selected node already
+                    var delta = (DateTime.Now - appTreeViewLastClick.Value).Duration().TotalMilliseconds;
+                    if (delta > SystemInformation.DoubleClickTime && 
+                        selectedNode == appTreeViewLastNodeClicked &&
+                        !selectedNode.IsEditing &&
+                        applicationTreeView.HitTest(e.Location).Location == TreeViewHitTestLocations.Label)
+                    {
+                        applicationTreeView.LabelEdit = true;
+                        selectedNode.BeginEdit();
+                    }
+
+                    appTreeViewLastClick = null;
+                    appTreeViewLastNodeClicked = null;
+                }
             }
         }
     }
