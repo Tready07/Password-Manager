@@ -29,7 +29,7 @@ namespace Password_Manager_Server
         public Server()
         {
             this.clientList = new List<ClientSession>();
-            this.tcpListener = new TcpListener(IPAddress.Loopback, 12086);
+            this.tcpListener = new TcpListener(IPAddress.Any, 12086);
             this.cancellationToken = new CancellationTokenSource();
         }
 
