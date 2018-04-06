@@ -11,7 +11,7 @@
     <Setting Name="Host" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Port" Type="System.Int32" Scope="User">
+    <Setting Name="Port" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">12086</Value>
     </Setting>
   </Settings>

@@ -62,9 +62,9 @@ namespace Password_Manager.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("12086")]
-        public int Port {
+        public decimal Port {
             get {
-                return ((int)(this["Port"]));
+                return ((decimal)(this["Port"]));
             }
             set {
                 this["Port"] = value;

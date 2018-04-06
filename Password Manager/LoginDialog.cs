@@ -102,33 +102,20 @@ namespace Password_Manager
             {
                 this.textboxKeyFilePath.Text = dialog.FileName;
                 this.keyData = File.ReadAllBytes(dialog.FileName);
-                Properties.Settings.Default.KeyFilePath = dialog.FileName;
             }
         }
 
         private void LoginDialog_Load(object sender, EventArgs e)
         {
-            this.serverAddressTextBox.Text = Properties.Settings.Default.Host;
-            this.serverPort.Value = Properties.Settings.Default.Port;
-            this.usernameTextBox.Text = Properties.Settings.Default.Username;
-
             string keyFilePath = Properties.Settings.Default.KeyFilePath;
             try
             {
                 this.keyData = File.ReadAllBytes(keyFilePath);
-                this.textboxKeyFilePath.Text = keyFilePath;
             }
             catch (Exception ex)
             {
                 Trace.WriteLine(string.Format("Failed to load key file {0}:\n{1}", keyFilePath, ex));
             }
-        }
-
-        private void LoginDialog_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Properties.Settings.Default.Host = this.serverAddressTextBox.Text;
-            Properties.Settings.Default.Username = this.usernameTextBox.Text;
-            Properties.Settings.Default.Port = (int)this.serverPort.Value;
         }
     }
 }

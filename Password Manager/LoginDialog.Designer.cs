@@ -34,7 +34,6 @@
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.usernameLabel = new System.Windows.Forms.Label();
             this.passwordLabel = new System.Windows.Forms.Label();
-            this.serverAddressTextBox = new System.Windows.Forms.TextBox();
             this.serverPort = new System.Windows.Forms.NumericUpDown();
             this.labelServer = new System.Windows.Forms.Label();
             this.labelMainInstruction = new System.Windows.Forms.Label();
@@ -43,6 +42,7 @@
             this.labelKeyFile = new System.Windows.Forms.Label();
             this.textboxKeyFilePath = new System.Windows.Forms.TextBox();
             this.buttonBrowseKeyFile = new System.Windows.Forms.Button();
+            this.serverAddressTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.serverPort)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,10 +59,12 @@
             // 
             // usernameTextBox
             // 
+            this.usernameTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Password_Manager.Properties.Settings.Default, "Username", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.usernameTextBox.Location = new System.Drawing.Point(87, 128);
             this.usernameTextBox.Name = "usernameTextBox";
             this.usernameTextBox.Size = new System.Drawing.Size(341, 23);
             this.usernameTextBox.TabIndex = 6;
+            this.usernameTextBox.Text = global::Password_Manager.Properties.Settings.Default.Username;
             // 
             // passwordTextBox
             // 
@@ -92,15 +94,9 @@
             this.passwordLabel.TabIndex = 7;
             this.passwordLabel.Text = "&Password:";
             // 
-            // serverAddressTextBox
-            // 
-            this.serverAddressTextBox.Location = new System.Drawing.Point(87, 99);
-            this.serverAddressTextBox.Name = "serverAddressTextBox";
-            this.serverAddressTextBox.Size = new System.Drawing.Size(278, 23);
-            this.serverAddressTextBox.TabIndex = 3;
-            // 
             // serverPort
             // 
+            this.serverPort.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::Password_Manager.Properties.Settings.Default, "Port", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.serverPort.Location = new System.Drawing.Point(371, 99);
             this.serverPort.Maximum = new decimal(new int[] {
             65535,
@@ -110,11 +106,7 @@
             this.serverPort.Name = "serverPort";
             this.serverPort.Size = new System.Drawing.Size(57, 23);
             this.serverPort.TabIndex = 4;
-            this.serverPort.Value = new decimal(new int[] {
-            12086,
-            0,
-            0,
-            0});
+            this.serverPort.Value = global::Password_Manager.Properties.Settings.Default.Port;
             // 
             // labelServer
             // 
@@ -170,11 +162,13 @@
             // textboxKeyFilePath
             // 
             this.textboxKeyFilePath.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.textboxKeyFilePath.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Password_Manager.Properties.Settings.Default, "KeyFilePath", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.textboxKeyFilePath.Location = new System.Drawing.Point(87, 186);
             this.textboxKeyFilePath.Name = "textboxKeyFilePath";
             this.textboxKeyFilePath.ReadOnly = true;
             this.textboxKeyFilePath.Size = new System.Drawing.Size(260, 23);
             this.textboxKeyFilePath.TabIndex = 12;
+            this.textboxKeyFilePath.Text = global::Password_Manager.Properties.Settings.Default.KeyFilePath;
             // 
             // buttonBrowseKeyFile
             // 
@@ -185,6 +179,15 @@
             this.buttonBrowseKeyFile.Text = "&Browse...";
             this.buttonBrowseKeyFile.UseVisualStyleBackColor = true;
             this.buttonBrowseKeyFile.Click += new System.EventHandler(this.buttonBrowseKeyFile_Click);
+            // 
+            // serverAddressTextBox
+            // 
+            this.serverAddressTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Password_Manager.Properties.Settings.Default, "Host", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.serverAddressTextBox.Location = new System.Drawing.Point(87, 99);
+            this.serverAddressTextBox.Name = "serverAddressTextBox";
+            this.serverAddressTextBox.Size = new System.Drawing.Size(278, 23);
+            this.serverAddressTextBox.TabIndex = 3;
+            this.serverAddressTextBox.Text = global::Password_Manager.Properties.Settings.Default.Host;
             // 
             // LoginDialog
             // 
@@ -215,7 +218,6 @@
             this.Name = "LoginDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LoginDialog_FormClosed);
             this.Load += new System.EventHandler(this.LoginDialog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.serverPort)).EndInit();
             this.ResumeLayout(false);
