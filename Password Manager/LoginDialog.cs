@@ -24,6 +24,8 @@ namespace Password_Manager
             InitializeComponent();
         }
 
+        public bool IsLoginSuccessful { get; private set; } = false;
+
         public byte[] keyData { get; private set; } = null;
         public string userName { get { return this.usernameTextBox.Text; } }
         public bool isAdmin { get; private set; } = false;
@@ -31,59 +33,63 @@ namespace Password_Manager
         public event EventHandler LoginSucceeded;
 
         private async void loginSubmitButton(object sender, EventArgs e)
-        { 
-            Console.WriteLine("The Submit button was clicked!");
-            String username = this.usernameTextBox.Text;
-            String password = this.passwordTextBox.Text;
-            Shared.Username user = new Shared.Username(username, password);
-            LoginRequest msg = new LoginRequest(user);
-            SocketManager sktMngr = SocketManager.Instance;
-
-            try
+        {
+            if (keyData == null)
             {
-                sktMngr.connect(this.serverAddressTextBox.Text, (int)serverPort.Value);
-
-                LoginResponse resp = await sktMngr.SendRequest<LoginResponse>(msg);
-                if (resp == null)
+                // Make sure the user has loaded a keyData file. If they haven't, we should ask if they
+                // would like us to generate one.
+                using (var confirmGenerate = new TaskDialog()
                 {
-                    using (var taskDialog = new TaskDialog()
-                    {
-                        Caption = "Password Manager",
-                        Icon = TaskDialogStandardIcon.Error,
-                        InstructionText = "Unable to log in",
-                        OwnerWindowHandle = this.Handle,
-                        Text = "Make sure the username and password you've entered is correct, and then try again.",
-                        StandardButtons = TaskDialogStandardButtons.Close
-                    })
-                    {
-                        taskDialog.Show();
-                    }
-                }
-                else
-                {
-                    this.isAdmin = resp.isAdmin;
-                    this.Close();
-
-                    this.LoginSucceeded?.Invoke(this, EventArgs.Empty);
-                }
-            }
-            catch (SocketException ex)
-            {
-                using (var taskDialog = new TaskDialog()
-                {
-                    Caption = "Password Manager",
-                    Icon = TaskDialogStandardIcon.Error,
-                    InstructionText = "Unable to connect to the server",
-                    Text = "Make sure that the server is running, and then try again.",
-                    StandardButtons = TaskDialogStandardButtons.Close,
-                    OwnerWindowHandle = this.Handle,
-                    DetailsCollapsedLabel = "Show error",
-                    DetailsExpandedLabel = "Hide error",
-                    DetailsExpandedText = string.Format("{1} (0x{0:X8})", ex.ErrorCode, ex.Message)
+                    Caption = "Generate Key File",
+                    InstructionText = "Would you like us to generate a key file for you?",
+                    Text = "A key file is needed in order to encrypt your passwords. You'll be " +
+                           "asked to save this file somewhere on your PC.\n\n" +
+                           "If you already generated a key file, press Browse in the Login window " +
+                           "to locate your key file.",
+                    OwnerWindowHandle = this.Handle
                 })
                 {
-                    taskDialog.Show();
+                    var buttonGenerate = new TaskDialogButton("GenerateButton", "Generate key file")
+                    {
+                        Default = true
+                    };
+                    buttonGenerate.Click += async (object theSender, EventArgs theArgs) =>
+                    {
+                        confirmGenerate.Close();
+
+                        var saveDialog = new SaveFileDialog()
+                        {
+                            Title = "Save Key File",
+                            Filter = "Key File (*.key)|*.key",
+                        };
+                        if (saveDialog.ShowDialog() != DialogResult.OK)
+                        {
+                            return;
+                        }
+
+                        keyData = Shared.CryptManager.generateKey();
+                        using (var stream = saveDialog.OpenFile())
+                        {
+                            await stream.WriteAsync(keyData, 0, keyData.Length);
+                        }
+
+                        await SendLoginRequest();
+                    };
+
+                    var buttonCancel = new TaskDialogButton("CancelButton", "Cancel");
+                    buttonCancel.Click += (object theSender, EventArgs theArgs) =>
+                    {
+                        confirmGenerate.Close();
+                    };
+
+                    confirmGenerate.Controls.Add(buttonGenerate);
+                    confirmGenerate.Controls.Add(buttonCancel);
+                    confirmGenerate.Show();
                 }
+            }
+            else
+            {
+                await SendLoginRequest();
             }
         }
 
@@ -116,7 +122,66 @@ namespace Password_Manager
             }
             catch (Exception ex)
             {
+                this.textboxKeyFilePath.Text = string.Empty;
                 Trace.WriteLine(string.Format("Failed to load key file {0}:\n{1}", keyFilePath, ex));
+            }
+        }
+
+        private async Task SendLoginRequest()
+        {
+            Console.WriteLine("The Submit button was clicked!");
+            String username = this.usernameTextBox.Text;
+            String password = this.passwordTextBox.Text;
+            Shared.Username user = new Shared.Username(username, password);
+            LoginRequest msg = new LoginRequest(user);
+            SocketManager sktMngr = SocketManager.Instance;
+
+            try
+            {
+                sktMngr.connect(this.serverAddressTextBox.Text, (int)serverPort.Value);
+
+                LoginResponse resp = await sktMngr.SendRequest<LoginResponse>(msg);
+                if (resp == null)
+                {
+                    using (var taskDialog = new TaskDialog()
+                    {
+                        Caption = "Password Manager",
+                        Icon = TaskDialogStandardIcon.Error,
+                        InstructionText = "Unable to log in",
+                        OwnerWindowHandle = this.Handle,
+                        Text = "Make sure the username and password you've entered is correct, and then try again.",
+                        StandardButtons = TaskDialogStandardButtons.Close
+                    })
+                    {
+                        taskDialog.Show();
+                    }
+                }
+                else
+                {
+                    this.isAdmin = resp.isAdmin;
+                    this.IsLoginSuccessful = true;
+                    this.Close();
+
+                    this.LoginSucceeded?.Invoke(this, EventArgs.Empty);
+                }
+            }
+            catch (SocketException ex)
+            {
+                using (var taskDialog = new TaskDialog()
+                {
+                    Caption = "Password Manager",
+                    Icon = TaskDialogStandardIcon.Error,
+                    InstructionText = "Unable to connect to the server",
+                    Text = "Make sure that the server is running, and then try again.",
+                    StandardButtons = TaskDialogStandardButtons.Close,
+                    OwnerWindowHandle = this.Handle,
+                    DetailsCollapsedLabel = "Show error",
+                    DetailsExpandedLabel = "Hide error",
+                    DetailsExpandedText = string.Format("{1} (0x{0:X8})", ex.ErrorCode, ex.Message)
+                })
+                {
+                    taskDialog.Show();
+                }
             }
         }
     }

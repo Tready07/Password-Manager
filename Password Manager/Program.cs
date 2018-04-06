@@ -46,6 +46,14 @@ namespace Password_Manager
                 };
                 passwordManagerForm.Show();
             };
+            loginDialog.FormClosed += (object sender, FormClosedEventArgs e) =>
+            {
+                if (!loginDialog.IsLoginSuccessful)
+                {
+                    // Assume that if we didn't log in that we're attempting to close the program.
+                    Application.Exit();
+                }
+            };
             loginDialog.Show();
         }
     }
