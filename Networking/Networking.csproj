@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="BadHeaderException.cs" />
     <Compile Include="MessageHeader.cs" />
+    <Compile Include="MessageReader.cs" />
     <Compile Include="MessageType.cs" />
     <Compile Include="MessageUtils.cs" />
     <Compile Include="Requests\ApplicationsRequest.cs" />
