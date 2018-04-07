@@ -12,7 +12,7 @@ namespace Networking.Requests
     public class EditUsernameRequest : MessageBase
     {
         const int MessageID = 12;
-        EditUsernameRequest(Shared.Application application):
+        public EditUsernameRequest(Shared.Application application):
             base(MessageID, MessageType.Request)
         {
             app = application;

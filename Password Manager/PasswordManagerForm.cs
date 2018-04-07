@@ -610,7 +610,7 @@ namespace Password_Manager
                     }
                 }
 
-                else
+                else if (e.Node.Level ==1)
                 {
                     // SEND EDITAPP REQUEST
 
@@ -634,6 +634,48 @@ namespace Password_Manager
                         e.Node.EndEdit(false);
                         applicationTreeView.LabelEdit = false;
                     }
+                }
+
+                else
+                {
+                    var oldUsername = e.Node.Text;
+                    Shared.Application app = new Shared.Application();
+                    Shared.Username[] usernames = new Shared.Username[] { new Shared.Username(e.Node.Text) };
+                    app.Usernames = usernames;
+                    app.Name = e.Node.Parent.Text;
+                    var request = new EditUsernameRequest(app);
+                    request.NewUsername = e.Label;
+
+                    try
+                    {
+                        var response = await SocketManager.Instance.SendRequest<EditUsernameResponse>(request);
+                        if (response.isSuccess)
+                        {
+                            e.Node.EndEdit(false);
+                            applicationTreeView.LabelEdit = false;
+                        }
+                    }
+
+                    catch (ResponseException ex)
+                    {
+                        e.Node.Text = oldUsername;
+                        applicationTreeView.LabelEdit = false;
+                        using (var dialog = new TaskDialog()
+                        {
+                            
+                            Caption = "Cannot Rename the Username",
+                            InstructionText = "Unable to rename the username. Could the username already exist?",
+                            Text = ex.Message,
+                            StandardButtons = TaskDialogStandardButtons.Close,
+                            Icon = TaskDialogStandardIcon.Error,
+                            OwnerWindowHandle = this.Handle
+                        })
+                        {
+                            dialog.Show();
+
+                        }
+                    }
+
                 }
 
             }
