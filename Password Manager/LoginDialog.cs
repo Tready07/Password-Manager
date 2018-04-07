@@ -184,5 +184,11 @@ namespace Password_Manager
                 }
             }
         }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            this.textboxKeyFilePath.Clear();
+            this.keyData = null;
+        }
     }
 }

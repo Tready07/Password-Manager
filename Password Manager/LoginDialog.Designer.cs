@@ -43,6 +43,7 @@
             this.textboxKeyFilePath = new System.Windows.Forms.TextBox();
             this.buttonBrowseKeyFile = new System.Windows.Forms.Button();
             this.serverAddressTextBox = new System.Windows.Forms.TextBox();
+            this.buttonClear = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.serverPort)).BeginInit();
             this.SuspendLayout();
             // 
@@ -166,13 +167,13 @@
             this.textboxKeyFilePath.Location = new System.Drawing.Point(87, 186);
             this.textboxKeyFilePath.Name = "textboxKeyFilePath";
             this.textboxKeyFilePath.ReadOnly = true;
-            this.textboxKeyFilePath.Size = new System.Drawing.Size(260, 23);
+            this.textboxKeyFilePath.Size = new System.Drawing.Size(179, 23);
             this.textboxKeyFilePath.TabIndex = 12;
             this.textboxKeyFilePath.Text = global::Password_Manager.Properties.Settings.Default.KeyFilePath;
             // 
             // buttonBrowseKeyFile
             // 
-            this.buttonBrowseKeyFile.Location = new System.Drawing.Point(353, 185);
+            this.buttonBrowseKeyFile.Location = new System.Drawing.Point(272, 185);
             this.buttonBrowseKeyFile.Name = "buttonBrowseKeyFile";
             this.buttonBrowseKeyFile.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowseKeyFile.TabIndex = 13;
@@ -189,6 +190,16 @@
             this.serverAddressTextBox.TabIndex = 3;
             this.serverAddressTextBox.Text = global::Password_Manager.Properties.Settings.Default.Host;
             // 
+            // buttonClear
+            // 
+            this.buttonClear.Location = new System.Drawing.Point(353, 186);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(75, 23);
+            this.buttonClear.TabIndex = 14;
+            this.buttonClear.Text = "&Clear";
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
             // LoginDialog
             // 
             this.AcceptButton = this.submitButton;
@@ -196,6 +207,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(440, 275);
+            this.Controls.Add(this.buttonClear);
             this.Controls.Add(this.buttonBrowseKeyFile);
             this.Controls.Add(this.textboxKeyFilePath);
             this.Controls.Add(this.labelKeyFile);
@@ -241,6 +253,7 @@
         private System.Windows.Forms.Label labelKeyFile;
         private System.Windows.Forms.TextBox textboxKeyFilePath;
         private System.Windows.Forms.Button buttonBrowseKeyFile;
+        private System.Windows.Forms.Button buttonClear;
     }
 }
 
