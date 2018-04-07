@@ -106,7 +106,6 @@ namespace Password_Manager_Server
         {
             const int Timeout = 100;
 
-            List<ReadyClient> pendingReadingTasks = new List<ReadyClient>();
             MessageHandler handler = new MessageHandler();
             while (!token.IsCancellationRequested)
             {
