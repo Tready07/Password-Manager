@@ -58,7 +58,7 @@ namespace Password_Manager_Server
             String salt = Shared.CryptManager.generateSalt(8);
             String password = Shared.CryptManager.hash("Admin" + salt);
             String addAdminUser = String.Format("INSERT INTO users VALUES('admin', '{0}', 'true', 'true', '{1}')",password,salt);
-            String createApplicationsTable = "CREATE TABLE applications (name VARCHAR(20) NOT NULL, application CHAR(20), application_type CHAR(20) NOT NULL, username CHAR(40), password TEXT, UNIQUE(name, application, username), FOREIGN KEY(name) REFERENCES users(name))";
+            String createApplicationsTable = "CREATE TABLE applications (name VARCHAR(20) NOT NULL, application CHAR(20), application_type CHAR(20) NOT NULL, username CHAR(40), password TEXT, UNIQUE(name, application, username), FOREIGN KEY(name) REFERENCES users(name) ON DELETE CASCADE)";
             try
             {
                 SQLiteCommand command = new SQLiteCommand(createUsersTable, dbConn);
@@ -109,6 +109,15 @@ namespace Password_Manager_Server
             {
                 connection = new SQLiteConnection("Data Source=pwdatabase.sqlite;Version=3;");
                 connection.Open();
+
+                // Foreign key constraints aren't applied in SQLite by default unless we call
+                // PRAGMA foreign_keys = ON, so be sure to enable it.
+                //
+                // For more information: https://sqlite.org/foreignkeys.html#fk_enable
+                var pragmaCommand = new SQLiteCommand(connection);
+                pragmaCommand.CommandText = "PRAGMA foreign_keys = ON;";
+                pragmaCommand.ExecuteNonQuery();
+
                 return connection;
             }
             catch (Exception e)
