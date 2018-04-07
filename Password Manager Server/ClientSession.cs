@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Threading;
+using Networking;
 using Shared;
 
 namespace Password_Manager_Server
@@ -21,10 +22,18 @@ namespace Password_Manager_Server
             this.tcpClient = tcpClient;
             loginUsername = new Username();
         }
+
         public Username loginUsername { get; set; }
+
         /// <summary>
         /// Gets the <see cref="TcpClient" /> for this client connection.
         /// </summary>
         public TcpClient Client => this.tcpClient;
+
+        /// <summary>
+        /// Gets the <see cref="MessageReader" /> that can be used to read messages received on
+        /// this socket.
+        /// </summary>
+        public MessageReader Reader { get; } = new MessageReader();
     }
 }
