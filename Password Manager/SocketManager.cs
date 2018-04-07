@@ -102,17 +102,16 @@ namespace Password_Manager
 
                 int totalSizeRead = 0;
                 byte[] messageData = new byte[messageSize];
-                int bufferSize = Math.Min(messageSize, 4096);
                 do
                 {
-                    bytesReceived = await this.socket.ReceiveAsync(messageData, totalSizeRead, bufferSize, SocketFlags.None);
+                    int bytesRemaining = messageData.Length - totalSizeRead;
+                    bytesReceived = await this.socket.ReceiveAsync(messageData, totalSizeRead, bytesRemaining, SocketFlags.None);
                     if (bytesReceived == 0)
                     {
                         this.Disconnect();
                         return null;
                     }
 
-                    bufferSize = Math.Min(messageSize - totalSizeRead, 4096);
                     totalSizeRead += bytesReceived;
                 }
                 while (totalSizeRead < messageSize);
