@@ -14,9 +14,8 @@ namespace Password_Manager_Server
 {
     public class MessageHandler
     {
-        Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp,
-            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin,
-            handleSendUsers, handleDeleteUser, handleChangeAppType, handleEditApp, handleEditUsername};
+        Func<ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp,
+            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers, handleDeleteUser, handleChangeAppType, handleEditApp, handleEditUsername};
 
         static MessageHandler()
         {
@@ -27,20 +26,17 @@ namespace Password_Manager_Server
         private static SQLiteConnection con;
         private static DatabaseQuerier db;
 
-        public bool handleMessage(byte [] message, ClientSession session, MessageHeader header)
+        public bool handleMessage(ClientSession session)
         {
-            bool isComplete = false;
-            MessageDeserializer ds = new MessageDeserializer(message);
-            int id = header.ID;
-            isComplete = functions[id](message,session);
+            int id = session.Reader.Header.Value.ID;
+            bool isComplete = functions[id](session);
             return isComplete;
         }
 
-        private static bool handleLogin(byte [] message,ClientSession session)
+        private static bool handleLogin(ClientSession session)
         {
-            MessageDeserializer ds = new MessageDeserializer(message);
-            LoginRequest msg =(LoginRequest) ds.getMessage();
-            if(db.checkLoginInfo(msg.username.name,msg.username.password))
+            LoginRequest msg = (LoginRequest)session.Reader.GetMessage();
+            if (db.checkLoginInfo(msg.username.name,msg.username.password))
             {
                 session.loginUsername.name = msg.username.name;
                 session.loginUsername.isAdmin = db.isAdmin(msg.username.name);
@@ -52,7 +48,7 @@ namespace Password_Manager_Server
             return false;
         }
 
-        private static bool handleApplications(byte [] message,ClientSession session)
+        private static bool handleApplications(ClientSession session)
         {
             DatabaseQuerier db = new DatabaseQuerier(con);
             ApplicationsResponse resp = new ApplicationsResponse(db.getApplications(session.loginUsername.name));
@@ -61,10 +57,9 @@ namespace Password_Manager_Server
             return true;
         }
 
-        private static bool handleNewApp(byte [] message, ClientSession session)
+        private static bool handleNewApp(ClientSession session)
         {
-            MessageDeserializer ds = new MessageDeserializer(message);
-            NewAppRequest request = (NewAppRequest)ds.getMessage();
+            NewAppRequest request = (NewAppRequest)session.Reader.GetMessage();
             Console.WriteLine(request.application.Usernames[0].name);
             Console.WriteLine(request.application.Usernames[0].password);            
             if(db.addUsername(request.application, session.loginUsername.name))
@@ -84,10 +79,9 @@ namespace Password_Manager_Server
             }
         }
 
-        private static bool handlePassword(byte [] message, ClientSession session)
+        private static bool handlePassword(ClientSession session)
         {
-            MessageDeserializer ds = new MessageDeserializer(message);
-            PasswordRequest request = (PasswordRequest)ds.getMessage();
+            PasswordRequest request = (PasswordRequest)session.Reader.GetMessage();
             Console.WriteLine(request.application.Usernames[0].name); 
             if(request.updatePassword)
             {
@@ -102,10 +96,9 @@ namespace Password_Manager_Server
             return true;
         }
 
-        private static bool handleDeleteUsername(byte[] message, ClientSession session)
+        private static bool handleDeleteUsername(ClientSession session)
         {
-            MessageDeserializer ds = new MessageDeserializer(message);
-            DeleteUsernameRequest request = (DeleteUsernameRequest)ds.getMessage();
+            DeleteUsernameRequest request = (DeleteUsernameRequest)session.Reader.GetMessage();
             var app = request.application;
 
             const string TraceFormat = @"DeleteUsernameRequest received:
@@ -122,10 +115,9 @@ namespace Password_Manager_Server
             return false;
         }
 
-        private static bool handleChangeUserPassword(byte[] message, ClientSession session)
+        private static bool handleChangeUserPassword(ClientSession session)
         {
-            MessageDeserializer ds = new MessageDeserializer(message);
-            ChangeUserPasswordRequest request = (ChangeUserPasswordRequest)ds.getMessage();
+            ChangeUserPasswordRequest request = (ChangeUserPasswordRequest)session.Reader.GetMessage();
             var plainTextPw = request.plainTextPassword;
             bool success = db.changeUserPassword(session.loginUsername.name, request.plainTextPassword);
             ChangeUserPasswordResponse response = new ChangeUserPasswordResponse(success);
@@ -134,11 +126,10 @@ namespace Password_Manager_Server
             return true;
         }
 
-        private static bool handleCreateNewUser(byte[] message, ClientSession session)
+        private static bool handleCreateNewUser(ClientSession session)
         {
             bool success = false;
-            MessageDeserializer ds = new MessageDeserializer(message);
-            CreateNewUserRequest request = (CreateNewUserRequest)ds.getMessage();
+            CreateNewUserRequest request = (CreateNewUserRequest)session.Reader.GetMessage();
             var userInfo = request.username;
             if(session.loginUsername.isAdmin)
             {
@@ -158,10 +149,9 @@ namespace Password_Manager_Server
             return success;
         }
 
-        private static bool handleChangeAdmin(byte [] message, ClientSession session)
+        private static bool handleChangeAdmin(ClientSession session)
         {
-            MessageDeserializer ds = new MessageDeserializer(message);
-            ChangeAdminRequest request = (ChangeAdminRequest)ds.getMessage();
+            ChangeAdminRequest request = (ChangeAdminRequest)session.Reader.GetMessage();
             var userInfo = request.username;
             if(db.isSuperAdmin(userInfo.name))
             {
@@ -197,12 +187,11 @@ namespace Password_Manager_Server
             return true;
         }
 
-        private static bool handleSendUsers(byte [] message, ClientSession session)
+        private static bool handleSendUsers(ClientSession session)
         {
             bool success = false;
-            MessageDeserializer ds = new MessageDeserializer(message);
-            SendUsersRequest request = (SendUsersRequest)ds.getMessage();
-            if(session.loginUsername.isAdmin)
+            SendUsersRequest request = (SendUsersRequest)session.Reader.GetMessage();
+            if (session.loginUsername.isAdmin)
             {
                 var users = db.getUsers();
                 SendUsersResponse resp = new SendUsersResponse(users);
@@ -214,12 +203,11 @@ namespace Password_Manager_Server
             return success;
         }
 
-        private static bool handleDeleteUser(byte [] message, ClientSession session)
+        private static bool handleDeleteUser(ClientSession session)
         {
             bool success = false;
-            MessageDeserializer ds = new MessageDeserializer(message);
-            DeleteUserRequest request = (DeleteUserRequest) ds.getMessage();
-            if(db.isSuperAdmin(request.username))
+            DeleteUserRequest request = (DeleteUserRequest)session.Reader.GetMessage();
+            if (db.isSuperAdmin(request.username))
             {
                 ErrorResponse resp = new ErrorResponse(DeleteUsernameResponse.MessageID,
                     "You do not have permission to delete this user");
@@ -258,11 +246,10 @@ namespace Password_Manager_Server
             return success;
         }
 
-        private static bool handleChangeAppType(byte [] message, ClientSession session)
+        private static bool handleChangeAppType(ClientSession session)
         {
             bool success = true;
-            MessageDeserializer ds = new MessageDeserializer(message);
-            ChangeAppTypeRequest request = (ChangeAppTypeRequest)ds.getMessage();
+            ChangeAppTypeRequest request = (ChangeAppTypeRequest)session.Reader.GetMessage();
             var applications = request.apps;
             foreach(var app in applications)
             {
@@ -276,11 +263,10 @@ namespace Password_Manager_Server
             return success;
         }
 
-        private static bool handleEditApp(byte [] message, ClientSession session)
+        private static bool handleEditApp(ClientSession session)
         {
-            MessageDeserializer ds = new MessageDeserializer(message);
-            EditApplicationRequest request = (EditApplicationRequest)ds.getMessage();
-            if(db.editApp(request.AppToEdit, request.NewAppName, request.NewAppType, session.loginUsername.name))
+            EditApplicationRequest request = (EditApplicationRequest)session.Reader.GetMessage();
+            if (db.editApp(request.AppToEdit, request.NewAppName, request.NewAppType, session.loginUsername.name))
             {
                 EditApplicationResponse resp = new EditApplicationResponse(true);
                 byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
@@ -298,10 +284,9 @@ namespace Password_Manager_Server
          
         }
 
-        private static bool handleEditUsername(byte [] message, ClientSession session)
+        private static bool handleEditUsername(ClientSession session)
         {
-            MessageDeserializer ds = new MessageDeserializer(message);
-            EditUsernameRequest request = (EditUsernameRequest)ds.getMessage();
+            EditUsernameRequest request = (EditUsernameRequest)session.Reader.GetMessage();
             if(db.changeUsername(request.app,request.NewUsername,session.loginUsername.name))
             {
                 EditUsernameResponse resp = new EditUsernameResponse(true);
