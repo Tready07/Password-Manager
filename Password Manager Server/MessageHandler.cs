@@ -15,7 +15,8 @@ namespace Password_Manager_Server
     public class MessageHandler
     {
         Func<byte [],ClientSession, bool>[] functions = {handleLogin,handleApplications,handleNewApp,
-            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin, handleSendUsers, handleDeleteUser, handleChangeAppType, handleEditApp};
+            handlePassword, handleDeleteUsername, handleChangeUserPassword, handleCreateNewUser, handleChangeAdmin,
+            handleSendUsers, handleDeleteUser, handleChangeAppType, handleEditApp, handleEditUsername};
 
         static MessageHandler()
         {
@@ -298,6 +299,26 @@ namespace Password_Manager_Server
                 return false;
             }
          
+        }
+
+        private static bool handleEditUsername(byte [] message, ClientSession session)
+        {
+            MessageDeserializer ds = new MessageDeserializer(message);
+            EditUsernameRequest request = (EditUsernameRequest)ds.getMessage();
+            if(db.changeUsername(request.app,request.NewUsername,session.loginUsername.name))
+            {
+                EditUsernameResponse resp = new EditUsernameResponse(true);
+                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payload);
+                return true;
+            }
+            else
+            {
+                ErrorResponse resp = new ErrorResponse(EditUsernameResponse.MessageID, "Error in changing username. Does it already exist?");
+                byte[] payload = MessageUtils.SerializeMessage(resp).GetAwaiter().GetResult();
+                session.Client.Client.Send(payload);
+                return false;
+            }
         }
     }
 }

@@ -52,6 +52,7 @@
     <Compile Include="Requests\ChangeAdminRequest.cs" />
     <Compile Include="Requests\DeleteUserRequest.cs" />
     <Compile Include="Requests\EditApplicationRequest.cs" />
+    <Compile Include="Requests\EditUsernameRequest.cs" />
     <Compile Include="Requests\NewAppRequest.cs" />
     <Compile Include="Requests\PasswordRequest.cs" />
     <Compile Include="Requests\SendUsersRequest.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Responses\ChangeAdminResponse.cs" />
     <Compile Include="Responses\DeleteUserResponse.cs" />
     <Compile Include="Responses\EditApplicationResponse.cs" />
+    <Compile Include="Responses\EditUsernameResponse.cs" />
     <Compile Include="Responses\ErrorResponse.cs" />
     <Compile Include="Responses\LoginResponse.cs" />
     <Compile Include="Responses\NewAppResponse.cs" />

@@ -155,7 +155,9 @@ namespace Password_Manager_Server
                 command.ExecuteNonQuery();
                 return true;
                 }
-            catch{
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -177,8 +179,9 @@ namespace Password_Manager_Server
                 command.ExecuteNonQuery();
                 return true;
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -203,8 +206,9 @@ namespace Password_Manager_Server
                 command.ExecuteNonQuery();
                 return true;
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             
@@ -226,7 +230,9 @@ namespace Password_Manager_Server
                 command.ExecuteNonQuery();
                 return true;
             }
-            catch{
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -289,8 +295,9 @@ namespace Password_Manager_Server
                 int effectedRows = command.ExecuteNonQuery();
                 success = (effectedRows > 0) ? true : false;
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
 
@@ -313,8 +320,9 @@ namespace Password_Manager_Server
                 command.ExecuteNonQuery();
                 return true;
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -331,8 +339,9 @@ namespace Password_Manager_Server
                 bool isAdmin = (bool)reader["isadmin"];
                 return isAdmin;
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -373,8 +382,9 @@ namespace Password_Manager_Server
                 bool isAdmin = (bool)reader["issuperadmin"];
                 return isAdmin;
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -388,8 +398,9 @@ namespace Password_Manager_Server
                 command.Parameters.AddWithValue("@name", user);
                 return (command.ExecuteNonQuery() > 0);
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -411,8 +422,9 @@ namespace Password_Manager_Server
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
@@ -439,6 +451,28 @@ namespace Password_Manager_Server
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        public bool changeUsername(Shared.Application app, string newUsername, string user)
+        {
+            try
+            {
+                string sqlString = "UPDATE APPLICATIONS set username = @newUsername " +
+                    " WHERE name = @user AND application = @appname AND username = @username";
+                SQLiteCommand command = new SQLiteCommand(sqlString, dbConnection);
+                command.Parameters.AddWithValue("@newUsername", newUsername);
+                command.Parameters.AddWithValue("@user", user);
+                command.Parameters.AddWithValue("@appname", app.Name);
+                command.Parameters.AddWithValue("@username", app.Usernames[0].name);
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
