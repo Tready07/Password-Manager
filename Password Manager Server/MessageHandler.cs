@@ -40,11 +40,8 @@ namespace Password_Manager_Server
         {
             MessageDeserializer ds = new MessageDeserializer(message);
             LoginRequest msg =(LoginRequest) ds.getMessage();
-            Console.WriteLine(msg.username.name);
-            Console.WriteLine(msg.username.password);
             if(db.checkLoginInfo(msg.username.name,msg.username.password))
             {
-                Console.Write("The info is True!");
                 session.loginUsername.name = msg.username.name;
                 session.loginUsername.isAdmin = db.isAdmin(msg.username.name);
                 LoginResponse loginResponse = new LoginResponse(session.loginUsername.isAdmin);
