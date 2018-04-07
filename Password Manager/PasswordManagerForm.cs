@@ -251,11 +251,6 @@ namespace Password_Manager
             this.populateTree(response.applications);
         }
 
-        private void PasswordManagerForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void passwordCopyButton_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(this.passwordTextBox.Text);
@@ -715,6 +710,11 @@ namespace Password_Manager
                     appTreeViewLastNodeClicked = null;
                 }
             }
+        }
+
+        private void PasswordManagerForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
     }
     

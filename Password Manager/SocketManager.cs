@@ -39,6 +39,11 @@ namespace Password_Manager
             socket.Connect(host, port);
         }
 
+        public bool IsConnected()
+        {
+            return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
+        }
+
         /// <summary>
         /// Disconnect from the server.
         /// </summary>
@@ -69,10 +74,10 @@ namespace Password_Manager
         /// <returns>The response or <c>null</c> if the message couldn't be fetched because the server disconnected.</returns>
         public async Task<TResponse> SendRequest<TResponse>(MessageBase request) where TResponse : class
         {
-            this.socket.Send(await MessageUtils.SerializeMessage(request));
-
             try
             {
+                this.socket.Send(await MessageUtils.SerializeMessage(request));
+
                 // Read the message header
                 byte[] buffer = new byte[MessageHeader.HeaderSize];
                 int bytesReceived = await this.socket.ReceiveAsync(buffer);
