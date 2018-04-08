@@ -59,9 +59,7 @@ namespace Password_Manager_Server
 
         private static bool handleNewApp(ClientSession session)
         {
-            NewAppRequest request = (NewAppRequest)session.Reader.GetMessage();
-            Console.WriteLine(request.application.Usernames[0].name);
-            Console.WriteLine(request.application.Usernames[0].password);            
+            NewAppRequest request = (NewAppRequest)session.Reader.GetMessage();         
             if(db.addUsername(request.application, session.loginUsername.name))
             {
                 NewAppResponse resp = new NewAppResponse(request.application);
@@ -82,7 +80,6 @@ namespace Password_Manager_Server
         private static bool handlePassword(ClientSession session)
         {
             PasswordRequest request = (PasswordRequest)session.Reader.GetMessage();
-            Console.WriteLine(request.application.Usernames[0].name); 
             if(request.updatePassword)
             {
                 db.setPassword(request.application, session.loginUsername.name);
