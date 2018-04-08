@@ -49,10 +49,10 @@
             // 
             // submitButton
             // 
-            this.submitButton.Location = new System.Drawing.Point(263, 238);
+            this.submitButton.Location = new System.Drawing.Point(272, 238);
             this.submitButton.Margin = new System.Windows.Forms.Padding(3, 20, 3, 10);
             this.submitButton.Name = "submitButton";
-            this.submitButton.Size = new System.Drawing.Size(84, 25);
+            this.submitButton.Size = new System.Drawing.Size(75, 23);
             this.submitButton.TabIndex = 9;
             this.submitButton.Text = "&Login";
             this.submitButton.UseVisualStyleBackColor = true;
@@ -145,7 +145,7 @@
             // 
             this.buttonClose.Location = new System.Drawing.Point(353, 238);
             this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(75, 25);
+            this.buttonClose.Size = new System.Drawing.Size(75, 23);
             this.buttonClose.TabIndex = 10;
             this.buttonClose.Text = "E&xit";
             this.buttonClose.UseVisualStyleBackColor = true;
