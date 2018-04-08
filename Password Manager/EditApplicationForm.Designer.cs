@@ -134,6 +134,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "EditApplicationForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Edit Application";
             this.ResumeLayout(false);
             this.PerformLayout();

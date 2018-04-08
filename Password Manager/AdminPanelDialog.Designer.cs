@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminPanelDialog));
             this.labelMainInstruction = new System.Windows.Forms.Label();
             this.listviewAccounts = new System.Windows.Forms.ListView();
             this.columnUsername = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -51,12 +52,15 @@
             // 
             // listviewAccounts
             // 
+            this.listviewAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listviewAccounts.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnUsername,
             this.columnRole});
             this.listviewAccounts.Location = new System.Drawing.Point(16, 82);
             this.listviewAccounts.Name = "listviewAccounts";
-            this.listviewAccounts.Size = new System.Drawing.Size(684, 425);
+            this.listviewAccounts.Size = new System.Drawing.Size(717, 464);
             this.listviewAccounts.TabIndex = 3;
             this.listviewAccounts.UseCompatibleStateImageBehavior = false;
             this.listviewAccounts.View = System.Windows.Forms.View.Details;
@@ -109,14 +113,18 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(712, 519);
+            this.ClientSize = new System.Drawing.Size(745, 558);
             this.Controls.Add(this.buttonChangeRole);
             this.Controls.Add(this.buttonDeleteUser);
             this.Controls.Add(this.buttonAddUser);
             this.Controls.Add(this.listviewAccounts);
             this.Controls.Add(this.labelMainInstruction);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AdminPanelDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Admin Panel";
             this.Load += new System.EventHandler(this.AdminPanelDialog_Load);
             this.ResumeLayout(false);

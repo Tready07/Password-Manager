@@ -255,6 +255,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "PasswordManagerForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Password Manager";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PasswordManagerForm_FormClosed);
             this.Load += new System.EventHandler(this.PasswordManagerForm_Load);

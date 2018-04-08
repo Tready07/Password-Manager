@@ -148,6 +148,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddUserDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add User";
             this.ResumeLayout(false);
             this.PerformLayout();

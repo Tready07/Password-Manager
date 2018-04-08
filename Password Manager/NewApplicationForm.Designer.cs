@@ -177,6 +177,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "NewApplicationForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "New Application";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -123,6 +123,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AccountSettingsDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Account Settings";
             this.groupboxChangePassword.ResumeLayout(false);
             this.groupboxChangePassword.PerformLayout();
