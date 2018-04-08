@@ -24,10 +24,24 @@ namespace Password_Manager
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
+
             //TODO: Fix names
             List<TreeNode> rootNodes = getRootNodes();
             NewApplicationForm newAppForm = new NewApplicationForm(rootNodes.Select(node => node.Text).ToArray(),M_secretkey, this);
-            newAppForm.Show();
+
+            // Prepopulate the application type field of the NewApplicationForm with the selected
+            // application type (which we determine by getting the top-most parent node's text), 
+            // if applicable.
+            var parent = this.applicationTreeView.SelectedNode;
+            while (parent?.Parent != null)
+            {
+                parent = parent.Parent;
+            }
+            if (parent != null)
+            {
+                newAppForm.appType = parent.Text;
+            }
+            newAppForm.ShowDialog();
         }
 
         public List<TreeNode> getRootNodes()
