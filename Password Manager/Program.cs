@@ -21,25 +21,25 @@ namespace Password_Manager
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ApplicationExit += OnApplicationExit;
 
-            SocketManager.Instance.Disconnected += (object s, EventArgs e) =>
-            {
-                using (var dialog = new TaskDialog()
-                {
-                    Caption = "Password Manager",
-                    InstructionText = "You have been disconnected from the server",
-                    Text = "You'll need to reconnect from the server. The password manager will now close.",
-                    Icon = TaskDialogStandardIcon.Error
-                })
-                {
-                    dialog.Show();
-
-                    Application.Exit();
-                }
-            };
-
             ShowLoginDialog();
 
             Application.Run();
+        }
+
+        private static void OnDisconnect(object s, EventArgs e)
+        {
+            using (var dialog = new TaskDialog()
+            {
+                Caption = "Password Manager",
+                InstructionText = "You have been disconnected from the server",
+                Text = "You'll need to reconnect from the server. The password manager will now close.",
+                Icon = TaskDialogStandardIcon.Error
+            })
+            {
+                dialog.Show();
+
+                Application.Exit();
+            }
         }
 
         private static void OnApplicationExit(object sender, EventArgs e)
@@ -60,6 +60,7 @@ namespace Password_Manager
                         isAdmin = loginDialog.isAdmin
                     }
                 };
+                SocketManager.Instance.Disconnected += OnDisconnect;
                 passwordManagerForm.Show();
             };
             loginDialog.FormClosed += (object sender, FormClosedEventArgs e) =>
