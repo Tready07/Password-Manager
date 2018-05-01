@@ -14,6 +14,8 @@ namespace Password_Manager
     {
         private const int Timeout = 500;
 
+        private readonly MessageReader messageReader = new MessageReader();
+
         private static SocketManager instance;
         public static SocketManager Instance
         {
@@ -72,73 +74,35 @@ namespace Password_Manager
         /// <typeparam name="Response">The type of response. This should be a ISerializable.</typeparam>
         /// <param name="message">The request to send.</param>
         /// <returns>The response or <c>null</c> if the message couldn't be fetched because the server disconnected.</returns>
-        public async Task<TResponse> SendRequest<TResponse>(MessageBase request) where TResponse : class
+        public async Task<TResponse> SendRequest<TResponse>(MessageBase request) where TResponse : MessageBase
         {
             try
             {
                 this.socket.Send(await MessageUtils.SerializeMessage(request));
 
-                // Read the message header
-                byte[] buffer = new byte[MessageHeader.HeaderSize];
-                int bytesReceived = await this.socket.ReceiveAsync(buffer);
-                if (bytesReceived == 0)
+                while (true)
                 {
-                    // We got disconnected from the server, return null.
-                    this.Disconnect();
-                    return null;
-                }
-                else if (bytesReceived != buffer.Length)
-                {
-                    // We couldn't read the message header. Force a disconnect, and return null.
-                    this.Disconnect();
-                    return null;
-                }
+                    if (!this.socket.Poll(Timeout, SelectMode.SelectRead))
+                    {
+                        continue;
+                    }
 
-                MessageType messageType;
-                int messageID = 0;
-                int messageSize = 0;
-                using (var memoryStream = new MemoryStream(buffer))
-                {
-                    var messageHeader = MessageUtils.DeserializeMessageHeader(memoryStream);
-                    messageSize = messageHeader.Size;
-                    messageID = messageHeader.ID;
-                    messageType = messageHeader.Type;
-                }
-
-                int totalSizeRead = 0;
-                byte[] messageData = new byte[messageSize];
-                do
-                {
-                    int bytesRemaining = messageData.Length - totalSizeRead;
-                    bytesReceived = await this.socket.ReceiveAsync(messageData, totalSizeRead, bytesRemaining, SocketFlags.None);
-                    if (bytesReceived == 0)
+                    // There's no data to read, so that must mean that the server disconnected.
+                    if (this.socket.Available == 0)
                     {
                         this.Disconnect();
                         return null;
                     }
 
-                    totalSizeRead += bytesReceived;
-                }
-                while (totalSizeRead < messageSize);
-
-                if (messageType == MessageType.Response)
-                {
-                    // Deserialize the message, and return it.
-                    using (var memoryStream = new MemoryStream(messageData))
+                    using (var stream = new NetworkStream(this.socket))
                     {
-                        var formatter = new BinaryFormatter();
-                        return (TResponse)formatter.Deserialize(memoryStream);
+                        await this.messageReader.Process(stream);
                     }
-                }
-                else
-                {
-                    // Deserialize the message, and throw the error.
-                    using (var memoryStream = new MemoryStream(messageData))
-                    {
-                        var formatter = new BinaryFormatter();
-                        var error = (ErrorResponse)formatter.Deserialize(memoryStream);
 
-                        throw new ResponseException(error.Message);
+                    if (this.messageReader.IsMessageReady)
+                    {
+                        this.messageReader.ProcessNextMessage();
+                        return (TResponse)this.messageReader.GetMessage();
                     }
                 }
             }
