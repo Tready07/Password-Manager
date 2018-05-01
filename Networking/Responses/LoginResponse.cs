@@ -19,16 +19,5 @@ namespace Networking.Responses
             isAdmin = admin;
         }
         public bool isAdmin { get; set; } = false;
-
-        public override byte[] ToByteArray()
-        {
-            using (var stream = new MemoryStream())
-            {
-                var serializer = new BinaryFormatter();
-                serializer.Serialize(stream, this);
-
-                return stream.ToArray();
-            }
-        }
     }
 }

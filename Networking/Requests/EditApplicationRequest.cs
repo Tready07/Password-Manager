@@ -21,15 +21,5 @@ namespace Networking.Requests
         public Shared.Application AppToEdit { get; set; }
         public String NewAppType { get; set; }
         public String NewAppName { get; set; }
-        public override byte[] ToByteArray()
-        {
-            using (var stream = new MemoryStream())
-            {
-                var serializer = new BinaryFormatter();
-                serializer.Serialize(stream, this);
-
-                return stream.ToArray();
-            }
-        }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Networking
 {
@@ -44,18 +41,25 @@ namespace Networking
 
         /// <summary>
         /// Gets the payload data for this message as a <see cref="byte" />[], if there are any.
+        /// 
+        /// The default implementation uses BinaryFormatter to serialize the message.
         /// </summary>
         /// <returns>The payload data for this message.</returns>
         /// <remarks>
-        /// <para>
-        ///     Implementers do not need to serialize the <see cref="MessageBase.ID" /> and
-        ///     <see cref="MessageBase.Type" /> as they're included with the message's header.
-        /// </para>
         /// <para>
         ///     If there is no payload data that needs to be sent with this message, then this
         ///     function should return <c>null</c>.
         /// </para>
         /// </remarks>
-        public abstract byte[] ToByteArray();
+        public virtual byte[] ToByteArray()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var serializer = new BinaryFormatter();
+                serializer.Serialize(stream, this);
+
+                return stream.ToArray();
+            }
+        }
     }
 }

@@ -21,16 +21,5 @@ namespace Networking.Responses
 
         public Shared.Application application { get; set; }
 
-        public override byte [] ToByteArray()
-        {
-            using (var stream = new MemoryStream())
-            {
-                var serializer = new BinaryFormatter();
-                serializer.Serialize(stream, this);
-
-                return stream.ToArray();
-            }
-        }
-
     }
 }
